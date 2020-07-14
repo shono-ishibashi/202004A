@@ -16,10 +16,6 @@ public class ShowListController {
     @RequestMapping("/show-list")
     public String showList( Integer id, Model model) {
 
-
-
-
-
         return "item_list_noodle";
     }
 

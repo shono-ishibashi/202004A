@@ -45,7 +45,7 @@
 			<!-- /.container-fluid -->
 		</nav>
 
-		<form action="cart_list.html" th:action = "@{/noodle/}" method="" >
+		<form action="cart_list.html" th:action = "@{/noodle/}" method="post" >
 		<div class="row">
 			<div class="col-xs-offset-2 col-xs-8">
 
@@ -53,7 +53,7 @@
 				<div class="row">
 					<div class="col-xs-5">
 						<img src="../static/img_pizza/1.jpg" class="img-responsive img-rounded item-img-center"
-								th:src = "" >
+								th:src = "${item.imagePath}" >
 					</div>
 
 					//商品名
@@ -64,6 +64,7 @@
 							<br>
 							<br>
 							//商品説明
+							<p th:text="${item.description}"></p>
 <!--							<p>マイルドな味付けのカレーに大きくカットしたポテトをのせた、バターとチーズの風味が食欲をそそるお子様でも楽しめる商品です。</p>-->
 						</div>
 					</div>
@@ -101,18 +102,22 @@
 					<div class="col-xs-offset-2 col-xs-8">
 						<div class="form-group">
 							<div class="row">
-								<div class="col-sm-12">
+								<div class="col-sm-12" th:each="list:${toppingList}">
 									<label for="inputResponsibleCompany">
 										トッピング：&nbsp;1つにつき
-										<span>&nbsp;М&nbsp;</span>&nbsp;&nbsp;200円(税抜)
-										<span>&nbsp;Ｌ</span>&nbsp;&nbsp;300円(税抜)
+										<span>&nbsp;М&nbsp;</span>
+<!--										200円(税抜)-->
+										<span th:text="${list.priceM}"></span>
+										<span>&nbsp;Ｌ</span>&nbsp;&nbsp;
+<!--										300円(税抜)-->
+										<span th:text="${list.priceL}"></span>
 									</label>
 								</div>
-								<div class="col-sm-12" th:each="li:${{list}">
+								<div class="col-sm-12" >
 
 									<label class="checkbox-inline">
 										<input type="checkbox" value="">
-										<div th:text = "${}">
+										<div th:text = "${list.name}">
 
 										</div>
 									</label>

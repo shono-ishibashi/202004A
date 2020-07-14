@@ -25,8 +25,8 @@ public class ItemRepository {
         item.setDescription(rs.getString("description"));
         item.setPriceM(rs.getInt("price_m"));
         item.setPriceL(rs.getInt("price_l"));
-        item.setImagePath(rs.getString("image_path");
-        item.getDelete(rs.getBoolean("deleted");
+        item.setImagePath(rs.getString("image_path"));
+        item.setDeleted(rs.getBoolean("deleted"));
 
         return item;
     };
@@ -55,7 +55,7 @@ public class ItemRepository {
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%"+name+"%");
 
-        List<Item> itemList = template.query(sql, paramm, ITEM_ROW_MAPPER);
+        List<Item> itemList = template.query(sql, param, ITEM_ROW_MAPPER);
 
         return itemList;
     }

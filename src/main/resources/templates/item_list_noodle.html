@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -85,7 +85,8 @@
 									<img src="../static/img_noodle/1.jpg"
 										class="img-responsive img-rounded item-img-center" width="200" height="600">
 								</a><br>
-								<a href="item_detail.html">じゃがバターベーコン</a><br>
+								<a href="item_detail.html" th:href = "@{'/noodle/show-detail?id=' + ${item.id} }">
+									じゃがバターベーコン</a><br>
 								<span class="price">&nbsp;М&nbsp;</span>&nbsp;&nbsp;1,380円(税抜)<br>
 								<span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;2,380円(税抜)<br>
 							</th>

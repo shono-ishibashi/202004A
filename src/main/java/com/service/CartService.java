@@ -20,7 +20,7 @@ public class CartService {
     @Autowired
     private OrderRepository orderRepository;
 
-    public Cart addCart() throws Exception {
+    public Order addCart() throws Exception {
 
         Integer testId = 1;
         List<Order> orderListStatus0 = orderRepository.findByUserIdAndStatus0(1);
@@ -40,10 +40,9 @@ public class CartService {
 
 
 
+        //order.getOrderItemList().add();
 
-
-        order.getOrderItemList().add();
+        return order;
     }
 
-    }
-
+}

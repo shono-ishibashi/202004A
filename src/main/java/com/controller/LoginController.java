@@ -24,8 +24,7 @@ public class LoginController {
     }
 
     @RequestMapping("/login-form")
-    private String showForm(String error){
-        System.out.println(error);
+    private String showForm(){
         return "login";
     }
 

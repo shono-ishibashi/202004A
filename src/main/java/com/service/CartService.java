@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 public class CartService {
-
+/*
     @Autowired
     private HttpSession session;
 
@@ -25,5 +25,7 @@ public class CartService {
 
 
         }return cart;
+
+ */
     }
 

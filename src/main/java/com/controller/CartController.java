@@ -18,12 +18,12 @@ public class CartController {
     private CartService cartService;
     @Autowired
     private HttpSession session;
-
+/*
     @RequestMapping("/add")
     public String addItem(Item item){
     Cart cart = cartService.addCart(item);
     session.setAttribute("cart", cart);
     return "cart_list";
     }
-
+*/
 }

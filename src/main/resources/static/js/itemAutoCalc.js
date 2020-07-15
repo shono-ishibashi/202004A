@@ -46,16 +46,19 @@ $(function () {
         console.log(toppingCount);
 
         if (checkedItemPrice ==0 ){
+            toppingPrice=200;
             total =firstCheckedItemPrice * itemCount + toppingPrice * toppingCount ;
-        } else {
+        } else if (firstCheckedItemPrice == checkedItemPrice){
+            toppingPrice =200;
+            total =checkedItemPrice * itemCount + toppingPrice * toppingCount ;
+        } else{
+            toppingPrice =300;
             total =checkedItemPrice * itemCount + toppingPrice * toppingCount ;
         }
-
         $("#total-price").text(total);
     });
 
     $("select, #auto").change(function () {
-        alert("iiiii");
 
         itemCount = $("#auto").val();
         console.log(itemCount);

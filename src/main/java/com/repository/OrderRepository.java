@@ -16,7 +16,7 @@ public class OrderRepository {
     @Autowired
     private NamedParameterJdbcTemplate template;
 
-    private static final RowMapper<Order> ORDER_ROW_MAPPER = (rs,i) -> {
+    private static final RowMapper<Order> ORDER_ROW_MAPPER = (rs, i) -> {
         Order order = new Order();
 
         order.setId(rs.getInt("id"));
@@ -36,15 +36,15 @@ public class OrderRepository {
 
     public List<Order> findByUserIdAndStatus0(Integer userId) {
         String sql = "SELECT * FROM orders WHERE user_id = :userId and status = 0";
-        SqlParameterSource param = new MapSqlParameterSource().addValue("userId",userId);
+        SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId);
 
-        List<Order> orderList = template.query(sql,param,ORDER_ROW_MAPPER);
+        List<Order> orderList = template.query(sql, param, ORDER_ROW_MAPPER);
 
         return orderList;
     }
 
-    public List<Order> findByUserIdJoinOrderItems(Integer userId){
-
+    public List<Order> findByUserIdJoinOrderItems(Integer userId) {
+     return null;
     }
 
 }

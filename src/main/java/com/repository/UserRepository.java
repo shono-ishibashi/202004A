@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.List;
 
 /**
@@ -36,6 +37,11 @@ public class UserRepository {
         return user;
     };
 
+    /**
+     *
+     * @param email
+     * @return
+     */
     public User findByEmail(String email) {
         String sql = "SELECT * FROM users WHERE email = :email";
         SqlParameterSource param = new MapSqlParameterSource().addValue("email",email);

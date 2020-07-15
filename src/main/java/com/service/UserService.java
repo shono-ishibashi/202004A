@@ -20,4 +20,9 @@ public class UserService {
         user.setPassword(encodedPassword);
         userRepository.insert(user);
     }
+
+    public User findUserByEmail(String email){
+        User user = userRepository.findByEmail(email);
+        return user;
+    }
 }

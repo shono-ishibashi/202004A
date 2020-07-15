@@ -5,11 +5,15 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Collection;
 
 @EntityScan
 @Data
 public class User implements UserDetails {
+
     private Integer id;
     private String name;
     private String email;

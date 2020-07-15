@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ネットでピザ注文</title>
-<link href="../static/css/bootstrap.css" rel="stylesheet">
+<link th:href="@{/css/bootstrap.css}" rel="stylesheet">
 <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -50,9 +50,10 @@
 							<legend>
 								ログイン
 							</legend>
-							<label
-									class="control-label" style="color: red"
-									for="inputError">メールアドレス、またはパスワードが間違っています</label>
+							<div class="alert alert-danger" th:if="${session['SPRING_SECURITY_LAST_EXCEPTION']} != null"
+								 th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
+								ログインIDまはたパスワードが間違っています。
+							</div>
 							<div class="form-group">
 								<label for="email">メールアドレス:</label>
 								<input type="text" id="email" class="form-control" name="email"

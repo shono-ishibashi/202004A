@@ -69,7 +69,7 @@ public class ItemRepository {
      */
 
 
-    public List<Item> load(Integer id) {
+    public List<Item> load(Long id) {
         String sql = "SELECT * FROM items WHERE id = :id";
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("id" ,id);

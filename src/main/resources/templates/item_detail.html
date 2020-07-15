@@ -93,13 +93,15 @@
                                 </div>
                                 <div class="col-sm-12">
 
-                                    <label class="checkbox-inline">
+
                                         <div id="topping">
                                             <div  th:each="list:${toppingList}">
+                                                <label class="checkbox-inline">
                                                 <input type="checkbox" th:value="${list.id}" th:text="${list.name}" name="topping">
+                                                </label>
                                             </div>
                                         </div>
-                                    </label>
+
 
                                     <!--									<label class="checkbox-inline">-->
                                     <!--										<input type="checkbox" value="">オニオン-->

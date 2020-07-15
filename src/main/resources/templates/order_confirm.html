@@ -1,12 +1,12 @@
 	<!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ピザ屋のネット注文</title>
-<link href="../static/css/bootstrap.css" rel="stylesheet">
-<link href="../static/css/piza.css" rel="stylesheet">
+<title> ラーメン屋のネット注文</title>
+<link href="../../css/bootstrap.css" rel="stylesheet">
+<link href="../../css/piza.css" rel="stylesheet">
 <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -26,7 +26,7 @@
 							class="icon-bar"></span>
 					</button>
 					<a class="navbar-brand" href="item_list_pizza.html"> <!-- 企業ロゴ --> <img
-						alt="main log" src="../static/img_pizza/header_logo.png" height="35">
+						alt="main log" src="../../img_noodle/header_logo.png" height="35">
 					</a>
 				</div>
 
@@ -100,56 +100,6 @@
 								</div>
 							</td>
 						</tr>
-						<tr>
-							<td>
-								<div class="center">
-									<img src="../static/img_pizza/1.jpg"
-										class="img-responsive img-rounded item-img-center" width="100" height="300"><br>
-									じゃがバターベーコン
-								</div>
-							</td>
-							<td>
-								<span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;2,380円
-								&nbsp;&nbsp;1個
-							</td>
-							<td>
-								<ul>
-									<li>ピーマン300円</li>
-									<li>オニオン300円</li>
-									<li>あらびきソーセージ300円</li>
-								</ul>
-							</td>
-							<td>
-								<div class="text-center">
-									3,280円
-								</div>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<div class="center">
-									<img src="../static/img_pizza/1.jpg"
-										class="img-responsive img-rounded item-img-center" width="100" height="300"><br>
-									じゃがバターベーコン
-								</div>
-							</td>
-							<td>
-								<span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;2,380円
-								&nbsp;&nbsp;1個
-							</td>
-							<td>
-								<ul>
-									<li>ピーマン300円</li>
-									<li>オニオン300円</li>
-									<li>あらびきソーセージ300円</li>
-								</ul>
-							</td>
-							<td>
-								<div class="text-center">
-									3,280円
-								</div>
-							</td>
-						</tr>
 					</tbody>
 				</table>
 			</div>
@@ -165,7 +115,7 @@
 		</div>
 
 		<!-- table -->
-		<form action="order_finished.html">
+		<form action="order_finished.html" th:action="@{/confirm/order-finished}" method="post" th:object="${orderConfirmForm}">
 			<div class="row">
 				<div
 					class="table-responsive col-lg-offset-3 col-lg-6 col-md-offset-1 col-md-10 col-sm-10 col-xs-12">
@@ -179,17 +129,19 @@
 									</div>
 								</td>
 								<td>
-									<input type="text">
+									<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red"></div>
+									<input type="text" th:fields="*{name}">
 								</td>
 							</tr>
 							<tr>
 								<td>
-									<div class="text-center">
+									<div class="text-center" th:fields="*{mailAddress}">
 										メールアドレス
 									</div>
 								</td>
 								<td>
-									<input type="text">
+									<div th:if="${#fields.hasErrors('mailAddress')}" th:errors="*{mailAddress}" style="color: red"></div>
+									<input type="text" th:fields="*{mailAddress}">
 								</td>
 							</tr>
 							<tr>
@@ -199,7 +151,8 @@
 									</div>
 								</td>
 								<td>
-									<input type="text">&nbsp;&nbsp;<button>住所検索</button>
+									<div th:if="${#fields.hasErrors('zipCode')}" th:errors="*{zipCode}" style="color: red"></div>
+									<input type="text" th:fields="*{zipCode}">&nbsp;&nbsp;<button>住所検索</button>
 								</td>
 							</tr>
 							<tr>
@@ -209,7 +162,12 @@
 									</div>
 								</td>
 								<td>
-									<input type="text">
+									都道府県<br>
+									<div th:if="${#fields.hasErrors('address1')}" th:errors="*{address1}" style="color: red"></div>
+									<input type="text" th:fields="*{address1}"><br>
+									市区町村　(建物名)<br>
+									<div th:if="${#fields.hasErrors('address2')}" th:errors="*{address2}" style="color: red"></div>
+									<input type="text" th:fields="*{address2}">
 								</td>
 							</tr>
 							<tr>
@@ -219,7 +177,8 @@
 									</div>
 								</td>
 								<td>
-									<input type="text">
+									<div th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}" style="color: red"></div>
+									<input type="text" th:fields="*{telephone}">
 								</td>
 							</tr>
 							<tr>
@@ -232,62 +191,24 @@
 									<div class="form-group">
 										<div class="row">
 											<div class="col-sm-12">
-												<label
-													class="control-label" style="color: red" for="inputPeriod">配達日時を入力してください</label>
+<!--												<label-->
+<!--													class="control-label" style="color: red" for="inputPeriod">配達日時を入力してください</label>-->
 											</div>
 											<div class="col-sm-5">
-												<input type="date" name="name" id="name"
+												<input type="date" th:fields="*{orderDate}"
 													class="form-control input-sm" />
 											</div>
 
 										</div>
 										<div class="row">
 											<div class="col-sm-12">
+												<div th:if="${#fields.hasErrors('orderTime')}" th:errors="*{orderTime}" style="color: red"></div>
+												<div th:each="time,status : ${deliveryTimeList}">
 												<label class="radio-inline">
-													<input type="radio"
-														name="responsibleCompany" checked="checked">
-													10時
+													<input type="radio" name="time"
+														th:value="${time}" th:text="${time}" th:fields="*{orderTime}">
 												</label>
-												<label class="radio-inline">
-													<input type="radio"
-														name="responsibleCompany">
-													11時
-												</label>
-												<label class="radio-inline">
-													<input type="radio"
-														name="responsibleCompany">
-													12時
-												</label><br>
-												<label class="radio-inline">
-													<input type="radio"
-														name="responsibleCompany">
-													13時
-												</label>
-												<label class="radio-inline">
-													<input type="radio"
-														name="responsibleCompany">
-													14時
-												</label>
-												<label class="radio-inline">
-													<input type="radio"
-														name="responsibleCompany">
-													15時
-												</label><br>
-												<label class="radio-inline">
-													<input type="radio"
-														name="responsibleCompany">
-													16時
-												</label>
-												<label class="radio-inline">
-													<input type="radio"
-														name="responsibleCompany">
-													17時
-												</label>
-												<label class="radio-inline">
-													<input type="radio"
-														name="responsibleCompany">
-													18時
-												</label><br>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -305,42 +226,26 @@
 					<h3 class="text-center">お支払い方法</h3>
 					<table class="table table-striped item-list-table">
 						<tbody>
-							<tr>
+							<tr th:each="payment,status : ${paymentMap}">
 								<td>
-									<div class="text-center">
+									<div class="text-center" th:if="${status.count%2==1}">
 										代金引換
+									</div>
+									<div class="text-center" th:if="${status.count%2==0}">
+										クレジットカー決済
 									</div>
 								</td>
 								<td>
 									<div class="row">
 										<div class="col-sm-12">
 											<label class="radio-inline">
+												<div th:if="${#fields.hasErrors('paymentMethod')}" th:errors="*{paymentMethod}" style="color: red"></div>
 												<input type="radio"
-													name="responsibleCompany" checked="checked">
-												代金引換
+													name="responsibleCompany" checked="checked" th:value="${payment.key}" th:text="${payment.value}" th:fields="*{paymentMethod}">
 											</label>
 										</div>
 									</div>
 								</td>
-							</tr>
-							<tr>
-								<td>
-									<div class="text-center">
-										クレジットカード決済
-									</div>
-								</td>
-								<td align="center">
-									<div class="row">
-										<div class="col-sm-12">
-											<label class="radio-inline">
-												<input type="radio"
-													name="responsibleCompany" checked="checked">
-												クレジットカード
-											</label><br><br>
-										</div>
-									</div>
-								</td>
-							</tr>
 						</tbody>
 					</table>
 				</div>

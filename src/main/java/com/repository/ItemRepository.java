@@ -69,12 +69,14 @@ public class ItemRepository {
      */
 
 
-    public List<Item> load(Integer id) {
+    public Item load(Long id) {
         String sql = "SELECT * FROM items WHERE id = :id";
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("id" ,id);
 
-        return template.query(sql, param, ITEM_ROW_MAPPER);
+        Item item = template.queryForObject(sql, param, ITEM_ROW_MAPPER);
+
+        return item;
     }
 
 

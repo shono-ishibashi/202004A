@@ -18,15 +18,15 @@ public class ShowDetailController {
     private ItemService itemService;
 
 
-    @RequestMapping("/show-detail")
-    public String showDetail( String strId , Model model ) {
 
-        strId = "1";
+    @RequestMapping("/show-detail")
+    public String showDetail(String id, Model model ) {
+
 
         //商品選択時に受け取ったString型のidをLong型に変換
-        Long id = Long.parseLong(strId);
 
-        Item item = itemService.load(id);
+
+        Item item = itemService.load(Long.parseLong(id));
 
         model.addAttribute("item" , item );
 

@@ -12,18 +12,18 @@ import java.util.List;
 @Service
 public class CartService {
 
-    @Autowired
-    private HttpSession session;
-
-    public Cart addCart(Item item) {
-        List<OrderItem> cartInScope = (List<OrderItem>) session.getAttribute("cart");
-        if (cart == null) {
-            Cart cart = new Cart();
-
-        }
-        for (OrderItem orderItem : cart) {
-
-
-        }return cart;
+//    @Autowired
+//    private HttpSession session;
+//
+//    public Cart addCart(Item item) {
+//        List<OrderItem> cartInScope = (List<OrderItem>) session.getAttribute("cart");
+//        if (cart == null) {
+//            Cart cart = new Cart();
+//
+//        }
+//        for (OrderItem orderItem : cart) {
+//
+//
+//        }return cart;
     }
 

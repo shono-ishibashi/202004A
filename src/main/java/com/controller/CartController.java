@@ -21,8 +21,6 @@ public class CartController {
 
     @RequestMapping("/add")
     public String addItem(Item item){
-    Cart cart = cartService.addCart(item);
-    session.setAttribute("cart", cart);
     return "cart_list";
     }
 

@@ -50,7 +50,7 @@ public class ItemRepository {
      * @param name
      * @return itemList
      */
-    public List<Item> findByItem(String name){
+    public List<Item> findByNameLike(String name){
         String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items WHERE name LIKE :name ORDER BY price_m";
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%"+name+"%");
@@ -58,6 +58,23 @@ public class ItemRepository {
         List<Item> itemList = template.query(sql, param, ITEM_ROW_MAPPER);
 
         return itemList;
+    }
+
+    /**
+     *
+     * 主キーでitemを検索するメソッド
+     *
+     * @param id 検索条件の主キー
+     * @return 検索結果のitemのlist
+     */
+
+
+    public List<Item> load(Integer id) {
+        String sql = "SELECT * FROM items WHERE id = :id";
+
+        SqlParameterSource param = new MapSqlParameterSource().addValue("id" ,id);
+
+        return template.query(sql, param, ITEM_ROW_MAPPER);
     }
 
 

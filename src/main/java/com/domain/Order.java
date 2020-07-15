@@ -21,6 +21,6 @@ public class Order {
     private Timestamp deliveryTime;
     private Integer paymentMethod;
     private User user;
-    private List<Item> orderItemList;
+    private List<OrderItem> orderItemList;
 }
 

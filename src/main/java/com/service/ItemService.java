@@ -25,7 +25,7 @@ public class ItemService {
     }
 
     public List<Item> findByItem(String name){
-        return itemRepository.findByItem(name);
+        return itemRepository.findByNameLike(name);
     }
 
 

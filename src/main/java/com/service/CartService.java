@@ -40,17 +40,12 @@ public class CartService {
 
 
 
-<<<<<<< HEAD
-        //order.getOrderItemList().add();
-
-        return order;
-=======
         order.getOrderItemList().add();
 
         return order;
     }
 
->>>>>>> 813c2b805e73ae6a9701fb84a6cbd6321eeb478c
+
     }
 
 }

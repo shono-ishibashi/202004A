@@ -57,8 +57,5 @@ public class ShowListController {
     }
 
 
-    @RequestMapping("/show-detail")
-    public String showDetail() {
-        return "item_detail";
-    }
+
 }

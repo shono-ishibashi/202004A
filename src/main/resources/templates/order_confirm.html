@@ -11,6 +11,7 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+	<script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
 </head>
 <body>
 	<div class="container">
@@ -103,7 +104,7 @@
 									</div>
 								</td>
 								<td>
-									<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red"></div>
+									<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red" th:placeholder="山田太郎"></div>
 									<input type="text" th:fields="*{name}">
 								</td>
 							</tr>
@@ -126,7 +127,7 @@
 								</td>
 								<td>
 									<div th:if="${#fields.hasErrors('zipCode')}" th:errors="*{zipCode}" style="color: red"></div>
-									<input type="text" th:fields="*{zipCode}">&nbsp;&nbsp;<button>住所検索</button>
+									<input type="text" name="zipCode" th:fields="*{zipCode}">&nbsp;&nbsp;<input type="button" onKeyUp="AjaxZip3.zip2addr('zipCode','','address1','address2');" onclick="AjaxZip3.zip2addr('zipCode','','address1','address2');" value="住所検索">
 								</td>
 							</tr>
 							<tr>
@@ -138,10 +139,10 @@
 								<td>
 									都道府県<br>
 									<div th:if="${#fields.hasErrors('address1')}" th:errors="*{address1}" style="color: red"></div>
-									<input type="text" th:fields="*{address1}"><br>
+									<input type="text" name="address1" th:fields="*{address1}"><br>
 									市区町村　(建物名)<br>
 									<div th:if="${#fields.hasErrors('address2')}" th:errors="*{address2}" style="color: red"></div>
-									<input type="text" th:fields="*{address2}">
+									<input type="text" name="address2" th:fields="*{address2}">
 								</td>
 							</tr>
 							<tr>

@@ -49,7 +49,7 @@
                     <th>
                     </th>
                 </tr>
-                <tr th:each="item:${session.cart[0].orderItemList}">
+                <tr th:if="${!session.cart.isEmpty()}" th:each="item:${session.cart[0].orderItemList}">
                     <td>
                         <div class="center">
                             <img th:src="${'/img_noodle/' + item.item.imagePath}"
@@ -61,7 +61,7 @@
                         <span class="price" th:text="${item.size}"></span>
                         <span th:if="${item.size.toString() == 'M'}" th:text="${item.item.priceM}"></span>
                         <span th:if="${item.size.toString() == 'L'}" th:text="${item.item.priceL}"></span>円
-                        &nbsp;<span th:text="${item.quantity}"></span>個
+                        <span th:text="${item.quantity}"></span>個
                     </td>
                     <td>
                         <ul>

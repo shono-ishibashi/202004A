@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,6 +63,33 @@ public class OrderComfirmController {
 
     @RequestMapping("/order-finished")
     public String orderFinished(@Validated OrderConfirmForm orderConfirmForm, BindingResult result, Integer id, Integer status, Model model) throws Exception {
+
+        //現在時刻（日）を取得
+        LocalDate currentDate = LocalDate.now();
+        //現在時刻（時間）を整数として取得
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Integer currentDateTimeInt = localDateTime.getHour();
+
+        //注文時刻（日）を取得
+        String orderDateStr = orderConfirmForm.getOrderDate();
+        LocalDate orderDate = LocalDate.parse(orderDateStr);
+
+        //注文時刻（時間）を整数として取得
+        String orderTimeStr = orderConfirmForm.getOrderTime();
+        String replaceOrderTimeStr = orderTimeStr.replace("時", "");
+        Integer replaceOrderTimeInt = Integer.parseInt(replaceOrderTimeStr);
+
+        //現在時刻（日）と注文時刻（日）を比較
+        if(orderDate.compareTo(currentDate) < 0 ){
+            return showConfirm(id,status,model);
+        }
+
+        //現在時刻（時間）と注文時刻（時間）を比較
+        if(currentDateTimeInt + 3 > replaceOrderTimeInt){
+            return showConfirm(id,status,model);
+        }
+
+
 
         if(result.hasErrors()){
             return showConfirm(id,status,model);

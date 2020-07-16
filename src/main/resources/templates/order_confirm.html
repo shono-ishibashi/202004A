@@ -112,7 +112,7 @@
 								</td>
 								<td>
 									<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red"></div>
-									<input type="text" th:fields="*{name}" placeholder="山田太郎">
+									<input type="text" th:fields="*{name}" name="name" placeholder="山田太郎">
 								</td>
 							</tr>
 							<tr>
@@ -123,7 +123,7 @@
 								</td>
 								<td>
 									<div th:if="${#fields.hasErrors('mailAddress')}" th:errors="*{mailAddress}" style="color: red"></div>
-									<input type="text" th:fields="*{mailAddress}" placeholder="sample@gmail.com">
+									<input type="text" th:fields="*{mailAddress}" name="mailAddress" placeholder="sample@gmail.com">
 								</td>
 							</tr>
 							<tr>
@@ -160,7 +160,7 @@
 								</td>
 								<td>
 									<div th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}" style="color: red"></div>
-									<input type="text" th:fields="*{telephone}" placeholder="123-4567-8910">
+									<input type="text" name="telephone" th:fields="*{telephone}" placeholder="123-4567-8910">
 								</td>
 							</tr>
 							<tr>
@@ -178,7 +178,7 @@
 											</div>
 											<div class="col-sm-5">
 												<input type="date" th:fields="*{orderDate}"
-													class="form-control input-sm" />
+													class="form-control input-sm" name="orderDate"/>
 											</div>
 
 										</div>
@@ -187,7 +187,7 @@
 												<div th:if="${#fields.hasErrors('orderTime')}" th:errors="*{orderTime}" style="color: red"></div>
 												<div th:each="time,status : ${deliveryTimeList}">
 												<label class="radio-inline">
-													<input type="radio" name="time"
+													<input type="radio" name="orderTime"
 														th:value="${time}" th:text="${time}" th:fields="*{orderTime}">
 												</label>
 												</div>
@@ -223,7 +223,7 @@
 											<label class="radio-inline">
 												<div th:if="${#fields.hasErrors('paymentMethod')}" th:errors="*{paymentMethod}" style="color: red"></div>
 												<input type="radio"
-													name="responsibleCompany" checked="checked" th:value="${payment.key}" th:text="${payment.value}" th:fields="*{paymentMethod}">
+													name="paymentMethod" checked="checked" th:value="${payment.key}" th:text="${payment.value}" th:fields="*{paymentMethod}">
 											</label>
 										</div>
 									</div>

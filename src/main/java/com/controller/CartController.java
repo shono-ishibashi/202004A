@@ -35,10 +35,12 @@ public class CartController {
     @RequestMapping("/show-list")
     public String showCart(Model model) throws Exception {
 
-        User user = (User)session.getAttribute("loginUser");
+        Integer userId = (Integer)session.getAttribute("userId");
 
-        List<Order> cart = cartService.showCart(1,0);
+        List<Order> cart = cartService.showCart(userId,0);
+
         session.setAttribute("cart", cart);
+
         return "cart_list";
     }
 }

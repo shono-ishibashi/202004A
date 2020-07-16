@@ -1,72 +1,30 @@
 $(function () {
+    $('html').change(function () {
 
-    var toppingCount=0;
-    var toppingPrice=0;
+        var checkedItemSize = $('input[name=size]:checked').val();
 
-    var itemCount=1;
-    var firstCheckedItemPrice=0;
-    var checkedItemPrice=0;
-    var total=0;
+        var checkedItemPrice = 0;
 
+        if(checkedItemSize == 'M'){
+            checkedItemPrice = $('#itemPriceM').text();
+        }else if (checkedItemSize == 'L'){
+            checkedItemPrice = $('#itemPriceL').text();
+        }
 
-     firstCheckedItemPrice = $('input[name=responsibleCompany]:checked').val();
-     console.log(firstCheckedItemPrice);
+        var toppingPrice;
 
-    if (checkedItemPrice ==0 ){
-        total =firstCheckedItemPrice * itemCount + toppingPrice * toppingCount ;
-    } else {
-        total =checkedItemPrice * itemCount + toppingPrice * toppingCount ;
-    }
-
-    $("#total-price").text(total);
-
-    $('input:radio').change(function() {
-        checkedItemPrice = $('input[name=responsibleCompany]:checked').val();
-        console.log(checkedItemPrice);
-
-        if( checkedItemPrice == firstCheckedItemPrice ){
+        if (checkedItemSize == 'M') {
             toppingPrice = 200;
-        } else {
+        } else if (checkedItemSize == 'L') {
             toppingPrice = 300;
         }
         console.log(toppingPrice);
 
-        if (checkedItemPrice ==0 ){
-            total =firstCheckedItemPrice * itemCount + toppingPrice * toppingCount ;
-        } else {
-            total =checkedItemPrice * itemCount + toppingPrice * toppingCount ;
-        }
+        var toppingCount = $('#topping input:checkbox:checked').length;
 
-        $("#total-price").text(total);
-
-    });
-
-    $('input:checkbox').change(function() {
-        toppingCount = $('#topping input:checkbox:checked').length;
-        console.log(toppingCount);
-
-        if (checkedItemPrice ==0 ){
-            total =firstCheckedItemPrice * itemCount + toppingPrice * toppingCount ;
-        } else {
-            total =checkedItemPrice * itemCount + toppingPrice * toppingCount ;
-        }
-
-        $("#total-price").text(total);
-    });
-
-    $("select, #auto").change(function () {
-        alert("iiiii");
-
-        itemCount = $("#auto").val();
-        console.log(itemCount);
-
-        if (checkedItemPrice ==0 ){
-            total =firstCheckedItemPrice * itemCount + toppingPrice * toppingCount ;
-        } else {
-            total =checkedItemPrice * itemCount + toppingPrice * toppingCount ;
-        }
-
-        $("#total-price").text(total);
-    });
-
+        var itemCount = Number($("#quantity").val());
+        var sumPrice = toppingPrice * toppingCount + Number(checkedItemPrice) ;
+        var totalPrice = sumPrice * itemCount;
+        $("#total-price").text(totalPrice);
+    })
 });

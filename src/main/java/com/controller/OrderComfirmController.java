@@ -3,6 +3,7 @@ package com.controller;
 import com.domain.Order;
 import com.form.OrderConfirmForm;
 import com.service.CartService;
+import com.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,9 @@ public class OrderComfirmController {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
     private HttpSession session;
@@ -60,8 +64,12 @@ public class OrderComfirmController {
         return "order_confirm";
     }
 
+    /**
+     *  注文ボタンを押下した時の処理
+     */
+
     @RequestMapping("/order-finished")
-    public String orderFinished(@Validated OrderConfirmForm orderConfirmForm, BindingResult result, Integer id, Integer status, Model model) throws Exception {
+    public String orderFinished(@Validated OrderConfirmForm orderConfirmForm, BindingResult result, Integer id,Integer totalPrice, Integer status, Model model) throws Exception {
 
         //現在時刻（日）を取得
         LocalDate currentDate = LocalDate.now();
@@ -88,36 +96,30 @@ public class OrderComfirmController {
             return showConfirm(id,status,model);
         }
 
-
-
         if(result.hasErrors()){
             return showConfirm(id,status,model);
         }
-
 
         Order order = new Order();
 
         order.setId(id);
         order.setStatus(status);
-//        order.setTotalPrice();
+        order.setTotalPrice(totalPrice);
         //String型の日付をDate型へ変換
         SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd ");
         Date date = sdFormat.parse(orderConfirmForm.getOrderDate());
         order.setOrderDate(date);
-
         order.setDestinationName(orderConfirmForm.getName());
         order.setDestinationEmail(orderConfirmForm.getMailAddress());
         order.setDestinationZipcode(orderConfirmForm.getZipCode());
         order.setDestinationAddress(orderConfirmForm.getAddress1() + orderConfirmForm.getAddress2());
         order.setDestinationTel(orderConfirmForm.getTelephone());
-
         //String型の日付をTimeStamp型へ変換
         Timestamp ts = new Timestamp(date.getTime());
         order.setDeliveryTime(ts);
-
         order.setPaymentMethod(status);
 
-
+        orderService.UpDate(order);
 
         return "order_finished";
     }

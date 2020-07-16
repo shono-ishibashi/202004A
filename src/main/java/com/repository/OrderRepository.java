@@ -206,12 +206,10 @@ public class OrderRepository {
     }
 
     /**
-     *
+     *お客様情報を更新する処理
      *
      */
-    public void UpDateCash(Order order){
-
-
+    public void UpDate(Order order){
 
         SqlParameterSource param = new BeanPropertySqlParameterSource(order);
 

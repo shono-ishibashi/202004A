@@ -44,9 +44,16 @@ public class CartService {
         return null;
     }
 
-    public List<Order> showCart(Integer userId) {
+    /**
+     *
+     * @param userId ログイン中または、仮発行のUserId
+     * @param status 注文状態を示す数値
+     * @return 注文(Order)が入ったリスト
+     * @throws Exception
+     */
+    public List<Order> showCart(Integer userId,Integer status) throws Exception {
 
-        List<Order> orderList = orderRepository.findByUserIdJoinOrderItems(userId);
+        List<Order> orderList = orderRepository.findByUserIdJoinOrderItems(1,0);
 
 
         //orderToppingだけのListを作成
@@ -72,6 +79,7 @@ public class CartService {
 
         for (Order order : orderList) {
             orderMap.put(order.getId(), order);
+            orderMap.get(order.getId()).getOrderItemList().clear();
         }
 
         //OrderItemの重複なしのMapを作成
@@ -84,6 +92,7 @@ public class CartService {
 
         //OrderItem の の中にtoppingを 格納
         for (OrderItem uniqOrderItem : orderItemMap.values()) {
+            uniqOrderItem.getOrderToppingList().clear();
             for (OrderTopping resultOrderTopping : orderToppingList) {
                 if (uniqOrderItem.getId().equals(resultOrderTopping.getOrderItemId())) {
                     uniqOrderItem.getOrderToppingList().add(resultOrderTopping);
@@ -91,18 +100,21 @@ public class CartService {
             }
         }
 
-        //Order の 中に OrderItemを格納
-        for (Order uniqOrder : orderMap.values()) {
-            for (OrderItem uniqOrderItem : orderItemMap.values()) {
-                if (uniqOrder.getId().equals(uniqOrderItem.getOrderId())) {
-                    uniqOrder.getOrderItemList().add(uniqOrderItem);
-                }
-            }
-        }
+        List<OrderItem> resultOrderItemList = new ArrayList<>(orderItemMap.values());
 
+        //Order の 中に OrderItemを格納
         List<Order> result = new ArrayList<>(orderMap.values());
 
+            for(Order order : result){
+                for(OrderItem resultOrderItem : resultOrderItemList){
+                    if(order.getId().equals(resultOrderItem.getOrderId())){
+                        order.getOrderItemList().add(resultOrderItem);
+                    }
+                }
+            }
+
         return result;
+
     }
 
 }

@@ -25,6 +25,7 @@ public class LoginController {
 
     @RequestMapping("/login-form")
     private String showForm(){
+        System.out.println();
         return "login";
     }
 

@@ -45,15 +45,14 @@ public class CartService {
     }
 
     /**
-     *
      * @param userId ログイン中または、仮発行のUserId
      * @param status 注文状態を示す数値
      * @return 注文(Order)が入ったリスト
      * @throws Exception
      */
-    public List<Order> showCart(Integer userId,Integer status) throws Exception {
+    public List<Order> showCart(Integer userId, Integer status) throws Exception {
 
-        List<Order> orderList = orderRepository.findByUserIdJoinOrderItems(1,0);
+        List<Order> orderList = orderRepository.findByUserIdJoinOrderItems(1, 0);
 
 
         //orderToppingだけのListを作成
@@ -105,13 +104,13 @@ public class CartService {
         //Order の 中に OrderItemを格納
         List<Order> result = new ArrayList<>(orderMap.values());
 
-            for(Order order : result){
-                for(OrderItem resultOrderItem : resultOrderItemList){
-                    if(order.getId().equals(resultOrderItem.getOrderId())){
-                        order.getOrderItemList().add(resultOrderItem);
-                    }
+        for (Order order : result) {
+            for (OrderItem resultOrderItem : resultOrderItemList) {
+                if (order.getId().equals(resultOrderItem.getOrderId())) {
+                    order.getOrderItemList().add(resultOrderItem);
                 }
             }
+        }
 
         return result;
 

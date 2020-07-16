@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -12,7 +13,7 @@ public class Order {
     private Integer userId;
     private Integer status;
     private Integer totalPrice;
-    private LocalDate orderDate;
+    private Date orderDate;
     private String destinationName;
     private String destinationEmail;
     private String destinationZipcode;

@@ -33,15 +33,12 @@ public class CartController {
     }
 
     @RequestMapping("/show-list")
-    public String showCart(Model model){
+    public String showCart(Model model) throws Exception {
 
         User user = (User)session.getAttribute("loginUser");
-        if(isNull(user)){
-            model.addAttribute("カートが空です");
-            return "cart_list";
-        }
-        List<Order> cartList = cartService.showCart(user.getId());
-        model.addAttribute("cartList", cartList);
+
+        List<Order> cart = cartService.showCart(1,0);
+        session.setAttribute("cart", cart);
         return "cart_list";
     }
 }

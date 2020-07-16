@@ -104,8 +104,8 @@
 									</div>
 								</td>
 								<td>
-									<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red" th:placeholder="山田太郎"></div>
-									<input type="text" th:fields="*{name}">
+									<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red"></div>
+									<input type="text" th:fields="*{name}" placeholder="山田太郎">
 								</td>
 							</tr>
 							<tr>
@@ -116,7 +116,7 @@
 								</td>
 								<td>
 									<div th:if="${#fields.hasErrors('mailAddress')}" th:errors="*{mailAddress}" style="color: red"></div>
-									<input type="text" th:fields="*{mailAddress}">
+									<input type="text" th:fields="*{mailAddress}" placeholder="sample@gmail.com">
 								</td>
 							</tr>
 							<tr>
@@ -127,7 +127,7 @@
 								</td>
 								<td>
 									<div th:if="${#fields.hasErrors('zipCode')}" th:errors="*{zipCode}" style="color: red"></div>
-									<input type="text" name="zipCode" th:fields="*{zipCode}">&nbsp;&nbsp;<input type="button" onKeyUp="AjaxZip3.zip2addr('zipCode','','address1','address2');" onclick="AjaxZip3.zip2addr('zipCode','','address1','address2');" value="住所検索">
+									<input type="text" name="zipCode" th:fields="*{zipCode}" placeholder="123-4567">&nbsp;&nbsp;<input type="button" onKeyUp="AjaxZip3.zip2addr('zipCode','','address1','address2');" onclick="AjaxZip3.zip2addr('zipCode','','address1','address2');" value="住所検索">
 								</td>
 							</tr>
 							<tr>
@@ -139,10 +139,10 @@
 								<td>
 									都道府県<br>
 									<div th:if="${#fields.hasErrors('address1')}" th:errors="*{address1}" style="color: red"></div>
-									<input type="text" name="address1" th:fields="*{address1}"><br>
+									<input type="text" name="address1" th:fields="*{address1}" placeholder="東京都"><br>
 									市区町村　(建物名)<br>
 									<div th:if="${#fields.hasErrors('address2')}" th:errors="*{address2}" style="color: red"></div>
-									<input type="text" name="address2" th:fields="*{address2}">
+									<input type="text" name="address2" th:fields="*{address2}" placeholder="〇〇区〇〇1-2-3　〇〇ビル">
 								</td>
 							</tr>
 							<tr>
@@ -153,7 +153,7 @@
 								</td>
 								<td>
 									<div th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}" style="color: red"></div>
-									<input type="text" th:fields="*{telephone}">
+									<input type="text" th:fields="*{telephone}" placeholder="123-4567-8910">
 								</td>
 							</tr>
 							<tr>

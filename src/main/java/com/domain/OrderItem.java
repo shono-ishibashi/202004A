@@ -12,5 +12,6 @@ public class OrderItem {
     private Integer quantity;
     private Character size;
     private Item item;
+    private Integer totalPrice;
     private List<OrderTopping> orderToppingList;
 }

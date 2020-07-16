@@ -26,7 +26,7 @@
 					<fieldset>
 						<legend>ユーザ登録</legend>
 						<div class="form-group">
-							<label for="inputName" >名前:</label>
+							<label >名前:</label>
 							<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color:red"></span>
 
 							<input type="text" id="name" class="form-control"

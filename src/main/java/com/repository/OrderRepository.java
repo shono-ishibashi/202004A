@@ -80,7 +80,7 @@ public class OrderRepository {
         return order;
     };
 
-    public List<Order> findByUserIdAndStatus0(Integer userId ,Integer status) {
+    public List<Order> findByUserIdAndStatus(Integer userId ,Integer status) {
         String sql = "SELECT * FROM orders WHERE user_id = :userId and status = :status;";
         SqlParameterSource param = new MapSqlParameterSource()
                 .addValue("userId",userId)

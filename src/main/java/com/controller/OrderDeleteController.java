@@ -14,8 +14,8 @@ public class OrderDeleteController {
     private CartService cartService;
 
     @RequestMapping("/item")
-    public String delete(Integer orderId, Integer orderItemId){
-        cartService.delete(orderId, orderItemId);
-        return "forword:/cart/cart-list";
+    public String delete(Integer orderId, Integer itemId, Integer orderItemId){
+        cartService.delete(orderId, itemId,orderItemId);
+        return "forward:/cart/show-list";
     }
 }

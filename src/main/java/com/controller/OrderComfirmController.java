@@ -1,6 +1,8 @@
 package com.controller;
 
 import com.form.OrderConfirmForm;
+import com.service.CartService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +27,9 @@ public class OrderComfirmController {
 
     @RequestMapping("")
     public String showConfirm(Model model){
+
+
+
         List<String> deliveryTimeList = new ArrayList<>();
         deliveryTimeList.add("10時");
         deliveryTimeList.add("11時");

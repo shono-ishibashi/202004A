@@ -18,6 +18,10 @@ span#total-price {
 	font-size: 35px;
 }
 
+span#total-tax {
+    font-size: 35px;
+}
+
 /* 商品一覧の画像を中央寄せにする*/
 .item-img-center{
   margin-left: auto; 

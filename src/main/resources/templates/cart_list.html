@@ -75,7 +75,7 @@
                     </td>
                     <td>
                         <div class="text-center">
-                            3,280円
+                            <span th:text="${#numbers.formatInteger(item.totalPrice,1,'COMMA')}"></span>円
                         </div>
                     </td>
                     <td>
@@ -92,8 +92,8 @@
     <div class="row">
         <div class="col-xs-offset-2 col-xs-8">
             <div class="form-group text-center" th:if="${!session.cart.isEmpty()}">
-                <span id="total-tax" th:text="${#numbers.formatInteger(session.cart[0].totalPrice * 0.1 ,1,'COMMA')}"></span><br>
-                <span id="total-price">ご注文金額合計：<span th:text="${#numbers.formatInteger(session.cart[0].totalPrice * 1.1 ,1,'COMMA')}"></span> (税込)</span>
+                <span id="total-tax">消費税：<span th:text="${#numbers.formatInteger(session.cart[0].totalPrice * 0.1 ,1,'COMMA')}"></span> 円</span><br>
+                <span id="total-price">ご注文金額合計：<span th:text="${#numbers.formatInteger(session.cart[0].totalPrice * 1.1 ,1,'COMMA')}"></span> 円(税込)</span>
             </div>
         </div>
     </div>

@@ -144,5 +144,9 @@ public class CartService {
 
         return result;
     }
+
+    public void delete(Integer orderId, Integer orderItemId){
+        orderRepository.delete(orderId,orderItemId);
+    }
 }
 

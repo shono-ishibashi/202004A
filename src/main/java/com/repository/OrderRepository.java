@@ -204,4 +204,16 @@ public class OrderRepository {
 
         return null;
     }
+
+    public void delete(Integer orderId, Integer orderItemId){
+        String sql = "BEGIN;" +
+                "DELETE FROM order_items WHERE order_id = :orderId;" +
+                "DELETE FROM order_toppings WHERE order_item_id = :orderItemId;" +
+                "COMMIT;";
+
+        SqlParameterSource param = new MapSqlParameterSource().addValue("orderId",orderId).addValue("orderItemId",orderItemId);
+
+        template.update(sql,param);
+
+    }
 }

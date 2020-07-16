@@ -12,12 +12,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/confirm")
@@ -94,6 +93,31 @@ public class OrderComfirmController {
         if(result.hasErrors()){
             return showConfirm(id,status,model);
         }
+
+
+        Order order = new Order();
+
+        order.setId(id);
+        order.setStatus(status);
+//        order.setTotalPrice();
+        //String型の日付をDate型へ変換
+        SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd ");
+        Date date = sdFormat.parse(orderConfirmForm.getOrderDate());
+        order.setOrderDate(date);
+
+        order.setDestinationName(orderConfirmForm.getName());
+        order.setDestinationEmail(orderConfirmForm.getMailAddress());
+        order.setDestinationZipcode(orderConfirmForm.getZipCode());
+        order.setDestinationAddress(orderConfirmForm.getAddress1() + orderConfirmForm.getAddress2());
+        order.setDestinationTel(orderConfirmForm.getTelephone());
+
+        //String型の日付をTimeStamp型へ変換
+        Timestamp ts = new Timestamp(date.getTime());
+        order.setDeliveryTime(ts);
+
+        order.setPaymentMethod(status);
+
+
 
         return "order_finished";
     }

@@ -204,4 +204,23 @@ public class OrderRepository {
 
         return null;
     }
+
+    /**
+     *
+     *
+     */
+    public void UpDateCash(Order order){
+
+
+
+        SqlParameterSource param = new BeanPropertySqlParameterSource(order);
+
+        String upDateSqlCash ="UPDATE ";
+
+        template.update(upDateSqlCash,param);
+
+    }
+
+
+
 }

@@ -1,5 +1,6 @@
 package com.controller;
 
+import com.domain.Order;
 import com.form.OrderConfirmForm;
 import com.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +21,11 @@ import java.util.Map;
 @RequestMapping("/confirm")
 public class OrderComfirmController {
 
+    @Autowired
+    private CartService cartService;
+
+    @Autowired
+    private HttpSession session;
 
     @ModelAttribute
     public OrderConfirmForm setUpform(){
@@ -26,9 +33,10 @@ public class OrderComfirmController {
     }
 
     @RequestMapping("")
-    public String showConfirm(Model model){
+    public String showConfirm(Integer id, Integer status, Model model) throws Exception{
 
-
+        List<Order> orderConfirmList = cartService.showCart(id, status);
+        session.setAttribute("orderConfirmList", orderConfirmList);
 
         List<String> deliveryTimeList = new ArrayList<>();
         deliveryTimeList.add("10時");
@@ -52,10 +60,10 @@ public class OrderComfirmController {
     }
 
     @RequestMapping("/order-finished")
-    public String orderFinished(@Validated OrderConfirmForm orderConfirmForm, BindingResult result, Model model){
+    public String orderFinished(@Validated OrderConfirmForm orderConfirmForm, BindingResult result, Integer id, Integer status, Model model) throws Exception {
 
         if(result.hasErrors()){
-            return showConfirm(model);
+            return showConfirm(id,status,model);
         }
 
         return "order_finished";

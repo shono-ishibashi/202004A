@@ -53,7 +53,7 @@ public class CartService {
      */
     public List<Order> showCart(Integer userId,Integer status) throws Exception {
 
-        List<Order> orderList = orderRepository.findByUserIdJoinOrderItems(1,0);
+        List<Order> orderList = orderRepository.findByUserIdJoinOrderItems(1,status);
 
 
         //orderToppingだけのListを作成

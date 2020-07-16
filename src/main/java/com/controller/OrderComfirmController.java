@@ -1,6 +1,9 @@
 package com.controller;
 
 import com.form.OrderConfirmForm;
+import com.service.CartService;
+import com.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +20,11 @@ import java.util.Map;
 @RequestMapping("/confirm")
 public class OrderComfirmController {
 
+@Autowired
+private OrderService orderService;
+
+@Autowired
+private CartService cartService;
 
     @ModelAttribute
     public OrderConfirmForm setUpform(){
@@ -54,5 +62,10 @@ public class OrderComfirmController {
         }
 
         return "order_finished";
+    }
+    @RequestMapping("/view")
+    public String view() throws Exception {
+        orderService.getOrderList();
+        return null;
     }
 }

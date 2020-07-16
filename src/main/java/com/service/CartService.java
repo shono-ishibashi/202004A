@@ -45,14 +45,15 @@ public class CartService {
     }
 
     /**
+     *
      * @param userId ログイン中または、仮発行のUserId
      * @param status 注文状態を示す数値
      * @return 注文(Order)が入ったリスト
      * @throws Exception
      */
-    public List<Order> showCart(Integer userId, Integer status) throws Exception {
+    public List<Order> showCart(Integer userId,Integer status) throws Exception {
 
-        List<Order> orderList = orderRepository.findByUserIdJoinOrderItems(1, 0);
+        List<Order> orderList = orderRepository.findByUserIdJoinOrderItems(1,status);
 
 
         //orderToppingだけのListを作成
@@ -104,49 +105,17 @@ public class CartService {
         //Order の 中に OrderItemを格納
         List<Order> result = new ArrayList<>(orderMap.values());
 
-        for (Order order : result) {
-            for (OrderItem resultOrderItem : resultOrderItemList) {
-                if (order.getId().equals(resultOrderItem.getOrderId())) {
-                    order.getOrderItemList().add(resultOrderItem);
-                }
-            }
-        }
-
-
-        //totalPrice を 計算する
-
-        Integer totalPrice = 0;
-        Integer orderItemTotalPrice = 0;
-        for(Order order : result){
-            totalPrice = 0;
-            for(OrderItem totalPriceOrderItem : order.getOrderItemList()){
-                orderItemTotalPrice = 0;
-                if('M' == totalPriceOrderItem.getSize()){
-                    totalPrice += totalPriceOrderItem.getItem().getPriceM();
-                    orderItemTotalPrice +=  totalPriceOrderItem.getItem().getPriceM();
-                }else if ('L' == totalPriceOrderItem.getSize() ){
-                    totalPrice += totalPriceOrderItem.getItem().getPriceL();
-                    orderItemTotalPrice +=  totalPriceOrderItem.getItem().getPriceL();
-                }
-                for(OrderTopping totalPriceOrderTopping : totalPriceOrderItem.getOrderToppingList()) {
-                    if ('M' == totalPriceOrderItem.getSize()) {
-                        totalPrice += totalPriceOrderTopping.getTopping().getPriceM();
-                        orderItemTotalPrice += totalPriceOrderTopping.getTopping().getPriceM();
-                    } else if ('L' == totalPriceOrderItem.getSize()) {
-                        totalPrice += totalPriceOrderTopping.getTopping().getPriceL();
-                        orderItemTotalPrice += totalPriceOrderTopping.getTopping().getPriceL();
+            for(Order order : result){
+                for(OrderItem resultOrderItem : resultOrderItemList){
+                    if(order.getId().equals(resultOrderItem.getOrderId())){
+                        order.getOrderItemList().add(resultOrderItem);
                     }
                 }
-            totalPriceOrderItem.setTotalPrice(orderItemTotalPrice);
             }
-            order.setTotalPrice(totalPrice);
-        }
 
         return result;
+
     }
 
-    public void delete(Integer orderId, Integer orderItemId){
-        orderRepository.delete(orderId,orderItemId);
-    }
 }
 

@@ -31,6 +31,8 @@ public class ShowListController {
     public String showList(Model model) {
         List<Item> itemList = itemService.findAll();
         model.addAttribute("itemList", itemList);
+        StringBuilder autoComplete = itemService.getNoodleAutoCompleteList(itemList);
+        model.addAttribute("autoComplete", autoComplete);
         return "item_list_noodle";
     }
 

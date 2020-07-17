@@ -157,8 +157,9 @@ public class CartService {
         return result;
     }
 
-    public void delete(Integer orderId, Integer itemId, Integer orderItemId){
-        orderRepository.delete(orderId,itemId,orderItemId);
+    public void delete(Integer orderId, Integer itemId, Integer orderItemId) {
+        orderRepository.delete(orderId, itemId, orderItemId);
+    }
 
 
     public Integer addCartItem(OrderItem orderItem){

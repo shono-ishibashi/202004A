@@ -31,7 +31,9 @@
             <a th:href="@{/}" class="navbar-link">注文履歴</a>&nbsp;&nbsp;
 
             <a th:href="@{/login-form}" class="navbar-link">ログイン</a>&nbsp;&nbsp;
-            <a th:href="@{/logout}" class="navbar-link">ログアウト</a>
+            <form th:action="@{/logout}" name="logout" method="POST">
+                <a href="javascript:logout.submit()" class="navbar-link" >ログアウト</a>
+            </form>
         </p>
     </div>
 </div>

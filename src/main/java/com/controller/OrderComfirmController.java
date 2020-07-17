@@ -35,7 +35,6 @@ public class OrderComfirmController {
     private HttpSession session;
 
 
-
     @ModelAttribute
     public OrderConfirmForm setUpform(){
         return new OrderConfirmForm();

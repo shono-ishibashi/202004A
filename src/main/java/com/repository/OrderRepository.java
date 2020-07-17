@@ -302,6 +302,16 @@ public class OrderRepository {
         SqlParameterSource param = new MapSqlParameterSource().addValue("orderId",orderId).addValue("orderItemId",orderItemId);
 
         template.update(sql,param);
+    }
+
+    public void updateTotalPrice(Integer orderId, Integer totalPrice){
+
+        String sql = "UPDATE orders SET total_price = :totalPrice WHERE id = :orderId";
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("totalPrice",totalPrice)
+                .addValue("orderId",orderId);
+
+        template.update(sql,param);
 
     }
 }

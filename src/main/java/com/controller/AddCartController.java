@@ -28,6 +28,16 @@ public class AddCartController {
     @Autowired
     private HttpSession session;
 
+
+    /**
+     *
+     * 新しくカートを作成するメソッド
+     *
+     * @param cartAddForm 入力フォームで入力したデータ
+     * @param model
+     * @return
+     * @throws Exception
+     */
     @RequestMapping("/add")
     public String cartAdd(CartAddForm cartAddForm, Model model) throws Exception {
 

@@ -94,10 +94,12 @@
 
 
                                         <div id="topping">
+
                                             <div  th:each="list:${toppingList}">
 
                                                 <input type="checkbox" th:value="${list.id}" th:text="${list.name}" th:field="*{toppingList}" name="topping">
                                             </div>
+
                                         </div>
                                     </label>
                                 </div>

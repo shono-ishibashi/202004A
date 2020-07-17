@@ -69,6 +69,10 @@ public class ItemRepository {
         return itemList;
     }
 
+    /**
+     * 商品の人気順に表示する。
+     * @return
+     */
     public List<Item> findAllByPopullerItem(){
         String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items ORDER BY price_m";
 

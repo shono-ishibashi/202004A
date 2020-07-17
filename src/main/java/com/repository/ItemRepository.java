@@ -74,7 +74,6 @@ public class ItemRepository {
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("id" ,id);
 
-
         Item item = template.queryForObject(sql, param, ITEM_ROW_MAPPER);
 
         return item;

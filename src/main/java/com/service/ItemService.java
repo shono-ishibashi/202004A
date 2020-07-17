@@ -37,6 +37,20 @@ public class ItemService {
         return toppingRepository.findAll();
     }
 
+    public StringBuilder getNoodleAutoCompleteList(List<Item> itemList){
+        StringBuilder noodleAutoCompleteList = new StringBuilder();
+        for (int i = 0; i < itemList.size(); i++) {
+            if (i != 0) {
+                noodleAutoCompleteList.append(",");
+            }
+            Item item = itemList.get(i);
+            noodleAutoCompleteList.append("\"");
+            noodleAutoCompleteList.append(item.getName());
+            noodleAutoCompleteList.append("\"");
+        }
+        return noodleAutoCompleteList;
+    }
+
 
 
 }

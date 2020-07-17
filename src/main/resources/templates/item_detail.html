@@ -22,6 +22,7 @@
 
     <form action="cart_list.html" th:action="@{/noodle/cart/add}" method="post" name="noodleDetail" th:object="${cartAddForm}">
         <input type="hidden" th:value="${item.id}" name="id">
+
         <div class="row">
             <div class="col-xs-offset-2 col-xs-8">
 
@@ -91,9 +92,10 @@
                                 </div>
                                 <div class="col-sm-12">
 
-                                    <label class="checkbox-inline">
+
                                         <div id="topping">
                                             <div  th:each="list:${toppingList}">
+
                                                 <input type="checkbox" th:value="${list.id}" th:text="${list.name}" th:field="*{toppingList}" name="topping">
                                             </div>
                                         </div>

@@ -20,7 +20,9 @@ $(function () {
         }
         console.log(toppingPrice);
 
+
         var toppingCount = $('#topping input:checkbox:checked').length;
+
 
         var itemCount = Number($("#quantity").val());
         var sumPrice = toppingPrice * toppingCount + Number(checkedItemPrice) ;

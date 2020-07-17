@@ -19,13 +19,15 @@
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
-        $(function(){
-            const availableTags = [[(${autoComplete})]];
+        $(function () {
+            var availableTags =[ [(${itemListForAutocomplete})] ];
 
-            $("#code").autocomplete({
-                source: availableTags
+            $('#code').autocomplete({
+                source: availableTags,
+                minLength: 1
             });
-        } );
+        });
+
     </script>
     <script>
         function textClear(){

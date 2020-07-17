@@ -2,10 +2,12 @@ package com.controller;
 
 import com.domain.Item;
 import com.domain.Topping;
+import com.form.CartAddForm;
 import com.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -17,6 +19,10 @@ public class ShowDetailController {
     @Autowired
     private ItemService itemService;
 
+    @ModelAttribute
+    public CartAddForm setUpCartAddForm(){
+        return new CartAddForm();
+    }
 
 
     @RequestMapping("/show-detail")
@@ -24,7 +30,6 @@ public class ShowDetailController {
 
 
         //商品選択時に受け取ったString型のidをLong型に変換
-
 
         Item item = itemService.load(Long.parseLong(id));
 
@@ -36,5 +41,4 @@ public class ShowDetailController {
 
         return "item_detail";
     }
-
 }

@@ -23,7 +23,7 @@ public class OrderConfirmForm {
     @NotBlank(message = "電話番号を入力してください")
     @Pattern(regexp = "^[0-9]{2,4}-[0-9]{2,4}-[0-9]{3,4}$", message = "電話番号はXXXX-XXXX-XXXXの形式で入力してください")
     private String telephone;
-    @NotNull(message = "配達日を選択してください")
+    @NotBlank(message = "配達日を選択してください")
     private String orderDate;
     @NotEmpty(message = "配達時間を選択してください")
     private String orderTime;

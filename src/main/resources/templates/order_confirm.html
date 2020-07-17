@@ -111,18 +111,18 @@
 								</td>
 								<td>
 									<div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red"></div>
-									<input type="text" th:fields="*{name}" name="name" placeholder="山田太郎">
+									<input type="text" th:field="*{name}" name="name" placeholder="山田太郎">
 								</td>
 							</tr>
 							<tr>
 								<td>
-									<div class="text-center" th:fields="*{mailAddress}">
+									<div class="text-center" th:field="*{mailAddress}">
 										メールアドレス
 									</div>
 								</td>
 								<td>
 									<div th:if="${#fields.hasErrors('mailAddress')}" th:errors="*{mailAddress}" style="color: red"></div>
-									<input type="text" th:fields="*{mailAddress}" name="mailAddress" placeholder="sample@gmail.com">
+									<input type="text" th:field="*{mailAddress}" name="mailAddress" placeholder="sample@gmail.com">
 								</td>
 							</tr>
 							<tr>
@@ -133,7 +133,7 @@
 								</td>
 								<td>
 									<div th:if="${#fields.hasErrors('zipCode')}" th:errors="*{zipCode}" style="color: red"></div>
-									<input type="text" name="zipCode" th:fields="*{zipCode}" placeholder="123-4567">&nbsp;&nbsp;<input type="button" onKeyUp="AjaxZip3.zip2addr('zipCode','','address1','address2');" onclick="AjaxZip3.zip2addr('zipCode','','address1','address2');" value="住所検索">
+									<input type="text" name="zipCode" th:field="*{zipCode}" placeholder="123-4567">&nbsp;&nbsp;<input type="button" onKeyUp="AjaxZip3.zip2addr('zipCode','','address1','address2');" onclick="AjaxZip3.zip2addr('zipCode','','address1','address2');" value="住所検索">
 								</td>
 							</tr>
 							<tr>
@@ -145,10 +145,10 @@
 								<td>
 									都道府県<br>
 									<div th:if="${#fields.hasErrors('address1')}" th:errors="*{address1}" style="color: red"></div>
-									<input type="text" name="address1" th:fields="*{address1}" placeholder="東京都"><br>
+									<input type="text" name="address1" th:field="*{address1}" placeholder="東京都"><br>
 									市区町村　(建物名)<br>
 									<div th:if="${#fields.hasErrors('address2')}" th:errors="*{address2}" style="color: red"></div>
-									<input type="text" name="address2" th:fields="*{address2}" placeholder="〇〇区〇〇1-2-3　〇〇ビル">
+									<input type="text" name="address2" th:field="*{address2}" placeholder="〇〇区〇〇1-2-3　〇〇ビル">
 								</td>
 							</tr>
 							<tr>
@@ -159,7 +159,7 @@
 								</td>
 								<td>
 									<div th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}" style="color: red"></div>
-									<input type="text" name="telephone" th:fields="*{telephone}" placeholder="123-4567-8910">
+									<input type="text" name="telephone" th:field="*{telephone}" placeholder="123-4567-8910">
 								</td>
 							</tr>
 							<tr>
@@ -175,7 +175,9 @@
 <!--												<label-->
 <!--													class="control-label" style="color: red" for="inputPeriod">配達日時を入力してください</label>-->
 											</div>
-											<div class="col-sm-5">
+<!--											<div th:if ="${errorMsg}" th:text="${errorMsg}" style="color: red"></div>-->
+											<div class="col-sm-12">
+												<div th:if="${#fields.hasErrors('orderDate')}" th:errors="*{orderDate}" style="color: red"></div>
 												<input type="date" th:fields="*{orderDate}"
 													class="form-control input-sm" name="orderDate"/>
 											</div>
@@ -187,7 +189,7 @@
 												<div th:each="time,status : ${deliveryTimeList}">
 												<label class="radio-inline">
 													<input type="radio" name="orderTime"
-														th:value="${time}" th:text="${time}" th:fields="*{orderTime}">
+														th:value="${time}" th:text="${time}" th:field="*{orderTime}">
 												</label>
 												</div>
 											</div>
@@ -213,7 +215,7 @@
 										代金引換
 									</div>
 									<div class="text-center" th:if="${status.count%2==0}">
-										クレジットカー決済
+										クレジットカード決済
 									</div>
 								</td>
 								<td>
@@ -222,7 +224,7 @@
 											<label class="radio-inline">
 												<div th:if="${#fields.hasErrors('paymentMethod')}" th:errors="*{paymentMethod}" style="color: red"></div>
 												<input type="radio"
-													name="paymentMethod" checked="checked" th:value="${payment.key}" th:text="${payment.value}" th:fields="*{paymentMethod}">
+													name="paymentMethod" checked="checked" th:value="${payment.key}" th:text="${payment.value}" th:field="*{paymentMethod}">
 											</label>
 										</div>
 									</div>

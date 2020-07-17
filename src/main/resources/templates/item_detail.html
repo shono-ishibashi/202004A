@@ -20,7 +20,9 @@
         <div th:include="fragment::header"></div>
     </nav>
 
-    <form action="cart_list.html" th:action="@{/cart/show-list}" method="post" name="noodleDetail">
+    <form action="cart_list.html" th:action="@{/noodle/cart/add}" method="post" name="noodleDetail" th:object="${cartAddForm}">
+        <input type="hidden" th:value="${item.id}" name="id">
+
         <div class="row">
             <div class="col-xs-offset-2 col-xs-8">
 
@@ -54,20 +56,17 @@
                                 </div>
                                 <div class="col-sm-12">
                                     <label class="radio-inline">
-                                        <input type="radio"
-                                               name="responsibleCompany" checked="checked" id="checkM"
-                                               th:value="${item.priceM}">
+                                        <input type="radio" name="size" checked="checked" id="checkM" value="M">
                                         <span class="price">&nbsp;М&nbsp;</span>&nbsp;&nbsp;
                                         <!--										//Mサイズの金額-->
-                                        <span th:text="${item.priceM}"></span>
+                                        <span id="itemPriceM" th:text="${item.priceM}"></span>
                                         <!--										1,380円(税抜)-->
                                     </label>
                                     <label class="radio-inline">
-                                        <input type="radio"
-                                               name="responsibleCompany" id="checkL" th:value="${item.priceL}">
-                                        <span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;
+                                        <input type="radio" name="size" id="checkL" value="L">
+                                        <span class="price">&nbsp;Ｌ </span>&nbsp;&nbsp;
                                         <!--										//Lサイズの金額-->
-                                        <span th:text="${item.priceL}"></span>
+                                        <span id="itemPriceL" th:text="${item.priceL}"></span>
                                         <!--										2,380円(税抜)-->
                                     </label>
                                 </div>
@@ -95,38 +94,14 @@
 
 
                                         <div id="topping">
+
                                             <div  th:each="list:${toppingList}">
-                                                <label class="checkbox-inline">
-                                                <input type="checkbox" th:value="${list.id}" th:text="${list.name}" name="topping">
-                                                </label>
+
+                                                <input type="checkbox" th:value="${list.id}" th:text="${list.name}" th:field="*{toppingList}" name="topping">
                                             </div>
+
                                         </div>
-
-
-                                    <!--									<label class="checkbox-inline">-->
-                                    <!--										<input type="checkbox" value="">オニオン-->
-                                    <!--									</label>-->
-                                    <!--									<label class="checkbox-inline">-->
-                                    <!--										<input type="checkbox" value="">チーズ-->
-                                    <!--									</label>-->
-                                    <!--									<label class="checkbox-inline">-->
-                                    <!--										<input type="checkbox" value="">ピーマン-->
-                                    <!--									</label>-->
-                                    <!--									<label class="checkbox-inline">-->
-                                    <!--										<input type="checkbox" value="">ロースハム-->
-                                    <!--									</label><br>-->
-                                    <!--									<label class="checkbox-inline">-->
-                                    <!--										<input type="checkbox" value="">ほうれん草-->
-                                    <!--									</label>-->
-                                    <!--									<label class="checkbox-inline">-->
-                                    <!--										<input type="checkbox" value="">ぺパロに-->
-                                    <!--									</label>-->
-                                    <!--									<label class="checkbox-inline">-->
-                                    <!--										<input type="checkbox" value="">グリルナス-->
-                                    <!--									</label>-->
-                                    <!--									<label class="checkbox-inline">-->
-                                    <!--										<input type="checkbox" value="">あらびきソーセージ-->
-                                    <!--									</label>-->
+                                    </label>
                                 </div>
                             </div>
                         </div>
@@ -140,7 +115,7 @@
                                     <label>数量:</label>
                                     <label class="control-label"
                                            style="color: red" >数量を選択してください</label> <select
-                                        name="area" class="form-control" id="auto">
+                                        name="quantity" class="form-control" id="quantity" th:field="*{quantity}">
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>

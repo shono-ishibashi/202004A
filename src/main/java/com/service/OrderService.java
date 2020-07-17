@@ -3,6 +3,7 @@ package com.service;
 import com.domain.Order;
 import com.domain.OrderItem;
 import com.domain.OrderTopping;
+import com.domain.User;
 import com.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,8 @@ public class OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-    public List<Order> getOrderList(){
-        List<Order> orderListWithDub = orderRepository.findByUserIdJoinOrderItems(1,3);
+    public List<Order> getOrderHistoryList(Integer userId){
+        List<Order> orderListWithDub = orderRepository.findByUserIdJoinOrderItemsForOrderHistory(userId);
 
         List<Integer> orderItemIdList = new ArrayList<>();
         List<OrderItem> orderItemListWithoutDub = new ArrayList<>();
@@ -55,7 +56,6 @@ public class OrderService {
                 }
             }
             orderItem.setOrderToppingList(orderToppingList);
-            System.out.println("");
             orderItemListWithoutDub.add(orderItem);
         }
 
@@ -105,7 +105,6 @@ public class OrderService {
 
         }
 
-
         for(Order order: orderListWithoutDub){
             for(OrderItem orderItem: order.getOrderItemList()){
                 for(OrderItem orderItem1: orderItemListWithoutDub){
@@ -116,10 +115,7 @@ public class OrderService {
                 }
             }
         }
-
-        System.out.println("a");
-        return null;
+        return orderListWithoutDub;
     }
-
 }
 

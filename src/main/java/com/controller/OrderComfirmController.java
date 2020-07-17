@@ -3,6 +3,7 @@ package com.controller;
 import com.domain.Order;
 import com.form.OrderConfirmForm;
 import com.service.CartService;
+import com.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,9 @@ public class OrderComfirmController {
 
     @Autowired
     private HttpSession session;
+
+    @Autowired
+    private OrderService orderService;
 
     @ModelAttribute
     public OrderConfirmForm setUpform(){
@@ -96,5 +100,13 @@ public class OrderComfirmController {
         }
 
         return "order_finished";
+    }
+    @RequestMapping("/view")
+    public String past(Model model){
+        //Integer userId = (Integer)session.getAttribute("userId");
+        Integer userId = 1;
+        List<Order> orderList = orderService.getOrderHistoryList(userId);
+        model.addAttribute("orderList", orderList);
+        return  "order_history";
     }
 }

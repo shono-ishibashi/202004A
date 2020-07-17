@@ -34,6 +34,9 @@ public class OrderComfirmController {
     @Autowired
     private HttpSession session;
 
+    @Autowired
+    private OrderService orderService;
+
     @ModelAttribute
     public OrderConfirmForm setUpform(){
         return new OrderConfirmForm();
@@ -149,6 +152,16 @@ public class OrderComfirmController {
         }
 //        orderService.UpDate(order);
         System.out.println("いいいいい");
+
+
         return "order_finished";
+    }
+    @RequestMapping("/view")
+    public String past(Model model){
+        //Integer userId = (Integer)session.getAttribute("userId");
+        Integer userId = 1;
+        List<Order> orderList = orderService.getOrderHistoryList(userId);
+        model.addAttribute("orderList", orderList);
+        return  "order_history";
     }
 }

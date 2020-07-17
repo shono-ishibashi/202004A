@@ -95,11 +95,11 @@
 
 
                                         <div id="topping">
-                                            <div  th:each="list:${toppingList}">
+                                            <span  th:each="list:${toppingList}">
                                                 <label class="checkbox-inline">
                                                 <input type="checkbox" th:value="${list.id}" th:text="${list.name}" name="topping">
                                                 </label>
-                                            </div>
+                                            </span>
                                         </div>
 
 

@@ -175,7 +175,9 @@
 <!--												<label-->
 <!--													class="control-label" style="color: red" for="inputPeriod">配達日時を入力してください</label>-->
 											</div>
-											<div class="col-sm-5">
+<!--											<div th:if ="${errorMsg}" th:text="${errorMsg}" style="color: red"></div>-->
+											<div class="col-sm-12">
+												<div th:if="${#fields.hasErrors('orderDate')}" th:errors="*{orderDate}" style="color: red"></div>
 												<input type="date" th:fields="*{orderDate}"
 													class="form-control input-sm" name="orderDate"/>
 											</div>

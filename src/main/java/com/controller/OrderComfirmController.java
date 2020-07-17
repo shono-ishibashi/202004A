@@ -85,7 +85,9 @@ public class OrderComfirmController {
         order.setOrderDate(date);
         order.setDestinationName(orderConfirmForm.getName());
         order.setDestinationEmail(orderConfirmForm.getMailAddress());
-        order.setDestinationZipcode(orderConfirmForm.getZipCode());
+        //xxx-xxxxで受け取った郵便番号をxxxxxxxxの形に変更
+        String zipCode = orderConfirmForm.getZipCode().replace("-", "");
+        order.setDestinationZipcode(zipCode);
         //StringBuilderを使って住所を結合
         String address1 = orderConfirmForm.getAddress1();
         String address2 = orderConfirmForm.getAddress2();
@@ -123,6 +125,7 @@ public class OrderComfirmController {
         //現在時刻（日）と注文時刻（日）を比較
         if(orderDate.compareTo(currentDate) < 0 ){
             System.out.println("iiiii");
+            model.addAttribute("errorMsg", "今から3時間後の日時をご入力ください");
             return showConfirm(id,status,model);
         } else if(orderDate.compareTo(currentDate) == 0 ){ //注文日が当日の場合
             //現在時刻を２つ生成、１つ現在時刻として、もう一つは現在時刻の時間の部分を注文時間を変更
@@ -135,6 +138,7 @@ public class OrderComfirmController {
             //現在時刻と注文時刻が３時間離れているか比較
             if( orderDateTime.compareTo(currentDateTimePlus3Hour) < 0 ){
                 System.out.println("aaaaaa");
+                model.addAttribute("errorMsg", "今から3時間後の日時をご入力ください");
                 return showConfirm(id,status,model);
             }
 //            orderService.UpDate(order);

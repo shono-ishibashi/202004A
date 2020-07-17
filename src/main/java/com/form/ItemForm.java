@@ -4,7 +4,7 @@ import javax.validation.constraints.NotBlank;
 
 public class ItemForm {
 
-    @NotBlank(message = "キーワードを入力してください")
+    @NotBlank(message = "　キーワードを入力してください")
     private String noodleName;
 
     public String getNoodleName() {

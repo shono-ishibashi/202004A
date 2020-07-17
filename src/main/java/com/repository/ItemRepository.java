@@ -45,7 +45,9 @@ public class ItemRepository {
         return itemList;
     }
 
+
     /**
+     *
      * 検索された商品を表示する。
      * @param name
      * @return itemList
@@ -73,7 +75,6 @@ public class ItemRepository {
         String sql = "SELECT * FROM items WHERE id = :id";
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("id" ,id);
-
 
         Item item = template.queryForObject(sql, param, ITEM_ROW_MAPPER);
 

@@ -52,6 +52,12 @@ public class OrderService {
                     orderTopping.setTopping(orderInList.getOrderItemList().get(0).getOrderToppingList().get(0).getTopping());
                     orderTopping.setToppingId(orderInList.getOrderItemList().get(0).getOrderToppingList().get(0).getToppingId());
 
+                    if(orderItem.getSize().equals('M')){
+                        orderTopping.setPrice(200);
+                    }else if(orderItem.getSize().equals('L')){
+                        orderTopping.setPrice(300);
+                    }
+
                     orderToppingList.add(orderTopping);
                 }
             }

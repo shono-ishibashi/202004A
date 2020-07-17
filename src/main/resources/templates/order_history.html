@@ -77,11 +77,14 @@
                         &nbsp;<span th:text="${orderItem.item.priceM}"></span>円
                         &nbsp;<span th:text="${orderItem.quantity}"></span>杯
 
-                            <div th:each="orderTopping:${orderItem.orderToppingList}">
 
-                                &nbsp; &nbsp; &nbsp;<span th:text="${orderTopping.topping.name}"></span>
-                                <span th:text="${orderTopping.topping.priceM}"></span>
-                            </div>
+                                <div th:each="orderTopping:${orderItem.orderToppingList}">
+                                    <div th:if="${orderTopping.topping.name}">
+                                     &nbsp;&nbsp;&nbsp;<span th:text="${orderTopping.topping.name}"></span>
+                                     <span th:text="${orderTopping.price}"></span>円
+                                    </div>
+                                </div>
+
                     </div>
                     </td>
                     <td>

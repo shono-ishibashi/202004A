@@ -37,6 +37,9 @@ public class ItemService {
         return toppingRepository.findAll();
     }
 
+
+
+
     public StringBuilder getNoodleAutoCompleteList(List<Item> itemList){
         StringBuilder noodleAutoCompleteList = new StringBuilder();
         for (int i = 0; i < itemList.size(); i++) {
@@ -48,6 +51,8 @@ public class ItemService {
             noodleAutoCompleteList.append(item.getName());
             noodleAutoCompleteList.append("\"");
         }
+        System.out.println(noodleAutoCompleteList);
+
         return noodleAutoCompleteList;
     }
 

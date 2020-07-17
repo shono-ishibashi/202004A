@@ -2,6 +2,7 @@ package com.domain;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -13,5 +14,6 @@ public class OrderItem {
     private Character size;
     private Item item;
     private Integer totalPrice;
-    private List<OrderTopping> orderToppingList;
+    private List<OrderTopping> orderToppingList = new ArrayList<>();
+
 }

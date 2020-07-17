@@ -34,8 +34,7 @@ public class OrderComfirmController {
     @Autowired
     private HttpSession session;
 
-    @Autowired
-    private OrderService orderService;
+
 
     @ModelAttribute
     public OrderConfirmForm setUpform(){

@@ -74,9 +74,10 @@
                     <div th:each="orderItem:${order.orderItemList}">
 
                             ・<span th:text="${orderItem.item.name}"></span>
-                        &nbsp;<span th:text="${orderItem.size}"></span>サイズ
-                        &nbsp;<span th:text="${orderItem.item.priceM}"></span>円
-                        &nbsp;<span th:text="${orderItem.quantity}"></span>杯
+                        &nbsp;&nbsp;<span th:text="${orderItem.size}"></span>サイズ
+                        <span th:if="${orderItem.size.toString() == 'M'}"> <span th:text="${orderItem.item.priceM}"></span>円</span>
+                        &nbsp;<span th:if="${orderItem.size.toString() == 'L'}"><span th:text="${orderItem.item.priceL}"></span>円</span>
+                        &nbsp;<span th:text="${orderItem.quantity}"></span>個
 
 
                                 <div th:each="orderTopping:${orderItem.orderToppingList}">
@@ -92,7 +93,7 @@
                         <div th:text="${order.destinationName}"></div>
                     </td>
                     <td>
-                        <div th:text="${order.totalPrice}"></div>
+                        <span th:text="${order.totalPrice}"></span>円
                     </td>
                     <td>
                         <div th:if="${order.paymentMethod == 1}">

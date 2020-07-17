@@ -119,7 +119,7 @@ public class OrderComfirmController {
         order.setDeliveryTime(ts);
         order.setPaymentMethod(status);
 
-        orderService.UpDate(order);
+//        orderService.UpDate(order);
 
         return "order_finished";
     }

@@ -1,6 +1,7 @@
 package com.repository;
 
 import com.domain.*;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -181,13 +182,13 @@ public class OrderRepository {
                 "     ,toppings.price_m as toppingPriceM" +
                 "     ,toppings.price_l as toppingPriceL" +
                 " FROM orders AS o" +
-                " JOIN order_items AS oi" +
+                " LEFT OUTER JOIN order_items AS oi" +
                 " ON o.id = oi.order_id" +
-                " JOIN items" +
+                " LEFT OUTER JOIN items" +
                 " ON oi.item_id = items.id" +
-                " JOIN order_toppings as ot" +
+                " LEFT OUTER JOIN order_toppings as ot" +
                 " ON ot.order_item_id = oi.id" +
-                " JOIN toppings" +
+                " LEFT OUTER JOIN toppings" +
                 " ON toppings.id = ot.topping_id" +
                 " WHERE o.user_id = :userId " +
                 " AND o.status = :status" +
@@ -201,63 +202,14 @@ public class OrderRepository {
         return orderList;
     }
 
-    public Integer insert(Order order) {
-        //orderのinsert
-        String sql =
-                "INSERT INTO orders (" +
-                        "user_id, " +
-                        "status, " +
-                        "total_price, " +
-                        "order_date, " +
-                        "destination_name, " +
-                        "destination_email, " +
-                        "destination_zipcode, " +
-                        "destination_address, " +
-                        "destination_tel, " +
-                        "delivery_time, " +
-                        "payment_method) " +
-                        "VALUES (" +
-                        ":userId, " +
-                        ":status, " +
-                        ":totalPrice, " +
-                        ":orderDate , " +
-                        ":destinationName, " +
-                        ":destinationEmail, " +
-                        ":destinationZipcode , " +
-                        ":destinationAddress, " +
-                        ":destinationTel ," +
-                        ":deliveryTime, " +
-                        ":paymentMethod" +
-                        ");";
+    public void updateUserId(Integer userId,Integer temporaryId) {
+        String sql = "UPDATE orders SET user_id = :userId WHERE user_id = :temporaryId ";
 
-        String orderItemInsert =
-                "INSERT INTO order_items (" +
-                        "id, " +
-                        "item_id, " +
-                        "order_id, " +
-                        "quantity, " +
-                        "size " +
-                        ")VALUES(" +
-                        ":id, " +
-                        ":itemId, " +
-                        ":quantity, " +
-                        ":size  " +
-                        ")";
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("userId",userId)
+                .addValue("temporaryId",temporaryId);
 
-        String orderToppingInsert =
-                "INSERT INTO order_toppings (" +
-                        "id, " +
-                        "topping_id, " +
-                        "order_item_id " +
-                        ")VALUES(" +
-                        ":id, " +
-                        ":toppingId, " +
-                        ":orderItemId " +
-                        ")";
-
-
-        SqlParameterSource orderPram = new BeanPropertySqlParameterSource(order);
-
-        return null;
+        template.update(sql,param );
     }
+
 }

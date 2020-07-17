@@ -125,12 +125,12 @@ public class CartService {
 
         //totalPrice を 計算する
 
-        Integer totalPrice = 0;
-        Integer orderItemTotalPrice = 0;
+        Integer totalPrice = -1;
+        Integer orderItemTotalPrice = -1;
         for(Order order : result){
-            totalPrice = 0;
+            totalPrice = -1;
             for(OrderItem totalPriceOrderItem : order.getOrderItemList()){
-                orderItemTotalPrice = 0;
+                orderItemTotalPrice = -1;
                 if('M' == totalPriceOrderItem.getSize()){
                     totalPrice += totalPriceOrderItem.getItem().getPriceM();
                     orderItemTotalPrice +=  totalPriceOrderItem.getItem().getPriceM();

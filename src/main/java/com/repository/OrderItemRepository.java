@@ -5,6 +5,7 @@ import com.domain.OrderItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -22,7 +23,7 @@ public class OrderItemRepository {
     private SimpleJdbcInsert insert;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(
                 ((JdbcTemplate) template.getJdbcOperations())
         );
@@ -33,7 +34,6 @@ public class OrderItemRepository {
     }
 
 
-
     public Integer insertOrderItem(OrderItem orderItem) {
 
         SqlParameterSource param = new BeanPropertySqlParameterSource(orderItem);
@@ -41,5 +41,17 @@ public class OrderItemRepository {
         Number id = insert.executeAndReturnKey(param);
 
         return id.intValue();
+    }
+
+    public void updateOrderId(Integer temporaryId, Integer userId) {
+        String sql = "UPDATE order_items " +
+                "SET order_id = (SELECT id FROM orders WHERE user_id = :userId AND status = 0) " +
+                "WHERE order_id = (SELECT id FROM orders WHERE user_id = :temporaryId  AND status = 0)";
+
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("userId", userId)
+                .addValue("temporaryId", temporaryId);
+
+        template.update(sql,param );
     }
 }

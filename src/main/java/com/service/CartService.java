@@ -22,14 +22,7 @@ public class CartService {
     @Autowired
     private OrderRepository orderRepository;
 
-    @Autowired
-    private OrderItemRepository orderItemRepository;
-
-    @Autowired
-    private OrderToppingRepository orderToppingRepository;
-
-
-    public Order cart(Integer userId) throws Exception {
+    public Order addCart() throws Exception {
 
         List<Order> orderListStatus0 = orderRepository.findByUserIdAndStatus(userId,0);
 
@@ -125,12 +118,12 @@ public class CartService {
 
         //totalPrice を 計算する
 
-        Integer totalPrice = -1;
-        Integer orderItemTotalPrice = -1;
+        Integer totalPrice = 0;
+        Integer orderItemTotalPrice = 0;
         for(Order order : result){
-            totalPrice = -1;
+            totalPrice = 0;
             for(OrderItem totalPriceOrderItem : order.getOrderItemList()){
-                orderItemTotalPrice = -1;
+                orderItemTotalPrice = 0;
                 if('M' == totalPriceOrderItem.getSize()){
                     totalPrice += totalPriceOrderItem.getItem().getPriceM();
                     orderItemTotalPrice +=  totalPriceOrderItem.getItem().getPriceM();
@@ -155,6 +148,10 @@ public class CartService {
         }
 
         return result;
+    }
+
+    public void delete(Integer orderId, Integer itemId, Integer orderItemId){
+        orderRepository.delete(orderId,itemId,orderItemId);
     }
 
     public Integer addCartItem(OrderItem orderItem){

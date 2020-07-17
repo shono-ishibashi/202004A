@@ -1,7 +1,9 @@
 package com.service;
 
 import com.domain.*;
+import com.repository.OrderItemRepository;
 import com.repository.OrderRepository;
+import com.repository.OrderToppingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,40 +22,47 @@ public class CartService {
     @Autowired
     private OrderRepository orderRepository;
 
-    public Order addCart() throws Exception {
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
-//        Integer testId = 1;
-//        List<Order> orderListStatus0 = orderRepository.findByUserIdAndStatus0();
-//
-//        Order order;
-//
-//        // status 0 の orderがあればそれを利用しなければ、インスタンス化する
-//        // それ以外は Exeptionを投げる
-//        if (orderListStatus0.isEmpty()) {
-//            order = new Order();
-//            order.setStatus(0);
-//        } else if (orderListStatus0.size() == 1) {
-//            order = orderListStatus0.get(0);
-//        } else {
-//            throw new Exception();
-//        }
-//
-//
-//        order.getOrderItemList();
-//
-        return null;
+    @Autowired
+    private OrderToppingRepository orderToppingRepository;
+
+
+    public Order cart(Integer userId) throws Exception {
+
+        List<Order> orderListStatus0 = orderRepository.findByUserIdAndStatus(userId,0);
+
+        // status 0 の orderがあればそれを利用しなければ、インスタンス化する
+        // それ以外は Exeptionを投げる
+        if (orderListStatus0.isEmpty()) {
+            Order cart = new Order();
+            cart.setUserId(userId);
+            cart.setStatus(0);
+            cart.setTotalPrice(0);
+
+            Integer generatedId = orderRepository.createCart(cart);
+
+            cart.setId(generatedId);
+
+            return cart;
+        } else if (orderListStatus0.size() == 1) {
+            Order cart = orderListStatus0.get(0);
+            return cart;
+        } else {
+            throw new Exception();
+        }
     }
 
     /**
-     *
      * @param userId ログイン中または、仮発行のUserId
      * @param status 注文状態を示す数値
      * @return 注文(Order)が入ったリスト
      * @throws Exception
      */
-    public List<Order> showCart(Integer userId,Integer status) throws Exception {
+    public List<Order> showCart(Integer userId, Integer status) throws Exception {
 
-        List<Order> orderList = orderRepository.findByUserIdJoinOrderItems(1,status);
+        List<Order> orderList = orderRepository.findByUserIdJoinOrderItems(userId, status);
 
 
         //orderToppingだけのListを作成
@@ -105,17 +114,61 @@ public class CartService {
         //Order の 中に OrderItemを格納
         List<Order> result = new ArrayList<>(orderMap.values());
 
-            for(Order order : result){
-                for(OrderItem resultOrderItem : resultOrderItemList){
-                    if(order.getId().equals(resultOrderItem.getOrderId())){
-                        order.getOrderItemList().add(resultOrderItem);
-                    }
+        for (Order order : result) {
+            for (OrderItem resultOrderItem : resultOrderItemList) {
+                if (order.getId().equals(resultOrderItem.getOrderId())) {
+                    order.getOrderItemList().add(resultOrderItem);
                 }
             }
+        }
+
+
+        //totalPrice を 計算する
+
+        Integer totalPrice = 0;
+        Integer orderItemTotalPrice = 0;
+        for(Order order : result){
+            totalPrice = 0;
+            for(OrderItem totalPriceOrderItem : order.getOrderItemList()){
+                orderItemTotalPrice = 0;
+                if('M' == totalPriceOrderItem.getSize()){
+                    totalPrice += totalPriceOrderItem.getItem().getPriceM();
+                    orderItemTotalPrice +=  totalPriceOrderItem.getItem().getPriceM();
+                }else if ('L' == totalPriceOrderItem.getSize() ){
+                    totalPrice += totalPriceOrderItem.getItem().getPriceL();
+                    orderItemTotalPrice +=  totalPriceOrderItem.getItem().getPriceL();
+                }
+                for(OrderTopping totalPriceOrderTopping : totalPriceOrderItem.getOrderToppingList()) {
+                    if ('M' == totalPriceOrderItem.getSize()) {
+                        totalPrice += totalPriceOrderTopping.getTopping().getPriceM();
+                        orderItemTotalPrice += totalPriceOrderTopping.getTopping().getPriceM();
+                    } else if ('L' == totalPriceOrderItem.getSize()) {
+                        totalPrice += totalPriceOrderTopping.getTopping().getPriceL();
+                        orderItemTotalPrice += totalPriceOrderTopping.getTopping().getPriceL();
+                    }
+                }
+            orderItemTotalPrice *= totalPriceOrderItem.getQuantity();
+            totalPriceOrderItem.setTotalPrice(orderItemTotalPrice);
+            totalPrice += orderItemTotalPrice;
+            }
+            order.setTotalPrice(orderItemTotalPrice);
+        }
 
         return result;
-
     }
 
+    public void delete(Integer orderId, Integer itemId, Integer orderItemId) {
+        orderRepository.delete(orderId, itemId, orderItemId);
+    }
+
+
+    public Integer addCartItem(OrderItem orderItem){
+        Integer orderItemId = orderItemRepository.insertOrderItem(orderItem);
+        return orderItemId;
+    }
+
+    public void addCartTopping(OrderTopping orderTopping){
+        orderToppingRepository.insertOrderTopping(orderTopping);
+    }
 }
 

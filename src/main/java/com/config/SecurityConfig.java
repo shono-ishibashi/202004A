@@ -57,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.logout()
                 //  ログアウト時の遷移先URL
-                .logoutSuccessUrl("/")
+                .logoutSuccessUrl("/cart/show-list")
                 //  ログアウトするとCookieのJSESSIONIDを削除
                 .deleteCookies();
     }

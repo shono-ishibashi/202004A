@@ -25,20 +25,16 @@ public class CartController {
     @Autowired
     private HttpSession session;
 
-    @RequestMapping("/add")
-    public String addItem(Item item){
-
-
-    return "cart_list";
-    }
 
     @RequestMapping("/show-list")
     public String showCart(Model model) throws Exception {
 
-        User user = (User)session.getAttribute("loginUser");
+        Integer userId = (Integer)session.getAttribute("userId");
 
-        List<Order> cart = cartService.showCart(1,0);
-        session.setAttribute("cart", cart);
+        List<Order> cart = cartService.showCart(userId,0);
+
+        model.addAttribute("cart", cart);
+
         return "cart_list";
     }
 }

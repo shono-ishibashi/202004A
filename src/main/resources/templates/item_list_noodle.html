@@ -27,6 +27,12 @@
             });
         } );
     </script>
+    <script>
+        function textClear(){
+            let textForm = document.getElementById("code");
+            textForm.value= '';
+        }
+    </script>
 </head>
 <body>
 	<div class="container">
@@ -58,8 +64,10 @@
 
                             <div class="text-center">
                                 <button type="submit" value="検索" class="btn btn-primary">検索</button>
-                                <button type="reset" value="クリア" class="btn btn-default">クリア</button>
+                                <button type="button" value="クリア" class="btn btn-default" onclick="textClear()">クリア</button>
+
                             </div>
+                        </div>
                     </form>
                 </div>
             </div>

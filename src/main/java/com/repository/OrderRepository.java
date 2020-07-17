@@ -265,22 +265,26 @@ public class OrderRepository {
     public void UpDate(Order order){
         SqlParameterSource param = new BeanPropertySqlParameterSource(order);
 
-        if( order.getStatus() == 1 ){
+        if( order.getPaymentMethod() == 1  ){
             String upDateSqlCash ="UPDATE orders SET  status=1,  " +
                     "order_date=:orderDate, destination_name=:destinationName, destination_email=:destinationEmail, " +
                     "destination_zipcode=:destinationZipcode, destination_address=:destinationAddress, " +
                     "destination_tel=:destinationTel, delivery_time=:deliveryTime, payment_method=:paymentMethod  " +
-                    "WHERE user_id=:userId ";
-
+                    "WHERE user_id=:userId and status = 0";
+            System.out.println("代金引換でお客様情報を更新");
             template.update(upDateSqlCash,param);
-        }
-        String upDateSqlCredit ="UPDATE orders SET status=2,  " +
-                "order_date=:orderDate, destination_name=:destinationName, destination_email=:destinationEmail, " +
-                "destination_zipcode=:destinationZipcode, destination_address=:destinationAddress, " +
-                "destination_tel=:destinationTel, delivery_time=:deliveryTime, payment_method=:paymentMethod " +
-                "WHERE user_id=:userId ";
+        } else{
 
-        template.update(upDateSqlCredit,param);
+            String upDateSqlCredit ="UPDATE orders SET status=2,  " +
+                    "order_date=:orderDate, destination_name=:destinationName, destination_email=:destinationEmail, " +
+                    "destination_zipcode=:destinationZipcode, destination_address=:destinationAddress, " +
+                    "destination_tel=:destinationTel, delivery_time=:deliveryTime, payment_method=:paymentMethod " +
+                    "WHERE user_id=:userId and status = 0";
+            System.out.println("クレカ決済でお客様情報を更新");
+            template.update(upDateSqlCredit,param);
+
+        }
+
     }
 
 

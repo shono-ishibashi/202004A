@@ -20,7 +20,7 @@
         <div th:include="fragment::header"></div>
     </nav>
 
-    <form action="cart_list.html" th:action="@{/noodle/cart/add}" method="post" name="noodleDetail" th:object="${cartAddForm}">
+    <form action="cart_list.html" th:action="@{/cart/show-list}" method="post" name="noodleDetail" th:object="${cartAddForm}">
         <input type="hidden" th:value="${item.id}" name="id">
 
         <div class="row">
@@ -91,15 +91,12 @@
                                     </label>
                                 </div>
                                 <div class="col-sm-12">
-
-
                                         <div id="topping">
-
                                             <div  th:each="list:${toppingList}">
-
-                                                <input type="checkbox" th:value="${list.id}" th:text="${list.name}" th:field="*{toppingList}" name="topping">
+                                                <label class="checkbox-inline">
+                                                    <input type="checkbox" th:value="${list.id}" th:text="${list.name}" th:field="*{toppingList}" name="topping" >
+                                                </label>
                                             </div>
-
                                         </div>
                                     </label>
                                 </div>

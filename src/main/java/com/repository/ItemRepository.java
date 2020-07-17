@@ -45,7 +45,9 @@ public class ItemRepository {
         return itemList;
     }
 
+
     /**
+     *
      * 検索された商品を表示する。
      * @param name
      * @return itemList

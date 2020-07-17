@@ -257,6 +257,31 @@ public class OrderRepository {
 
         return orderList;
     }
+  
+   /**
+     *お客様情報を更新する処理
+     *
+     */
+    public void UpDate(Order order){
+        SqlParameterSource param = new BeanPropertySqlParameterSource(order);
+
+        if( order.getStatus() == 1 ){
+            String upDateSqlCash ="UPDATE orders SET  status=1,  " +
+                    "order_date=:orderDate, destination_name=:destinationName, destination_email=:destinationEmail, " +
+                    "destination_zipcode=:destinationZipcode, destination_address=:destinationAddress, " +
+                    "destination_tel=:destinationTel, delivery_time=:deliveryTime, payment_method=:paymentMethod  " +
+                    "WHERE user_id=:userId ";
+
+            template.update(upDateSqlCash,param);
+        }
+        String upDateSqlCredit ="UPDATE orders SET status=2,  " +
+                "order_date=:orderDate, destination_name=:destinationName, destination_email=:destinationEmail, " +
+                "destination_zipcode=:destinationZipcode, destination_address=:destinationAddress, " +
+                "destination_tel=:destinationTel, delivery_time=:deliveryTime, payment_method=:paymentMethod " +
+                "WHERE user_id=:userId ";
+
+        template.update(upDateSqlCredit,param);
+    }
 
 
     public void updateUserId(Integer userId,Integer temporaryId) {
@@ -267,15 +292,26 @@ public class OrderRepository {
                 .addValue("temporaryId",temporaryId);
 
         template.update(sql,param );
+
     }
 
-    public void delete(Integer orderId, Integer itemId, Integer orderItemId){
+    public void delete(Integer orderId, Integer orderItemId){
         String sql = "BEGIN;" +
-                "DELETE FROM order_items WHERE order_id = :orderId AND item_id = :itemId;" +
+                "DELETE FROM order_items WHERE order_id = :orderId AND id = :orderItemId;" +
                 "DELETE FROM order_toppings WHERE order_item_id = :orderItemId;" +
                 "COMMIT;";
 
-        SqlParameterSource param = new MapSqlParameterSource().addValue("orderId",orderId).addValue("itemId", itemId).addValue("orderItemId",orderItemId);
+        SqlParameterSource param = new MapSqlParameterSource().addValue("orderId",orderId).addValue("orderItemId",orderItemId);
+
+        template.update(sql,param);
+    }
+
+    public void updateTotalPrice(Integer orderId, Integer totalPrice){
+
+        String sql = "UPDATE orders SET total_price = :totalPrice WHERE id = :orderId";
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("totalPrice",totalPrice)
+                .addValue("orderId",orderId);
 
         template.update(sql,param);
 

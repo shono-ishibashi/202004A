@@ -43,23 +43,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/login")
                 .usernameParameter("email")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/noodle/show-list", true)
+                .defaultSuccessUrl("/noodle/show-list")
                 .permitAll();
 
         http.authorizeRequests()
-                .antMatchers("/insert").permitAll()
-                .antMatchers("/register-user").permitAll()
-                .antMatchers("/register-user/insert").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/confirm").authenticated()
+                .antMatchers("/confirm/view").authenticated()
+                .antMatchers("/confirm/").authenticated()
+                .antMatchers("/confirm/order-finished").authenticated();
 
 
 
 
         http.logout()
                 //  ログアウト時の遷移先URL
-                .logoutSuccessUrl("/cart/show-list")
-                //  ログアウトするとCookieのJSESSIONIDを削除
-                .deleteCookies();
+                .logoutSuccessUrl("/cart/show-list");
     }
 
     @Override

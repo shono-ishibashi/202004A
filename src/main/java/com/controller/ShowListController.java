@@ -12,7 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpSession;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -31,10 +31,12 @@ public class ShowListController {
     public String showList(Model model) {
         List<Item> itemList = itemService.findAll();
         model.addAttribute("itemList", itemList);
-        StringBuilder autoComplete = itemService.getNoodleAutoCompleteList(itemList);
-        model.addAttribute("autoComplete", autoComplete);
+        StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(itemList);
+        model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
         return "item_list_noodle";
     }
+
+
 
     @RequestMapping("/search_noodle")
     public String searchNoodle(@Validated ItemForm itemForm, BindingResult result, Model model){
@@ -43,15 +45,18 @@ public class ShowListController {
             return showList(model);
         }
 
+        List<Item> allItems = itemService.findAll();
         List<Item> itemList = itemService.findByItem(itemForm.getNoodleName());
         if(itemList.size()==0){
             model.addAttribute("failure", "該当する商品がありません");
-            List<Item> allItems = itemService.findAll();
             model.addAttribute("itemList", allItems);
+            StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(allItems);
+            model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
             return "item_list_noodle";
         } else{
             model.addAttribute("itemList", itemList);
-
+            StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(allItems);
+            model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
             return "item_list_noodle";
         }
 

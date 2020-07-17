@@ -80,6 +80,8 @@ public class OrderRepository {
         orderItem.getOrderToppingList().add(orderTopping);
 
         order.getOrderItemList().add(orderItem);
+        orderItemList.add(orderItem);
+        order.setOrderItemList(orderItemList);
 
 
         return order;
@@ -197,7 +199,7 @@ public class OrderRepository {
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId).addValue("status", status);
 
-        List<Order> orderList = template.query(sql, param, ORDER_JOIN_ROW_MAPPER);
+        List<Order> orderList = template.query(sql, param, ORDER_ROW_MAPPER);
 
         return orderList;
     }
@@ -214,7 +216,7 @@ public class OrderRepository {
                 "     , o.destination_tel as destination_tel" +
                 "     , o.delivery_time as delivery_time" +
                 "     , o.payment_method as payment_method" +
-                "     ,oi.id as order_item_id" +
+                "     ,oi.id as orderItemId" +
                 "     ,oi.order_id as order_id" +
                 "     ,oi.item_id as item_id" +
                 "     ,oi.quantity as quantity" +
@@ -233,13 +235,13 @@ public class OrderRepository {
                 "     ,toppings.price_m as toppingPriceM" +
                 "     ,toppings.price_l as toppingPriceL" +
                 " FROM orders AS o" +
-                " LEFT JOIN order_items AS oi" +
+                " LEFT OUTER JOIN order_items AS oi" +
                 " ON o.id = oi.order_id" +
-                " LEFT JOIN items" +
+                " LEFT OUTER JOIN items" +
                 " ON oi.item_id = items.id" +
-                " LEFT JOIN order_toppings as ot" +
+                " LEFT OUTER JOIN order_toppings as ot" +
                 " ON ot.order_item_id = oi.id" +
-                " LEFT JOIN toppings" +
+                " LEFT OUTER JOIN toppings" +
                 " ON toppings.id = ot.topping_id" +
                 " WHERE o.user_id = :userId " +
                 " AND o.status = 1" +
@@ -251,7 +253,7 @@ public class OrderRepository {
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("userId",userId);
 
-        List<Order> orderList = template.query(sql,param,ORDER_ROW_MAPPER);
+        List<Order> orderList = template.query(sql,param,ORDER_JOIN_ROW_MAPPER);
 
         return orderList;
     }

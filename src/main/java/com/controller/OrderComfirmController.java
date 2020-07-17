@@ -58,6 +58,8 @@ public class OrderComfirmController {
         deliveryTimeList.add("18時");
         deliveryTimeList.add("19時");
         deliveryTimeList.add("20時");
+//        deliveryTimeList.add("21時");
+//        deliveryTimeList.add("22時");
 
         model.addAttribute("deliveryTimeList", deliveryTimeList);
 
@@ -71,6 +73,7 @@ public class OrderComfirmController {
 
     /**
      *  注文ボタンを押下した時の処理
+     *
      */
 
     @RequestMapping("/order-finished")
@@ -113,6 +116,8 @@ public class OrderComfirmController {
         order.setDeliveryTime(ts);
         order.setPaymentMethod(orderConfirmForm.getPaymentMethod());
 
+
+
         //現在時刻（日）を取得
         LocalDate currentDate = LocalDate.now();
         //現在時刻（時間）を整数として取得
@@ -139,10 +144,17 @@ public class OrderComfirmController {
             LocalDateTime orderDateTime = currentDateTime2.withHour(replaceOrderTimeInt1);
             //現在時刻に3時間加算
             LocalDateTime currentDateTimePlus3Hour = currentDateTime1.plusHours(3);
-            //現在時刻と注文時刻が３時間離れているか比較
-            if( orderDateTime.compareTo(currentDateTimePlus3Hour) < 0 ){
+
+            //現在時刻が最終注文時刻の３時間前を超えていた時
+            LocalDateTime lastOrderTime = currentDateTime1.withHour(20).withMinute(0).withSecond(0);
+            if( lastOrderTime.compareTo(currentDateTimePlus3Hour) < 0 ){
+                System.out.println("kkkkkkk");
+                model.addAttribute("errorMsg1", "最終注文時刻を過ぎています");
+                return showConfirm(id,status,model);
+            }//現在時刻と注文時刻が３時間離れているか比較
+            else if( orderDateTime.compareTo(currentDateTimePlus3Hour) < 0 ){
                 System.out.println("aaaaaa");
-                model.addAttribute("errorMsg", "今から3時間後の日時をご入力ください");
+                model.addAttribute("errorMsg2", "今から3時間後の日時をご入力ください");
                 return showConfirm(id,status,model);
             }
             orderService.UpDate(order);

@@ -55,6 +55,8 @@ public class OrderComfirmController {
         deliveryTimeList.add("16時");
         deliveryTimeList.add("17時");
         deliveryTimeList.add("18時");
+        deliveryTimeList.add("19時");
+        deliveryTimeList.add("20時");
 
         model.addAttribute("deliveryTimeList", deliveryTimeList);
 

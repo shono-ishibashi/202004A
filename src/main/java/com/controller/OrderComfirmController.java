@@ -28,8 +28,6 @@ public class OrderComfirmController {
     @Autowired
     private CartService cartService;
 
-    @Autowired
-    private OrderService orderService;
 
     @Autowired
     private HttpSession session;
@@ -82,9 +80,10 @@ public class OrderComfirmController {
             return showConfirm(id,status,model);
         }
         //Integer型としてuserIdを取得
-//        Integer userId = (Integer)session.getAttribute("userId");
-        Integer userId = 1;
+        Integer userId = (Integer)session.getAttribute("userId");
+//        Integer userId = 1;
         Order order = new Order();
+        order.setId(userId);
         //String型の日付をDate型へ変換
         Date date = Date.valueOf(orderConfirmForm.getOrderDate());
         order.setOrderDate(date);
@@ -146,11 +145,11 @@ public class OrderComfirmController {
                 model.addAttribute("errorMsg", "今から3時間後の日時をご入力ください");
                 return showConfirm(id,status,model);
             }
-//            orderService.UpDate(order);
+            orderService.UpDate(order);
             System.out.println("あああああ");
             return "order_finished";
         }
-//        orderService.UpDate(order);
+        orderService.UpDate(order);
         System.out.println("いいいいい");
 
 

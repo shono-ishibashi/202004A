@@ -263,12 +263,12 @@ public class OrderRepository {
     public void UpDate(Order order){
         SqlParameterSource param = new BeanPropertySqlParameterSource(order);
 
-        if( order.getStatus() == 1 ){
+        if( order.getStatus() == 1  ){
             String upDateSqlCash ="UPDATE orders SET  status=1,  " +
                     "order_date=:orderDate, destination_name=:destinationName, destination_email=:destinationEmail, " +
                     "destination_zipcode=:destinationZipcode, destination_address=:destinationAddress, " +
                     "destination_tel=:destinationTel, delivery_time=:deliveryTime, payment_method=:paymentMethod  " +
-                    "WHERE user_id=:userId ";
+                    "WHERE user_id=:userId and status = 0";
 
             template.update(upDateSqlCash,param);
         }
@@ -276,7 +276,7 @@ public class OrderRepository {
                 "order_date=:orderDate, destination_name=:destinationName, destination_email=:destinationEmail, " +
                 "destination_zipcode=:destinationZipcode, destination_address=:destinationAddress, " +
                 "destination_tel=:destinationTel, delivery_time=:deliveryTime, payment_method=:paymentMethod " +
-                "WHERE user_id=:userId ";
+                "WHERE user_id=:userId and status = 0";
 
         template.update(upDateSqlCredit,param);
     }

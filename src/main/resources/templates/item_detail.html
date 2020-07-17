@@ -91,15 +91,12 @@
                                     </label>
                                 </div>
                                 <div class="col-sm-12">
-
-
                                         <div id="topping">
-
                                             <div  th:each="list:${toppingList}">
-
-                                                <input type="checkbox" th:value="${list.id}" th:text="${list.name}" th:field="*{toppingList}" name="topping">
+                                                <label for="toppings">
+                                                    <input type="checkbox" th:value="${list.id}" th:text="${list.name}" th:field="*{toppingList}" name="topping" id="toppings">
+                                                </label>
                                             </div>
-
                                         </div>
                                     </label>
                                 </div>

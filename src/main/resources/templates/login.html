@@ -28,8 +28,8 @@
 								ログイン
 							</legend>
 							<label
-									class="control-label" style="color: red"
-									for="inputError">メールアドレス、またはパスワードが間違っています</label>
+									class="alert alert-danger" th:if="${session['SPRING_SECURITY_LAST_EXCEPTION']} != null"
+									th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}"></label>
 							<div class="form-group">
 								<label for="email">メールアドレス:</label>
 								<input type="text" id="email" class="form-control" name="email"

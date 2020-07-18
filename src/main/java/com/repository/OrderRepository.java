@@ -199,7 +199,7 @@ public class OrderRepository {
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId).addValue("status", status);
 
-        List<Order> orderList = template.query(sql, param, ORDER_ROW_MAPPER);
+        List<Order> orderList = template.query(sql, param, ORDER_JOIN_ROW_MAPPER);
 
         return orderList;
     }

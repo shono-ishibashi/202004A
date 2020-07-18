@@ -24,7 +24,7 @@ public class LoginController {
     }
 
     @RequestMapping("/login-form")
-    private String showForm(){
+    private String toLogin(){
         return "login";
     }
 
@@ -68,7 +68,8 @@ public class LoginController {
         user.setTelephone(userForm.getTelephone());
 
         userService.insertUser(user);
-        return showForm();
+
+        return toLogin();
     }
 
 }

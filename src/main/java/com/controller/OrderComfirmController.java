@@ -34,16 +34,21 @@ public class OrderComfirmController {
     @Autowired
     private HttpSession session;
 
+    @Autowired
+    private OrderService orderService;
+
     @ModelAttribute
     public OrderConfirmForm setUpform(){
         return new OrderConfirmForm();
     }
 
     @RequestMapping("")
-    public String showConfirm(Integer id, Integer status, Model model) throws Exception{
+    public String showConfirm(Model model) throws Exception{
 
-        List<Order> orderConfirmList = cartService.showCart(id, status);
-        session.setAttribute("orderConfirmList", orderConfirmList);
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        List<Order> orderConfirmList = cartService.showCart(userId, 0);
+        model.addAttribute("orderConfirmList", orderConfirmList);
 
         List<String> deliveryTimeList = new ArrayList<>();
         deliveryTimeList.add("10時");
@@ -76,10 +81,10 @@ public class OrderComfirmController {
      */
 
     @RequestMapping("/order-finished")
-    public String orderFinished(@Validated OrderConfirmForm orderConfirmForm, BindingResult result, Integer id, Integer status, Model model) throws Exception {
+    public String orderFinished(@Validated OrderConfirmForm orderConfirmForm, BindingResult result, Model model) throws Exception {
 
         if(result.hasErrors()){
-            return showConfirm(id,status,model);
+            return showConfirm(model);
         }
         //Integer型としてuserIdを取得
         Integer userId = (Integer)session.getAttribute("userId");
@@ -134,7 +139,7 @@ public class OrderComfirmController {
         if(orderDate.compareTo(currentDate) < 0 ){
             System.out.println("iiiii");
             model.addAttribute("errorMsg", "今から3時間後の日時をご入力ください");
-            return showConfirm(id,status,model);
+            return showConfirm(model);
         } else if(orderDate.compareTo(currentDate) == 0 ){ //注文日が当日の場合
             //現在時刻を２つ生成、１つ現在時刻として、もう一つは現在時刻の時間の部分を注文時間を変更
             LocalDateTime currentDateTime1 = LocalDateTime.now();
@@ -149,12 +154,12 @@ public class OrderComfirmController {
             if( lastOrderTime.compareTo(currentDateTimePlus3Hour) < 0 ){
                 System.out.println("kkkkkkk");
                 model.addAttribute("errorMsg1", "最終注文時刻を過ぎています");
-                return showConfirm(id,status,model);
+                return showConfirm(model);
             }//現在時刻と注文時刻が３時間離れているか比較
             else if( orderDateTime.compareTo(currentDateTimePlus3Hour) < 0 ){
                 System.out.println("aaaaaa");
                 model.addAttribute("errorMsg2", "今から3時間後の日時をご入力ください");
-                return showConfirm(id,status,model);
+                return showConfirm(model);
             }
             orderService.UpDate(order);
             System.out.println("あああああ");

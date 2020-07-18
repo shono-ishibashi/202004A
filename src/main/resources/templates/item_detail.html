@@ -20,7 +20,7 @@
         <div th:include="fragment::header"></div>
     </nav>
 
-    <form action="cart_list.html" th:action="@{/cart/show-list}" method="post" name="noodleDetail" th:object="${cartAddForm}">
+    <form action="cart_list.html" th:action="@{/noodle/cart/add}" method="post" name="noodleDetail" th:object="${cartAddForm}">
         <input type="hidden" th:value="${item.id}" name="id">
 
         <div class="row">

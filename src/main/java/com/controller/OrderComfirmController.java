@@ -1,10 +1,12 @@
 package com.controller;
 
 import com.domain.Order;
+import com.domain.User;
 import com.form.OrderConfirmForm;
 import com.service.CartService;
 import com.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,6 +30,8 @@ public class OrderComfirmController {
     @Autowired
     private CartService cartService;
 
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
     private HttpSession session;
@@ -169,8 +173,8 @@ public class OrderComfirmController {
     }
     @RequestMapping("/view")
     public String past(Model model){
-        //Integer userId = (Integer)session.getAttribute("userId");
-        Integer userId = 4;
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer userId = user.getId();
         List<Order> orderList = orderService.getOrderHistoryList(userId);
         model.addAttribute("orderList", orderList);
         return  "order_history";

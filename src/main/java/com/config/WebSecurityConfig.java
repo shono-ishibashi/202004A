@@ -33,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 //指定したパターンごとに制限をかける
-                .antMatchers("/login-form", "/login", "/register-user", "/noodle/show-list", "/noodle/show-detail", "/noodle/cart/add", "/cart/show-list" ,"/register-user/insert").permitAll()//制限なし
+                .antMatchers("/login-form", "/login", "/register-user", "/noodle/show-list", "/noodle/show-detail", "/noodle/cart/add", "/cart/show-list" ,"/register-user/insert","/noodle/search_noodle/genre").permitAll()//制限なし
                 .anyRequest().authenticated()
                 //アクセスの許可
                 .and()
@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/noodle/show-list")
-                .successHandler(new RefererRedirectionAuthenticationSuccessHandler())
+
 
                 .and()
 

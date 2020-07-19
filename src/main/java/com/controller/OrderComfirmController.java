@@ -28,8 +28,6 @@ public class OrderComfirmController {
     @Autowired
     private CartService cartService;
 
-    @Autowired
-    private OrderService orderService;
 
     @Autowired
     private HttpSession session;

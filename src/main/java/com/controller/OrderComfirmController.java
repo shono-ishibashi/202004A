@@ -5,8 +5,14 @@ import com.domain.User;
 import com.form.OrderConfirmForm;
 import com.service.CartService;
 import com.service.OrderService;
+import com.service.SendMailService;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
+
 import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,6 +42,8 @@ public class OrderComfirmController {
     @Autowired
     private HttpSession session;
 
+    @Autowired
+    private SendMailService sendMailService;
 
     @ModelAttribute
     public OrderConfirmForm setUpform(){
@@ -91,6 +99,8 @@ public class OrderComfirmController {
 //        Integer userId = 1;
         Order order = new Order();
         order.setId(userId);
+        //ステータスを"未入金"としてセット
+        order.setStatus(0);
         //String型の日付をDate型へ変換
         Date date = Date.valueOf(orderConfirmForm.getOrderDate());
         order.setOrderDate(date);
@@ -120,8 +130,6 @@ public class OrderComfirmController {
         order.setDeliveryTime(ts);
         order.setPaymentMethod(orderConfirmForm.getPaymentMethod());
 
-
-
         //現在時刻（日）を取得
         LocalDate currentDate = LocalDate.now();
         //現在時刻（時間）を整数として取得
@@ -131,8 +139,6 @@ public class OrderComfirmController {
         String orderDateStr = orderConfirmForm.getOrderDate();
         LocalDate orderDate = LocalDate.parse(orderDateStr);
         //注文時刻（時間）を整数として取得
-//        String orderTimeStr = orderConfirmForm.getOrderTime();
-//        String replaceOrderTimeStr = orderTimeStr.replace("時", "");
         Integer replaceOrderTimeInt1 = Integer.parseInt(replaceOrderTimeStr);
 
         //現在時刻（日）と注文時刻（日）を比較
@@ -161,14 +167,14 @@ public class OrderComfirmController {
                 model.addAttribute("errorMsg2", "今から3時間後の日時をご入力ください");
                 return showConfirm(model);
             }
-            orderService.UpDate(order);
-            System.out.println("あああああ");
+            //メールを送信する処理
+            sendMailService.sendMail(order);
+//            orderService.UpDate(order);
             return "order_finished";
         }
-        orderService.UpDate(order);
-        System.out.println("いいいいい");
-
-
+        //メールを送信する処理
+        sendMailService.sendMail(order);
+//        orderService.UpDate(order);
         return "order_finished";
     }
 

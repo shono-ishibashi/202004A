@@ -38,13 +38,49 @@ public class ItemRepository {
      * @return itemList
      */
     public List<Item> findAll(){
-        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items ORDER BY price_m";
+        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items";
 
         List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
 
         return itemList;
     }
 
+    /**
+     * 商品を安い順で表示する。
+     * @return
+     */
+    public List<Item> findAllByCheapPrice(){
+        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items ORDER BY price_m ";
+
+        List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
+
+        return itemList;
+    }
+
+    /**
+     * 商品の値段が高い順で表示する。
+     * @return
+     */
+    public List<Item> findAllByExpensivePrice(){
+        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items ORDER BY price_m DESC";
+
+        List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
+
+        return itemList;
+    }
+
+
+    /**
+     * 商品の人気順に表示する。
+     * @return
+     */
+    public List<Item> findAllByPopularItem(){
+        String sql = "SELECT items.id, name, description, price_m, price_l, image_path, deleted FROM items LEFT OUTER JOIN order_items ON items.id=order_items.item_id  GROUP BY items.id ORDER BY count(items.id) DESC, price_m;";
+
+        List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
+
+        return itemList;
+    }
 
     /**
      *
@@ -61,6 +97,9 @@ public class ItemRepository {
 
         return itemList;
     }
+
+
+
 
     /**
      *

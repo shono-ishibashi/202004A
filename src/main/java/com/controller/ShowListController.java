@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/noodle")
@@ -28,8 +30,20 @@ public class ShowListController {
         return new ItemForm();
     }
 
+    /**
+     *
+     *商品一覧を表示する。
+     * （商品の検索、オートコンプリート機能）
+     * @param model
+     * @return ページ表示のhtml
+     */
     @RequestMapping("/show-list")
     public String showList(Model model) {
+        Map<Integer, String> orderOfItemMap = new HashMap<>();
+        orderOfItemMap.put(1, "値段が安い順");
+        orderOfItemMap.put(2, "値段が高い順");
+        orderOfItemMap.put(3,"人気順");
+        model.addAttribute("orderOfItemMap", orderOfItemMap) ;
         List<Item> itemList = itemService.findAll();
         model.addAttribute("itemList", itemList);
         StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(itemList);
@@ -39,13 +53,60 @@ public class ShowListController {
         return "item_list_noodle";
     }
 
-
-
+//
+//    @RequestMapping("/orderOfItem")
+//    public String orderList(Model model, String orderKey){
+//        Map<Integer, String> orderOfItemMap = new HashMap<>();
+//        orderOfItemMap.put(1, "値段が安い順");
+//        orderOfItemMap.put(2, "値段が高い順");
+//        orderOfItemMap.put(3,"人気順");
+//        model.addAttribute("orderOfItemMap", orderOfItemMap);
+//
+//        System.out.println(orderKey);
+//        if(1==Integer.parseInt(orderKey)){
+//            List<Item> itemList = itemService.findAllByCheapPric();
+//            model.addAttribute("itemList", itemList);
+//        } else if(2==Integer.parseInt(orderKey)){
+//            List<Item> itemList = itemService.findAllByExpensivePrice();
+//            model.addAttribute("itemList", itemList);
+//        } else if(3==Integer.parseInt(orderKey)){
+//            List<Item> itemList = itemService.findAllByPopularItem();
+//            model.addAttribute("itemList",itemList);
+//        }
+//        return "item_list_noodle";
+//    }
+    /**
+     * 検索結果を表示する。
+     *
+     * @param itemForm
+     * @param result
+     * @param model
+     * @return
+     */
     @RequestMapping("/search_noodle")
-    public String searchNoodle(@Validated ItemForm itemForm, BindingResult result, Model model){
+    public String searchNoodle(@Validated ItemForm itemForm, BindingResult result, String orderKey, Model model){
 
         if(result.hasErrors()){
             return showList(model);
+        }
+
+
+        Map<Integer, String> orderOfItemMap = new HashMap<>();
+        orderOfItemMap.put(1, "値段が安い順");
+        orderOfItemMap.put(2, "値段が高い順");
+        orderOfItemMap.put(3,"人気順");
+        model.addAttribute("orderOfItemMap", orderOfItemMap);
+
+        System.out.println(orderKey);
+        if(1==Integer.parseInt(orderKey)){
+            List<Item> itemList = itemService.findAllByCheapPric();
+            model.addAttribute("itemList", itemList);
+        } else if(2==Integer.parseInt(orderKey)){
+            List<Item> itemList = itemService.findAllByExpensivePrice();
+            model.addAttribute("itemList", itemList);
+        } else if(3==Integer.parseInt(orderKey)){
+            List<Item> itemList = itemService.findAllByPopularItem();
+            model.addAttribute("itemList",itemList);
         }
 
         List<Item> allItems = itemService.findAll();
@@ -84,6 +145,9 @@ public class ShowListController {
         }
 
         List<Item> itemList;
+
+      
+      
 
         //不正な値ならメッセージを投げて、全件表示させる
         if(genreExists){

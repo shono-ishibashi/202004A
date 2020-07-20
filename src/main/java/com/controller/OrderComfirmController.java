@@ -171,6 +171,7 @@ public class OrderComfirmController {
 
         return "order_finished";
     }
+
     @RequestMapping("/view")
     public String past(Model model){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

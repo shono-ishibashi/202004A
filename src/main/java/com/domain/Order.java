@@ -20,6 +20,7 @@ public class Order {
     private String destinationAddress;
     private String destinationTel;
     private Timestamp deliveryTime;
+    private Date DateFormatDeliveryTime;
     private Integer paymentMethod;
     private User user;
     private List<OrderItem> orderItemList;

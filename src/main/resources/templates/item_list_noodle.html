@@ -68,8 +68,10 @@
                                 <input type="text" th:field="*{noodleName}" id="code"
                                        class="form-control input-sm"/>
                             </div>
-
                             <div class="text-center">
+                                <select>
+                                    <option th:each="order : ${orderOfItemMap}" th:value="${order.key}" th:text="${order.value}"></option>
+                                </select>
                                 <button type="submit" value="検索" class="btn btn-primary">検索</button>
                                 <button type="button" value="クリア" class="btn btn-default" onclick="textClear()">クリア
                                 </button>

@@ -30,14 +30,51 @@ public class ItemService {
     @Autowired
     private ToppingRepository toppingRepository;
 
+  
+  
     public Page<ItemPaging> findAllPage(Pageable pageable){
         return itemJpaRepository.findAllByOrderByPriceM(pageable);
     }
+
+    /**
+     * 商品一覧を表示する。
+     * @return
+     */
 
     public List<Item> findAll(){
         return itemRepository.findAll();
     }
 
+    /**
+     *
+     *商品の値段の安い順に表示する。
+     * @return
+     */
+    public List<Item> findAllByCheapPric(){
+        return itemRepository.findAllByCheapPrice();
+    }
+
+    /**
+     * 商品の値段お高い順で表示する。
+     * @return
+     */
+    public List<Item> findAllByExpensivePrice(){
+        return itemRepository.findAllByExpensivePrice();
+    }
+
+    /**
+     * 商品を人気順で表示する。
+     * @return
+     */
+    public List<Item> findAllByPopularItem(){
+        return itemRepository.findAllByPopularItem();
+    }
+
+    /**
+     * 商品の曖昧検索をする。
+     * @param name
+     * @return
+     */
     public List<Item> findByItem(String name){
         return itemRepository.findByNameLike(name);
     }
@@ -57,5 +94,22 @@ public class ItemService {
         }else {
             return itemRepository.findByGenre(genre);
         }
+    }
+
+
+    public StringBuilder getNoodleAutoCompleteList(List<Item> itemList){
+        StringBuilder noodleAutoCompleteList = new StringBuilder();
+        for (int i = 0; i < itemList.size(); i++) {
+            if (i != 0) {
+                noodleAutoCompleteList.append(",");
+            }
+            Item item = itemList.get(i);
+            noodleAutoCompleteList.append("\"");
+            noodleAutoCompleteList.append(item.getName());
+            noodleAutoCompleteList.append("\"");
+        }
+
+
+        return noodleAutoCompleteList;
     }
 }

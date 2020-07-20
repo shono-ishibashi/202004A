@@ -59,10 +59,16 @@
                             決算状況
                         </div>
                     </th>
+                    <th>
+                        <div class="text-center">
+                            詳細
+                        </div>
+                    </th>
                 </tr><!-- セル名の部分終わり-->
 
                 <!-- ここから下が注文内容-->
                 <div th:each="order:${orderList}">
+
                     <tr>
                         <td>
                             <div class="center">
@@ -89,38 +95,51 @@
                                     </div>
                                 </div>
 
-                            </div>
-                        </td>
-                        <td>
-                            <div th:text="${order.destinationName}"></div>
-                        </td>
-                        <td>
-                            <span th:text="${order.totalPrice}"></span>円
-                        </td>
-                        <td>
-                            <div th:if="${order.paymentMethod == 1}">
-                                <span>クレジットカード払い</span>
-                            </div>
-                            <div th:if="${order.paymentMethod == 2}">
-                                <span>現金払い</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div th:if="${order.status == 1}">
-                                <span>未入金</span>
-                            </div>
-                            <div th:if="${order.status == 2}">
-                                <span>入金済</span>
-                            </div>
-                            <div th:if="${order.status == 3}">
-                                <span>発送済</span>
-                            </div>
-                            <div th:if="${order.status == 4}">
-                                <span>配送完了</span>
-                            </div>
 
-                        </td>
-
+                    </div>
+                    </td>
+                    <td>
+                        <div class="text-center">
+                        <div th:text="${order.destinationName}"></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="text-center">
+                        <span th:text="${#numbers.formatInteger(order.totalPrice,0,'COMMA')}"></span>円
+                        </div>
+                    </td>
+                    <td>
+                        <div class="text-center">
+                        <div th:if="${order.paymentMethod == 1}">
+                            <span>クレジットカード払い</span>
+                        </div>
+                        <div th:if="${order.paymentMethod == 2}">
+                            <span>現金払い</span>
+                        </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="text-center">
+                        <div th:if="${order.status == 1}">
+                            <span>未入金</span>
+                        </div>
+                        <div th:if="${order.status == 2}">
+                            <span>入金済</span>
+                        </div>
+                        <div th:if="${order.status == 3}">
+                            <span>発送済</span>
+                        </div>
+                        <div th:if="${order.status == 4}">
+                            <span>配送完了</span>
+                        </div>
+                        </div>
+                    </td>
+                    <td>
+                        <form th:action="@{/order/show_history/detail}" method="post">
+                            <input type="hidden" name="orderId" th:value="${order.id}">
+                            <button>詳細はこちら</button>
+                        </form>
+                    </td>
                     </tr>
                     <br>
                 </div>

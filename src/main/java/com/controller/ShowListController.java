@@ -50,7 +50,28 @@ public class ShowListController {
         return "item_list_noodle";
     }
 
-
+//
+//    @RequestMapping("/orderOfItem")
+//    public String orderList(Model model, String orderKey){
+//        Map<Integer, String> orderOfItemMap = new HashMap<>();
+//        orderOfItemMap.put(1, "値段が安い順");
+//        orderOfItemMap.put(2, "値段が高い順");
+//        orderOfItemMap.put(3,"人気順");
+//        model.addAttribute("orderOfItemMap", orderOfItemMap);
+//
+//        System.out.println(orderKey);
+//        if(1==Integer.parseInt(orderKey)){
+//            List<Item> itemList = itemService.findAllByCheapPric();
+//            model.addAttribute("itemList", itemList);
+//        } else if(2==Integer.parseInt(orderKey)){
+//            List<Item> itemList = itemService.findAllByExpensivePrice();
+//            model.addAttribute("itemList", itemList);
+//        } else if(3==Integer.parseInt(orderKey)){
+//            List<Item> itemList = itemService.findAllByPopularItem();
+//            model.addAttribute("itemList",itemList);
+//        }
+//        return "item_list_noodle";
+//    }
     /**
      * 検索結果を表示する。
      *
@@ -60,19 +81,30 @@ public class ShowListController {
      * @return
      */
     @RequestMapping("/search_noodle")
-    public String searchNoodle(@Validated ItemForm itemForm, String orderKey, BindingResult result, Model model){
+    public String searchNoodle(@Validated ItemForm itemForm, BindingResult result, String orderKey, Model model){
 
         if(result.hasErrors()){
             return showList(model);
         }
 
+
         Map<Integer, String> orderOfItemMap = new HashMap<>();
         orderOfItemMap.put(1, "値段が安い順");
         orderOfItemMap.put(2, "値段が高い順");
         orderOfItemMap.put(3,"人気順");
-        model.addAttribute("orderOfItemMap", orderOfItemMap) ;
+        model.addAttribute("orderOfItemMap", orderOfItemMap);
 
-
+        System.out.println(orderKey);
+        if(1==Integer.parseInt(orderKey)){
+            List<Item> itemList = itemService.findAllByCheapPric();
+            model.addAttribute("itemList", itemList);
+        } else if(2==Integer.parseInt(orderKey)){
+            List<Item> itemList = itemService.findAllByExpensivePrice();
+            model.addAttribute("itemList", itemList);
+        } else if(3==Integer.parseInt(orderKey)){
+            List<Item> itemList = itemService.findAllByPopularItem();
+            model.addAttribute("itemList",itemList);
+        }
 
         List<Item> allItems = itemService.findAll();
         List<Item> itemList = itemService.findByItem(itemForm.getNoodleName());
@@ -81,13 +113,13 @@ public class ShowListController {
             model.addAttribute("itemList", allItems);
             StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(allItems);
             model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
-            return "item_list_noodle";
         } else{
             model.addAttribute("itemList", itemList);
             StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(allItems);
             model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
-            return "item_list_noodle";
         }
+
+        return "item_list_noodle";
 
 
     }

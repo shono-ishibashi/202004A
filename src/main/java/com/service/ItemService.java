@@ -20,10 +20,44 @@ public class ItemService {
     @Autowired
     private ToppingRepository toppingRepository;
 
+    /**
+     * 商品一覧を表示する。
+     * @return
+     */
     public List<Item> findAll(){
         return itemRepository.findAll();
     }
 
+    /**
+     *
+     *商品の値段の安い順に表示する。
+     * @return
+     */
+    public List<Item> findAllByCheapPric(){
+        return itemRepository.findAllByCheapPrice();
+    }
+
+    /**
+     * 商品の値段お高い順で表示する。
+     * @return
+     */
+    public List<Item> findAllByExpensivePrice(){
+        return itemRepository.findAllByExpensivePrice();
+    }
+
+    /**
+     * 商品を人気順で表示する。
+     * @return
+     */
+    public List<Item> findAllByPopularItem(){
+        return itemRepository.findAllByPopularItem();
+    }
+
+    /**
+     * 商品の曖昧検索をする。
+     * @param name
+     * @return
+     */
     public List<Item> findByItem(String name){
         return itemRepository.findByNameLike(name);
     }

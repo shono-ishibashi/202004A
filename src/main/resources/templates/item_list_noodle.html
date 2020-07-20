@@ -63,7 +63,6 @@
                                 <input type="text" th:field="*{noodleName}" id="code"
                                        class="form-control input-sm"/>
                             </div>
-
                             <div class="text-center">
                                 <select>
                                     <option th:each="order : ${orderOfItemMap}" th:value="${order.key}" th:text="${order.value}"></option>

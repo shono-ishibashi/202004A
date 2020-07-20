@@ -153,12 +153,6 @@ public class OrderComfirmController {
 
         return "order_finished";
     }
-    @RequestMapping("/view")
-    public String past(Model model){
-        //Integer userId = (Integer)session.getAttribute("userId");
-        Integer userId = 4;
-        List<Order> orderList = orderService.getOrderHistoryList(userId);
-        model.addAttribute("orderList", orderList);
-        return  "order_history";
-    }
+
+
 }

@@ -32,7 +32,7 @@
                     <span th:if="${session.loginUser != null}">こんにちは、
                         <span th:text="${session.loginUser.name}"></span>さん</span>
                     <a th:href="@{/cart/show-list}" class="navbar-link">ショッピングカート</a>&nbsp;&nbsp;
-                    <a th:href="@{/}" class="navbar-link">注文履歴</a>&nbsp;&nbsp;
+                    <a th:href="@{/order/show_history}" class="navbar-link">注文履歴</a>&nbsp;&nbsp;
                     <a th:href="@{/login-form}" class="navbar-link">ログイン</a>&nbsp;&nbsp;
                     <a href="javascript:logout.submit()" class="navbar-link">ログアウト</a>
                 </p>

@@ -80,6 +80,8 @@ public class OrderRepository {
         orderItem.getOrderToppingList().add(orderTopping);
 
         order.getOrderItemList().add(orderItem);
+        orderItemList.add(orderItem);
+        order.setOrderItemList(orderItemList);
 
 
         return order;
@@ -214,7 +216,7 @@ public class OrderRepository {
                 "     , o.destination_tel as destination_tel" +
                 "     , o.delivery_time as delivery_time" +
                 "     , o.payment_method as payment_method" +
-                "     ,oi.id as order_item_id" +
+                "     ,oi.id as orderItemId" +
                 "     ,oi.order_id as order_id" +
                 "     ,oi.item_id as item_id" +
                 "     ,oi.quantity as quantity" +
@@ -233,13 +235,13 @@ public class OrderRepository {
                 "     ,toppings.price_m as toppingPriceM" +
                 "     ,toppings.price_l as toppingPriceL" +
                 " FROM orders AS o" +
-                " LEFT JOIN order_items AS oi" +
+                " LEFT OUTER JOIN order_items AS oi" +
                 " ON o.id = oi.order_id" +
-                " LEFT JOIN items" +
+                " LEFT OUTER JOIN items" +
                 " ON oi.item_id = items.id" +
-                " LEFT JOIN order_toppings as ot" +
+                " LEFT OUTER JOIN order_toppings as ot" +
                 " ON ot.order_item_id = oi.id" +
-                " LEFT JOIN toppings" +
+                " LEFT OUTER JOIN toppings" +
                 " ON toppings.id = ot.topping_id" +
                 " WHERE o.user_id = :userId " +
                 " AND o.status = 1" +
@@ -251,7 +253,7 @@ public class OrderRepository {
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("userId",userId);
 
-        List<Order> orderList = template.query(sql,param,ORDER_ROW_MAPPER);
+        List<Order> orderList = template.query(sql,param,ORDER_JOIN_ROW_MAPPER);
 
         return orderList;
     }
@@ -263,22 +265,26 @@ public class OrderRepository {
     public void UpDate(Order order){
         SqlParameterSource param = new BeanPropertySqlParameterSource(order);
 
-        if( order.getStatus() == 1 ){
+        if( order.getPaymentMethod() == 1  ){
             String upDateSqlCash ="UPDATE orders SET  status=1,  " +
                     "order_date=:orderDate, destination_name=:destinationName, destination_email=:destinationEmail, " +
                     "destination_zipcode=:destinationZipcode, destination_address=:destinationAddress, " +
                     "destination_tel=:destinationTel, delivery_time=:deliveryTime, payment_method=:paymentMethod  " +
-                    "WHERE user_id=:userId ";
-
+                    "WHERE user_id=:userId and status = 0";
+            System.out.println("代金引換でお客様情報を更新");
             template.update(upDateSqlCash,param);
-        }
-        String upDateSqlCredit ="UPDATE orders SET status=2,  " +
-                "order_date=:orderDate, destination_name=:destinationName, destination_email=:destinationEmail, " +
-                "destination_zipcode=:destinationZipcode, destination_address=:destinationAddress, " +
-                "destination_tel=:destinationTel, delivery_time=:deliveryTime, payment_method=:paymentMethod " +
-                "WHERE user_id=:userId ";
+        } else{
 
-        template.update(upDateSqlCredit,param);
+            String upDateSqlCredit ="UPDATE orders SET status=2,  " +
+                    "order_date=:orderDate, destination_name=:destinationName, destination_email=:destinationEmail, " +
+                    "destination_zipcode=:destinationZipcode, destination_address=:destinationAddress, " +
+                    "destination_tel=:destinationTel, delivery_time=:deliveryTime, payment_method=:paymentMethod " +
+                    "WHERE user_id=:userId and status = 0";
+            System.out.println("クレカ決済でお客様情報を更新");
+            template.update(upDateSqlCredit,param);
+
+        }
+
     }
 
 
@@ -300,6 +306,16 @@ public class OrderRepository {
                 "COMMIT;";
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("orderId",orderId).addValue("orderItemId",orderItemId);
+
+        template.update(sql,param);
+    }
+
+    public void updateTotalPrice(Integer orderId, Integer totalPrice){
+
+        String sql = "UPDATE orders SET total_price = :totalPrice WHERE id = :orderId";
+        SqlParameterSource param = new MapSqlParameterSource()
+                .addValue("totalPrice",totalPrice)
+                .addValue("orderId",orderId);
 
         template.update(sql,param);
 

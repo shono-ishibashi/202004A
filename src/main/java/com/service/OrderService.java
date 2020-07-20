@@ -123,5 +123,11 @@ public class OrderService {
         }
         return orderListWithoutDub;
     }
+    //お客様情報を更新する処理
+    public void UpDate(Order order){
+        orderRepository.UpDate(order);
+    }
+
+
 }
 

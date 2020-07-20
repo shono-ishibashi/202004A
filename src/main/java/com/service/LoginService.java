@@ -31,22 +31,18 @@ public class LoginService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email);
 
-        if(!isNull(user)) {
-
+        if (!isNull(user)) {
             if (isNull(session.getAttribute("userId"))) {
-                session.setAttribute("loginUser", user);
-                session.setAttribute("userId",user.getId());
+                session.setAttribute("userId", user.getId());
                 return user;
             } else {
                 Integer temporaryId = (Integer) session.getAttribute("userId");
-                session.setAttribute("userId",user.getId());
-
-               orderItemRepository.updateOrderId(temporaryId,user.getId());
-
-               return user;
+                session.setAttribute("userId", user.getId());
+                orderItemRepository.updateOrderId(temporaryId, user.getId());
+                return user;
             }
-        }else {
-            return null;
+        } else {
+            throw new UsernameNotFoundException("そのemailは登録されていません");
         }
     }
 }

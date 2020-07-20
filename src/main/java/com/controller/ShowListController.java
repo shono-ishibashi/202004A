@@ -1,5 +1,6 @@
 package com.controller;
 
+import com.common.NoodleGenre;
 import com.domain.Item;
 
 import com.form.ItemForm;
@@ -47,6 +48,8 @@ public class ShowListController {
         model.addAttribute("itemList", itemList);
         StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(itemList);
         model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
+
+        model.addAttribute("genres", NoodleGenre.values());
         return "item_list_noodle";
     }
 
@@ -118,10 +121,45 @@ public class ShowListController {
             StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(allItems);
             model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
         }
-
+        model.addAttribute("genres", NoodleGenre.values());
         return "item_list_noodle";
+    }
 
+    /**
+     *
+     * ジャンルでラーメンを検索するメソッド
+     *
+     * @param genre
+     * @param model
+     * @return
+     */
+    @RequestMapping("/search_noodle/genre")
+    public String searchByGenre(Integer genre ,Model model){
 
+        //送られた数値が不正な値かどうかを確認する。
+        boolean genreExists = false;
+        for(NoodleGenre enumGenre : NoodleGenre.values()){
+            if(enumGenre.getLabelNum().equals(genre)){
+                genreExists = true;
+            }
+        }
+
+        List<Item> itemList;
+
+      
+      
+
+        //不正な値ならメッセージを投げて、全件表示させる
+        if(genreExists){
+            itemList = itemService.findByGenre(genre);
+        }else {
+            itemList = itemService.findAll();
+            model.addAttribute("genreError",true);
+        }
+
+        model.addAttribute("itemList",itemList);
+        model.addAttribute("genres", NoodleGenre.values());
+        return "item_list_noodle";
     }
 
 

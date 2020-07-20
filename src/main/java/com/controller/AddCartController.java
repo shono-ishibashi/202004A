@@ -22,12 +22,20 @@ public class AddCartController {
     @Autowired
     private CartService cartService;
 
-    @Autowired
-    CartController cartController;
 
     @Autowired
     private HttpSession session;
 
+
+    /**
+     *
+     * 新しくカートを作成するメソッド
+     *
+     * @param cartAddForm 入力フォームで入力したデータ
+     * @param model
+     * @return
+     * @throws Exception
+     */
     @RequestMapping("/add")
     public String cartAdd(CartAddForm cartAddForm, Model model) throws Exception {
 
@@ -45,7 +53,7 @@ public class AddCartController {
 
     OrderItem orderItem = new OrderItem();
 
-    //ここで、orderItemテーブルに新しく挿入して、generatedIdより、orderToppingをinsertする。
+    //formからdomainにデータをコピーする
 
     orderItem.setItemId(cartAddForm.getId());
     orderItem.setOrderId(cart.getId());
@@ -61,6 +69,6 @@ public class AddCartController {
         cartService.addCartTopping(orderTopping);
     }
 
-    return cartController.showCart(model);
+    return "forward:/cart/show-list";
     }
 }

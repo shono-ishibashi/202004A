@@ -26,7 +26,7 @@
 			<div
 				class="table-responsive col-lg-offset-1 col-lg-10 col-md-offset-1 col-md-10 col-sm-10 col-xs-12">
 				<h3 class="text-center">注文内容確認</h3>
-				<table class="table table-striped item-list-table"  th:if="${!session.orderConfirmList.isEmpty()}">
+				<table class="table table-striped item-list-table"  th:if="${!orderConfirmList.isEmpty()}">
 					<tbody>
 						<tr>
 							<th>
@@ -50,7 +50,7 @@
 								</div>
 							</th>
 						</tr>
-						<tr th:each="order : ${session.orderConfirmList[0].orderItemList}">
+						<tr th:each="order : ${orderConfirmList[0].orderItemList}">
 							<td>
 								<div class="center">
 									<img  th:src="${'/img_noodle/' + order.item.imagePath}"
@@ -88,9 +88,9 @@
 
 		<div class="row">
 			<div class="col-xs-offset-2 col-xs-8">
-				<div class="form-group text-center" th:if="${!session.orderConfirmList.isEmpty()}">
-					<span id="total-tax" >消費税：<span th:text="${#numbers.formatInteger(session.orderConfirmList[0].totalPrice * 0.1 ,1,'COMMA')}"></span>円</span><br>
-					<span id="total-price">ご注文金額合計：<span name="totalPrice" th:text="${#numbers.formatInteger(session.orderConfirmList[0].totalPrice * 1.1 ,1,'COMMA')}"></span>円 (税込)</span>
+				<div class="form-group text-center" th:if="${!orderConfirmList.isEmpty()}">
+					<span id="total-tax" >消費税：<span th:text="${#numbers.formatInteger(orderConfirmList[0].totalPrice * 0.1 ,1,'COMMA')}"></span>円</span><br>
+					<span id="total-price">ご注文金額合計：<span name="totalPrice" th:text="${#numbers.formatInteger(orderConfirmList[0].totalPrice * 1.1 ,1,'COMMA')}"></span>円 (税込)</span>
 				</div>
 			</div>
 		</div>
@@ -175,7 +175,8 @@
 <!--												<label-->
 <!--													class="control-label" style="color: red" for="inputPeriod">配達日時を入力してください</label>-->
 											</div>
-<!--											<div th:if ="${errorMsg}" th:text="${errorMsg}" style="color: red"></div>-->
+											<div th:if ="${errorMsg1}" th:text="${errorMsg1}" style="color: red"></div>
+											<div th:if ="${errorMsg2}" th:text="${errorMsg2}" style="color: red"></div>
 											<div class="col-sm-12">
 												<div th:if="${#fields.hasErrors('orderDate')}" th:errors="*{orderDate}" style="color: red"></div>
 												<input type="date" th:fields="*{orderDate}"

@@ -121,5 +121,21 @@ public class ItemRepository {
 
     }
 
+    /**
+     *
+     * ジャンルでitemを検索する
+     *
+     * @param genre
+     * @return 検索されたitemのlist
+     */
+
+    public List<Item> findByGenre(Integer genre){
+        String sql = "SELECT * FROM items WHERE genre = :genre";
+
+        SqlParameterSource param = new MapSqlParameterSource().addValue("genre",genre);
+
+        return template.query(sql, param,ITEM_ROW_MAPPER);
+    }
+
 
 }

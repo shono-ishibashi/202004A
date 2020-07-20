@@ -71,6 +71,14 @@ public class ItemService {
         return toppingRepository.findAll();
     }
 
+    public List<Item> findByGenre(Integer genre){
+        if(genre == 0){
+            return itemRepository.findAll();
+        }else {
+            return itemRepository.findByGenre(genre);
+        }
+    }
+
 
 
 

@@ -54,8 +54,8 @@ public class ShowListController {
   
         model.addAttribute("orderOfItemMap", orderOfItemMap) ;
 
-        StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(itemList);
-        model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
+        //StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(itemList);
+        //model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
 
         model.addAttribute("genres", NoodleGenre.values());
         return "item_list_noodle";

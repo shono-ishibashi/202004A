@@ -8,7 +8,11 @@
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/noodle.css" rel="stylesheet">
     <style type="text/css">
-        .ui-autocomplete { position: absolute; cursor: default;z-index:30 !important;}
+        .ui-autocomplete {
+            position: absolute;
+            cursor: default;
+            z-index: 30 !important;
+        }
     </style>
 
     <!--[if lt IE 9]-->
@@ -20,7 +24,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         $(function () {
-            var availableTags =[ [(${itemListForAutocomplete})] ];
+            var availableTags = [[(${itemListForAutocomplete})]];
 
             $('#code').autocomplete({
                 source: availableTags,
@@ -30,18 +34,18 @@
 
     </script>
     <script>
-        function textClear(){
+        function textClear() {
             let textForm = document.getElementById("code");
-            textForm.value= '';
+            textForm.value = '';
         }
     </script>
 </head>
 <body>
-	<div class="container">
-		<nav class="navbar navbar-default">
-            <!-- 共通ヘッダをインクルード-->
-			<div th:include="fragment::header"></div>
-		</nav>
+<div class="container">
+    <nav class="navbar navbar-default">
+        <!-- 共通ヘッダをインクルード-->
+        <div th:include="fragment::header"></div>
+    </nav>
 
     <!-- search form -->
     <div class="row">
@@ -50,6 +54,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="panel-title">商品を検索する</div>
+                    <div class="alert alert-danger" th:if="${genreError}" th:text="#{error.noodleSearch.genre}"></div>
                 </div>
                 <div class="panel-body">
                     <form method="post" action="#" class="form-horizontal" th:action="@{/noodle/search_noodle}"
@@ -63,11 +68,29 @@
                                 <input type="text" th:field="*{noodleName}" id="code"
                                        class="form-control input-sm"/>
                             </div>
-
                             <div class="text-center">
+                                <select>
+                                    <option th:each="order : ${orderOfItemMap}" th:value="${order.key}" th:text="${order.value}"></option>
+                                </select>
                                 <button type="submit" value="検索" class="btn btn-primary">検索</button>
-                                <button type="button" value="クリア" class="btn btn-default" onclick="textClear()">クリア</button>
+                                <button type="button" value="クリア" class="btn btn-default" onclick="textClear()">クリア
+                                </button>
 
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="panel-body">
+                    <form method="post" action="#" class="form-horizontal" th:action="@{/noodle/search_noodle/genre}"
+                          id="genre-search-form">
+                        <div class="form-group">
+                            <label for="genre" class="control-label col-sm-2">ジャンル</label>
+                            <select class="form-control" id="genre" name="genre">
+                                <option th:each="genre:${genres}" th:text="${genre.getJapaneseName()}"
+                                        th:value="${genre.getLabelNum()}" name="genre">
+                            </select>
+                            <div class="text-center">
+                                <button class="btn btn-primary">ジャンルで検索</button>
                             </div>
                         </div>
                     </form>
@@ -78,7 +101,7 @@
 
     <!-- table -->
     <div class="row">
-        <div0
+        <div
                 class="table-responsive col-lg-offset-1 col-lg-10 col-md-offset-1 col-md-10 col-sm-10 col-xs-12">
             <table class="table table-striped item-list-table">
                 <tbody>
@@ -88,7 +111,7 @@
                     </th:block>
                     <th>
                         <a href="item_detail.html" th:href="@{'/noodle/show-detail?id=' + ${item.id}}">
-                            <img th:src="${'../img_noodle/' + item.imagePath}"
+                            <img th:src="${'/img_noodle/' + item.imagePath}"
                                  class="img-responsive img-rounded item-img-center" width="200" height="600">
                         </a><br>
                         <a href="item_detail.html" th:href="@{'/noodle/show-detail?id=' + ${item.id}}">
@@ -103,7 +126,41 @@
                 </tbody>
             </table>
 
-        </div0>
+        </div>
+    </div>
+    <div>
+        <ul>
+            <li style="display:inline;">
+                <span th:if="${page.first}">&lt;&lt;前</span>
+                <a
+                        th:if="${!page.first}"
+                        th:href="@{/noodle/show-list(page = ${page.number} - 1)}"
+                >
+                    &lt;&lt;前
+                </a>
+            </li>
+            <li
+                    th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+                    style="display:inline; margin-left:10px;"
+            >
+                <span th:if="${i} == ${page.number}" th:text="${i + 1}">1</span>
+                <a
+                        th:if="${i} != ${page.number}"
+                        th:href="@{/noodle/show-list(page = ${i})}"
+                >
+                    <span th:text="${i+1}">1</span>
+                </a>
+            </li>
+            <li style="display:inline; margin-left:10px;">
+                <span th:if="${page.last}">次&gt;&gt;</span>
+                <a
+                        th:if="${!page.last}"
+                        th:href="@{/noodle/show-list(page = (${page.number} + 1))}"
+                >
+                    次&gt;&gt;
+                </a>
+            </li>
+        </ul>
     </div>
 </div>
 

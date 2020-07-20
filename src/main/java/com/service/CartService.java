@@ -127,23 +127,20 @@ public class CartService {
 
         Integer totalPrice = 0;
         Integer orderItemTotalPrice = 0;
+
         for(Order order : result){
             totalPrice = 0;
             for(OrderItem totalPriceOrderItem : order.getOrderItemList()){
                 orderItemTotalPrice = 0;
                 if('M' == totalPriceOrderItem.getSize()){
-                    totalPrice += totalPriceOrderItem.getItem().getPriceM();
                     orderItemTotalPrice +=  totalPriceOrderItem.getItem().getPriceM();
                 }else if ('L' == totalPriceOrderItem.getSize() ){
-                    totalPrice += totalPriceOrderItem.getItem().getPriceL();
                     orderItemTotalPrice +=  totalPriceOrderItem.getItem().getPriceL();
                 }
                 for(OrderTopping totalPriceOrderTopping : totalPriceOrderItem.getOrderToppingList()) {
                     if ('M' == totalPriceOrderItem.getSize()) {
-                        totalPrice += totalPriceOrderTopping.getTopping().getPriceM();
                         orderItemTotalPrice += totalPriceOrderTopping.getTopping().getPriceM();
                     } else if ('L' == totalPriceOrderItem.getSize()) {
-                        totalPrice += totalPriceOrderTopping.getTopping().getPriceL();
                         orderItemTotalPrice += totalPriceOrderTopping.getTopping().getPriceL();
                     }
                 }
@@ -151,14 +148,17 @@ public class CartService {
             totalPriceOrderItem.setTotalPrice(orderItemTotalPrice);
             totalPrice += orderItemTotalPrice;
             }
-            order.setTotalPrice(orderItemTotalPrice);
+            order.setTotalPrice(totalPrice);
+
+            orderRepository.updateTotalPrice(order.getId(), totalPrice);
+
         }
 
         return result;
     }
 
-    public void delete(Integer orderId, Integer itemId, Integer orderItemId) {
-        orderRepository.delete(orderId, itemId, orderItemId);
+    public void delete(Integer orderId, Integer orderItemId) {
+        orderRepository.delete(orderId, orderItemId);
     }
 
 

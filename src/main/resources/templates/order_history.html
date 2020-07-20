@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ラーメン屋の注文履歴</title>
 
-<link href="../../css/bootstrap.css" rel="stylesheet">
-<link href="../../css/piza.css" rel="stylesheet">
-<!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+    <link href="../../css/bootstrap.css" rel="stylesheet">
+    <link href="../../css/piza.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 </head>
 
 <body>
@@ -31,14 +31,14 @@
                 <tr>
                     <th>
                         <div class="text-center">
-                                注文日
+                            注文日
                         </div>
                     </th>
-                        <th>
-                            <div class="text-center">
-                                注文商品
-                            </div>
-                         </th>
+                    <th>
+                        <div class="text-center">
+                            注文商品
+                        </div>
+                    </th>
                     <th>
                         <div class="text-center">
                             宛先名
@@ -59,50 +59,67 @@
                             決算状況
                         </div>
                     </th>
+                    <th>
+                        <div class="text-center">
+                            詳細
+                        </div>
+                    </th>
                 </tr><!-- セル名の部分終わり-->
 
                 <!-- ここから下が注文内容-->
                 <div th:each="order:${orderList}">
-                <tr>
-                    <td>
-                        <div class="center">
-                            <br>
-                                <span th:text="${order.orderDate}"></span>
-                        </div>
-                    </td>
-                    <td>
-                    <div th:each="orderItem:${order.orderItemList}">
 
-                            ・<span th:text="${orderItem.item.name}"></span>
-                        &nbsp;<span th:text="${orderItem.size}"></span>サイズ
-                        &nbsp;<span th:text="${orderItem.item.priceM}"></span>円
-                        &nbsp;<span th:text="${orderItem.quantity}"></span>杯
+                    <tr>
+                        <td>
+                            <div class="center">
+                                <br>
+                                <span th:text="${order.orderDate}"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div th:each="orderItem:${order.orderItemList}">
+
+                                ・<span th:text="${orderItem.item.name}"></span>
+                                &nbsp;&nbsp;<span th:text="${orderItem.size}"></span>サイズ
+                                <span th:if="${orderItem.size.toString() == 'M'}"> <span
+                                        th:text="${orderItem.item.priceM}"></span>円</span>
+                                &nbsp;<span th:if="${orderItem.size.toString() == 'L'}"><span
+                                    th:text="${orderItem.item.priceL}"></span>円</span>
+                                &nbsp;<span th:text="${orderItem.quantity}"></span>個
 
 
                                 <div th:each="orderTopping:${orderItem.orderToppingList}">
                                     <div th:if="${orderTopping.topping.name}">
-                                     &nbsp;&nbsp;&nbsp;<span th:text="${orderTopping.topping.name}"></span>
-                                     <span th:text="${orderTopping.price}"></span>円
+                                        &nbsp;&nbsp;&nbsp;<span th:text="${orderTopping.topping.name}"></span>
+                                        <span th:text="${orderTopping.price}"></span>円
                                     </div>
                                 </div>
+
 
                     </div>
                     </td>
                     <td>
+                        <div class="text-center">
                         <div th:text="${order.destinationName}"></div>
+                        </div>
                     </td>
                     <td>
-                        <div th:text="${order.totalPrice}"></div>
+                        <div class="text-center">
+                        <span th:text="${#numbers.formatInteger(order.totalPrice,0,'COMMA')}"></span>円
+                        </div>
                     </td>
                     <td>
+                        <div class="text-center">
                         <div th:if="${order.paymentMethod == 1}">
                             <span>クレジットカード払い</span>
                         </div>
                         <div th:if="${order.paymentMethod == 2}">
                             <span>現金払い</span>
                         </div>
+                        </div>
                     </td>
                     <td>
+                        <div class="text-center">
                         <div th:if="${order.status == 1}">
                             <span>未入金</span>
                         </div>
@@ -115,10 +132,15 @@
                         <div th:if="${order.status == 4}">
                             <span>配送完了</span>
                         </div>
-
+                        </div>
                     </td>
-
-                </tr>
+                    <td>
+                        <form th:action="@{/order/show_history/detail}" method="post">
+                            <input type="hidden" name="orderId" th:value="${order.id}">
+                            <button>詳細はこちら</button>
+                        </form>
+                    </td>
+                    </tr>
                     <br>
                 </div>
                 </tbody>

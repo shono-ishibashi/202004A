@@ -2,12 +2,16 @@ package com.repository;
 
 import com.domain.Item;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -38,13 +42,51 @@ public class ItemRepository {
      * @return itemList
      */
     public List<Item> findAll(){
-        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items ORDER BY price_m";
+        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items";
+
+        List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
+
+
+
+        return itemList;
+    }
+
+    /**
+     * 商品を安い順で表示する。
+     * @return
+     */
+    public List<Item> findAllByCheapPrice(){
+        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items ORDER BY price_m ";
 
         List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
 
         return itemList;
     }
 
+    /**
+     * 商品の値段が高い順で表示する。
+     * @return
+     */
+    public List<Item> findAllByExpensivePrice(){
+        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items ORDER BY price_m DESC";
+
+        List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
+
+        return itemList;
+    }
+
+
+    /**
+     * 商品の人気順に表示する。
+     * @return
+     */
+    public List<Item> findAllByPopularItem(){
+        String sql = "SELECT items.id, name, description, price_m, price_l, image_path, deleted FROM items LEFT OUTER JOIN order_items ON items.id=order_items.item_id  GROUP BY items.id ORDER BY count(items.id) DESC, price_m;";
+
+        List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
+
+        return itemList;
+    }
 
     /**
      *
@@ -62,12 +104,14 @@ public class ItemRepository {
         return itemList;
     }
 
+
+
+
     /**
      *
      * 主キーでitemを検索するメソッド
      *
-     * @param id 検索条件の主キー
-     * @return 検索結果のitemのlist
+     * @param id 検索条件の主キー* @return 検索結果のitemのlist
      */
 
 
@@ -80,6 +124,22 @@ public class ItemRepository {
 
         return item;
 
+    }
+
+    /**
+     *
+     * ジャンルでitemを検索する
+     *
+     * @param genre
+     * @return 検索されたitemのlist
+     */
+
+    public List<Item> findByGenre(Integer genre){
+        String sql = "SELECT * FROM items WHERE genre = :genre";
+
+        SqlParameterSource param = new MapSqlParameterSource().addValue("genre",genre);
+
+        return template.query(sql, param,ITEM_ROW_MAPPER);
     }
 
 

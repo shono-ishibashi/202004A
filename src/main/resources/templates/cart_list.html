@@ -80,7 +80,7 @@
                     </td>
                     <td>
                         <div class="text-center">
-                            <form th:action="@{/delete/item(orderId=${item.orderId},itemId=${item.itemId},orderItemId=${item.id})}" method="post">
+                            <form th:action="@{/delete/item(orderId=${item.orderId},orderItemId=${item.id})}" method="post">
                             <button type="submit" class="btn btn-primary">削除</button>
                             </form>
                         </div>

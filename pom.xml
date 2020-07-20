@@ -148,6 +148,14 @@
             <version>5.2.7.RELEASE</version>
         </dependency>
 
+<!--メール関連-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
+
+
     </dependencies>
     <build>
         <plugins>

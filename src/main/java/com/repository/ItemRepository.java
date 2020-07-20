@@ -2,12 +2,16 @@ package com.repository;
 
 import com.domain.Item;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -41,6 +45,8 @@ public class ItemRepository {
         String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items";
 
         List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
+
+
 
         return itemList;
     }
@@ -105,8 +111,7 @@ public class ItemRepository {
      *
      * 主キーでitemを検索するメソッド
      *
-     * @param id 検索条件の主キー
-     * @return 検索結果のitemのlist
+     * @param id 検索条件の主キー* @return 検索結果のitemのlist
      */
 
 

@@ -3,9 +3,13 @@ package com.controller;
 import com.common.NoodleGenre;
 import com.domain.Item;
 
+import com.domain.ItemPaging;
 import com.form.ItemForm;
 import com.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,14 +42,18 @@ public class ShowListController {
      * @return ページ表示のhtml
      */
     @RequestMapping("/show-list")
-    public String showList(Model model) {
+    public String showList(@PageableDefault(page=0,size=10) Pageable pageable, Model model) {
+        Page<ItemPaging> itemPage = itemService.findAllPage(pageable);
+        model.addAttribute("page", itemPage);
+        model.addAttribute("itemList",itemPage.getContent());
+
         Map<Integer, String> orderOfItemMap = new HashMap<>();
         orderOfItemMap.put(1, "値段が安い順");
         orderOfItemMap.put(2, "値段が高い順");
         orderOfItemMap.put(3,"人気順");
+  
         model.addAttribute("orderOfItemMap", orderOfItemMap) ;
-        List<Item> itemList = itemService.findAll();
-        model.addAttribute("itemList", itemList);
+
         StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(itemList);
         model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
 
@@ -53,28 +61,6 @@ public class ShowListController {
         return "item_list_noodle";
     }
 
-//
-//    @RequestMapping("/orderOfItem")
-//    public String orderList(Model model, String orderKey){
-//        Map<Integer, String> orderOfItemMap = new HashMap<>();
-//        orderOfItemMap.put(1, "値段が安い順");
-//        orderOfItemMap.put(2, "値段が高い順");
-//        orderOfItemMap.put(3,"人気順");
-//        model.addAttribute("orderOfItemMap", orderOfItemMap);
-//
-//        System.out.println(orderKey);
-//        if(1==Integer.parseInt(orderKey)){
-//            List<Item> itemList = itemService.findAllByCheapPric();
-//            model.addAttribute("itemList", itemList);
-//        } else if(2==Integer.parseInt(orderKey)){
-//            List<Item> itemList = itemService.findAllByExpensivePrice();
-//            model.addAttribute("itemList", itemList);
-//        } else if(3==Integer.parseInt(orderKey)){
-//            List<Item> itemList = itemService.findAllByPopularItem();
-//            model.addAttribute("itemList",itemList);
-//        }
-//        return "item_list_noodle";
-//    }
     /**
      * 検索結果を表示する。
      *
@@ -87,7 +73,7 @@ public class ShowListController {
     public String searchNoodle(@Validated ItemForm itemForm, BindingResult result, String orderKey, Model model){
 
         if(result.hasErrors()){
-            return showList(model);
+            return "forward:/noodle/show-list";
         }
 
 
@@ -114,12 +100,12 @@ public class ShowListController {
         if(itemList.size()==0){
             model.addAttribute("failure", "該当する商品がありません");
             model.addAttribute("itemList", allItems);
-            StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(allItems);
-            model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
+//            StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(allItems);
+//            model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
         } else{
             model.addAttribute("itemList", itemList);
-            StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(allItems);
-            model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
+//            StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(allItems);
+//            model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
         }
         model.addAttribute("genres", NoodleGenre.values());
         return "item_list_noodle";

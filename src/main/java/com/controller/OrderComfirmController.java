@@ -98,7 +98,7 @@ public class OrderComfirmController {
         Integer userId = (Integer)session.getAttribute("userId");
 //        Integer userId = 1;
         Order order = new Order();
-        order.setId(userId);
+        order.setUserId(userId);
         //ステータスを"未入金"としてセット
         order.setStatus(0);
         //String型の日付をDate型へ変換

@@ -99,7 +99,8 @@
             </div>
         </div>
     </div>
-
+    <!-- カートの中身が空でないならば注文に進むボタンを出す-->
+   <div th:if="${!cart.isEmpty()}">
     <div class="row">
         <div class="col-xs-offset-5 col-xs-3">
             <div class="form-group">
@@ -107,6 +108,20 @@
                     <input class="form-control btn btn-warning btn-block"
                            type="submit" value="注文に進む">
                 </form>
+            </div>
+        </div>
+    </div>
+   </div>
+    <!-- cartの中が空ならば商品リストボタンを表示させる-->
+    <div th:unless="${!cart.isEmpty()}">
+    <div class="row">
+            <div class="col-xs-offset-5 col-xs-3">
+                <div class="form-group">
+                    <form action="order_confirm.html" th:action="@{/noodle/show-list}" method="get">
+                        <input class="form-control btn btn-warning btn-block"
+                           type="submit" value="商品リストに戻る">
+                    </form>
+                </div>
             </div>
         </div>
     </div>

@@ -13,6 +13,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 @EnableWebSecurity
 @Configuration
@@ -21,19 +23,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private LoginService loginService;
 
+
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers( "/css/**", "/js/**", "/img_noodle/**");
+        web.ignoring().antMatchers("/css/**", "/js/**", "/img_noodle/**");
     }
 
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
+
         http
                 .authorizeRequests()
                 //指定したパターンごとに制限をかける
-                .antMatchers("/login-form", "/login", "/register-user", "/noodle/show-list", "/noodle/show-detail", "/noodle/cart/add", "/cart/show-list" ,"/register-user/insert","/noodle/search_noodle/genre").permitAll()//制限なし
+                .antMatchers("/login-form", "/register-user", "/noodle/show-list", "/noodle/show-detail", "/noodle/cart/add", "/cart/show-list", "/register-user/insert", "/noodle/search_noodle/genre", "/error", "/js/**", "/templates/**", "/css/**", "/js/**", "/img_noodle/**", "/static/**").permitAll()//制限なし
                 .anyRequest().authenticated()
                 //アクセスの許可
                 .and()
@@ -42,10 +47,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .loginPage("/login-form")
                 .loginProcessingUrl("/login")
+                .failureUrl("/login-form?error")
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/noodle/show-list")
-
 
                 .and()
 

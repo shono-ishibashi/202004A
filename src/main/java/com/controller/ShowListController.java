@@ -3,9 +3,13 @@ package com.controller;
 import com.common.NoodleGenre;
 import com.domain.Item;
 
+import com.domain.ItemPaging;
 import com.form.ItemForm;
 import com.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,11 +33,12 @@ public class ShowListController {
     }
 
     @RequestMapping("/show-list")
-    public String showList(Model model) {
-        List<Item> itemList = itemService.findAll();
-        model.addAttribute("itemList", itemList);
-        StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(itemList);
-        model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
+    public String showList(@PageableDefault(page=0,size=10) Pageable pageable, Model model) {
+        Page<ItemPaging> itemPage = itemService.findAllPage(pageable);
+        model.addAttribute("page", itemPage);
+        model.addAttribute("itemList",itemPage.getContent());
+//        StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(itemList);
+//        model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
 
         model.addAttribute("genres", NoodleGenre.values());
         return "item_list_noodle";
@@ -45,7 +50,7 @@ public class ShowListController {
     public String searchNoodle(@Validated ItemForm itemForm, BindingResult result, Model model){
 
         if(result.hasErrors()){
-            return showList(model);
+            return "forward:/noodle/show-list";
         }
 
         List<Item> allItems = itemService.findAll();
@@ -53,12 +58,12 @@ public class ShowListController {
         if(itemList.size()==0){
             model.addAttribute("failure", "該当する商品がありません");
             model.addAttribute("itemList", allItems);
-            StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(allItems);
-            model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
+//            StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(allItems);
+//            model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
         } else{
             model.addAttribute("itemList", itemList);
-            StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(allItems);
-            model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
+//            StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(allItems);
+//            model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
         }
         model.addAttribute("genres", NoodleGenre.values());
         return "item_list_noodle";

@@ -51,7 +51,7 @@ public class ItemService {
             noodleAutoCompleteList.append(item.getName());
             noodleAutoCompleteList.append("\"");
         }
-        System.out.println(noodleAutoCompleteList);
+
 
         return noodleAutoCompleteList;
     }

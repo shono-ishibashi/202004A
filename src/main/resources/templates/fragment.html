@@ -6,7 +6,8 @@
 </head>
 <body>
 <div th:fragment="header">
-<div class="container-fluid">
+    <div class="container-fluid">
+
 
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -25,16 +26,19 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse"
          id="bs-example-navbar-collapse-1">
-        <p class="navbar-text navbar-right">
-            <a th:href="@{/cart/show-list}" class="navbar-link">ショッピングカート</a>&nbsp;&nbsp;
-            <a th:href="@{/confirm/view}" class="navbar-link">注文履歴</a>&nbsp;&nbsp;
-            <a th:href="@{/login-form}" class="navbar-link">ログイン</a>&nbsp;&nbsp;
             <form th:action="@{/logout}" name="logout" method="POST">
-                <a href="javascript:logout.submit()" class="navbar-link" >ログアウト</a>
+                <p class="navbar-text navbar-right">
+                    <span th:if="${session.loginUser == null}">こんにちは、ゲストさん</span>
+                    <span th:if="${session.loginUser != null}">こんにちは、
+                        <span th:text="${session.loginUser.name}"></span>さん</span>
+                    <a th:href="@{/cart/show-list}" class="navbar-link">ショッピングカート</a>&nbsp;&nbsp;
+                    <a th:href="@{/}" class="navbar-link">注文履歴</a>&nbsp;&nbsp;
+                    <a th:href="@{/login-form}" class="navbar-link">ログイン</a>&nbsp;&nbsp;
+                    <a href="javascript:logout.submit()" class="navbar-link">ログアウト</a>
+                </p>
             </form>
-        </p>
+        </div>
     </div>
-</div>
 </div>
 </body>
 </html>

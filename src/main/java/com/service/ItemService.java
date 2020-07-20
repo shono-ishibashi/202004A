@@ -1,13 +1,20 @@
 package com.service;
 
 import com.domain.Item;
+import com.domain.ItemPaging;
 import com.domain.Topping;
+import com.repository.ItemJpaRepository;
 import com.repository.ItemRepository;
 import com.repository.ToppingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -18,12 +25,22 @@ public class ItemService {
     private ItemRepository itemRepository;
 
     @Autowired
+    private ItemJpaRepository itemJpaRepository;
+
+    @Autowired
     private ToppingRepository toppingRepository;
+
+  
+  
+    public Page<ItemPaging> findAllPage(Pageable pageable){
+        return itemJpaRepository.findAllByOrderByPriceM(pageable);
+    }
 
     /**
      * 商品一覧を表示する。
      * @return
      */
+
     public List<Item> findAll(){
         return itemRepository.findAll();
     }
@@ -80,8 +97,6 @@ public class ItemService {
     }
 
 
-
-
     public StringBuilder getNoodleAutoCompleteList(List<Item> itemList){
         StringBuilder noodleAutoCompleteList = new StringBuilder();
         for (int i = 0; i < itemList.size(); i++) {
@@ -97,7 +112,4 @@ public class ItemService {
 
         return noodleAutoCompleteList;
     }
-
-
-
 }

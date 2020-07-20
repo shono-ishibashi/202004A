@@ -12,7 +12,7 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 
     import javax.annotation.PostConstruct;
 
-    @Repository
+@Repository
 public class OrderToppingRepository {
     @Autowired
     private NamedParameterJdbcTemplate template;

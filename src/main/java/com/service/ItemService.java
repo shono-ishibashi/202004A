@@ -109,6 +109,7 @@ public class ItemService {
         }
 
 
+        System.out.println(noodleAutoCompleteList);
         return noodleAutoCompleteList;
     }
 }

@@ -53,8 +53,10 @@ public class ShowListController {
         sortMap.put(3,"人気順");
         model.addAttribute("sortMap", sortMap);
 
-        //StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(itemList);
-        //model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
+        List<Item> itemList = itemService.findAll();
+        StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(itemList);
+        model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
+
 
         model.addAttribute("genres", NoodleGenre.values());
         return "item_list_noodle";

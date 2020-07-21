@@ -8,10 +8,7 @@ import com.repository.ItemRepository;
 import com.repository.ToppingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -68,8 +65,17 @@ public class ItemService {
      * @param name
      * @return
      */
-    public Page<ItemPaging> findByName(String name, Pageable pageable){
-        return itemJpaRepository.findByNameLike(name,pageable);
+    public Page<ItemPaging> findByName(String name, Integer sortNum,Pageable pageable) throws Exception {
+
+        if(sortNum == 1){
+            return itemJpaRepository.findByNameContainingOrderByPriceM(name,pageable);
+        }else if(sortNum == 2){
+            return itemJpaRepository.findByNameContainingOrderByPriceMDesc(name,pageable);
+        }else if(sortNum == 3){
+            return itemJpaRepository.findAllByOrderByPriceM(pageable);
+        }else {
+            throw new Exception();
+        }
     }
 
 
@@ -83,9 +89,9 @@ public class ItemService {
 
     public Page<ItemPaging> findByGenre(Integer genre,Pageable pageable){
         if(genre == 0){
-            return itemJpaRepository.findAll(pageable);
+            return itemJpaRepository.findAllByOrderByPriceM(pageable);
         }else {
-            return itemJpaRepository.findByGenre(genre,pageable);
+            return itemJpaRepository.findByGenreOrderByPriceM(genre,pageable);
         }
     }
 

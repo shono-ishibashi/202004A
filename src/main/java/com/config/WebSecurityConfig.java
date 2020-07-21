@@ -33,23 +33,40 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
 
         http
                 .authorizeRequests()
                 //指定したパターンごとに制限をかける
-                .antMatchers("/login-form", "/register-user", "/noodle/show-list", "/noodle/show-detail", "/noodle/cart/add", "/cart/show-list", "/register-user/insert", "/noodle/search_noodle/genre", "/error", "/js/**", "/templates/**", "/css/**", "/js/**", "/img_noodle/**", "/static/**").permitAll()//制限なし
+                .antMatchers(
+                        "/login-form"
+                        , "/register-user"
+                        , "/noodle/show-list"
+                        , "/noodle/show-detail"
+                        , "/noodle/cart/add"
+                        , "/cart/show-list"
+                        , "/register-user/insert"
+                        , "/noodle/search_noodle/genre"
+                        , "/noodle/search_noodle"
+                        , "/error"
+                        , "/js/**"
+                        , "/templates/**"
+                        , "/css/**"
+                        , "/js/**"
+                        , "/img_noodle/**"
+                        , "/static/**"
+                ).permitAll()//制限なし
+
                 .anyRequest().authenticated()
                 //アクセスの許可
                 .and()
 
                 .formLogin()
-                .loginPage("/login-form")
+                .defaultSuccessUrl("/noodle/show-list")
                 .loginProcessingUrl("/login")
-                .failureUrl("/login-form?error")
                 .usernameParameter("email")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/noodle/show-list")
+                .loginPage("/login-form")
+
 
                 .and()
 
@@ -75,6 +92,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 }

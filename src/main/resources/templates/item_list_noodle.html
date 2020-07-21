@@ -61,29 +61,22 @@
                           th:object="${itemForm}">
                         <div class="form-group">
                             <label for="code" class="control-label col-sm-2">商品名</label>
-                            <div th:if="${#fields.hasErrors('noodleName')}" th:errors="*{noodleName}"
-                                 style="color:#ff0000"></div>
                             <div class="col-sm-9">
                                 <span th:text="${failure}" style="color: #ff0000"></span>
                                 <input type="text" th:field="*{noodleName}" id="code"
                                        class="form-control input-sm"/>
                             </div>
+
+                            <label>
+                                <select name="orderKey" th:field="*{sortNumber}">
+                                    <option th:each="sort : ${sortMap}" th:value="${sort.key}"
+                                            th:text="${sort.value}"></option>
+                                </select>
+                            </label>
+
                         </div>
                         <button type="submit" value="検索" class="btn btn-primary">検索</button>
                         <button type="button" value="クリア" class="btn btn-default" onclick="textClear()">クリア</button>
-
-                    </form>
-                    <form>
-                            <div class="text-center">
-                                <select name="orderKey">
-                                    <option th:each="sort : ${sortMap}" th:value="${sort.key}" th:text="${sort.value}"></option>
-                                </select>
-                                <button type="submit" value="検索" class="btn btn-primary">検索</button>
-                                <button type="button" value="クリア" class="btn btn-default" onclick="textClear()">クリア
-                                </button>
-
-                            </div>
-                        </div>
                     </form>
                 </div>
                 <div class="panel-body">

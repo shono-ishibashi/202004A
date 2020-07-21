@@ -27,6 +27,7 @@ private OrderHistoryService orderHistoryService;
 
         //Integer userId = (Integer)session.getAttribute("userId");
         //Integer userId = 4;
+
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<Order> orderList = orderHistoryService.getOrderHistoryList(user.getId());
         if(!orderList.isEmpty()) {

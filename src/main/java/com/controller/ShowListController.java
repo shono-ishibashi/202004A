@@ -53,7 +53,7 @@ public class ShowListController {
         orderOfItemMap.put(3,"人気順");
   
         model.addAttribute("orderOfItemMap", orderOfItemMap) ;
-
+        List<Item> itemList = itemService.findAll();
         StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(itemList);
         model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
 

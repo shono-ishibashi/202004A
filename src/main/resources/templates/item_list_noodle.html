@@ -5,8 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title> ラーメン屋のネット注文</title>
-    <link th:href="@{/css/bootstrap.css}" rel="stylesheet">
-    <link th:href="@{/css/noodle.css}" rel="stylesheet">
+    <link href="../../css/bootstrap.css" rel="stylesheet">
+    <link href="../../css/noodle.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/css/swiper.min.css" />
     <style type="text/css">
         .ui-autocomplete {
             position: absolute;
@@ -22,6 +23,15 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="../../js/slider"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/js/swiper.min.js"></script>
+
+    <!--☆-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
     <script>
         $(function () {
             var availableTags = [[(${itemListForAutocomplete})]];
@@ -39,8 +49,18 @@
             textForm.value = '';
         }
     </script>
+    <script>
+    $(document).on('ready', function() {
+    $(".regular").slick({
+    autoplay: true,
+    autoplaySpeed: 4000,
+    dots: true,
+    });
+    });
+    </script>
 </head>
 <body>
+
 <div class="container">
     <nav class="navbar navbar-default">
         <!-- 共通ヘッダをインクルード-->
@@ -48,6 +68,20 @@
     </nav>
 
     <!-- search form -->
+    <div class="section">
+
+        <div class="sliderArea" width="50px">
+            <div class="regular slider">
+                <div class="text-center"><a th:href="@{'/noodle/show-detail?id=6'}"><img src="../img_noodle/slide6.jpg"></a></div>
+                <div class="text-center"><img src="../img_noodle/2.jpg"></div>
+                <div class="text-center"><img src="../img_noodle/3.jpg"></div>
+                <div class="text-center"><img src="../img_noodle/4.jpg"></div>
+                <div class="text-center"><img src="../img_noodle/5.jpg"></div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="row">
         <div
                 class="col-lg-offset-3 col-lg-6 col-md-offset-2 col-md-8 col-sm-10 col-xs-12">

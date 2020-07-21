@@ -53,8 +53,8 @@ public class ShowListController {
         model.addAttribute("sortMap", sortMap);
 
         List<Item> itemList = itemService.findAll();
-        StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(itemList);
-        model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
+//        StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(itemList);
+        model.addAttribute("itemListForAutocomplete", itemList);
 
 
         model.addAttribute("genres", NoodleGenre.values());
@@ -107,8 +107,8 @@ public class ShowListController {
         model.addAttribute("itemList", page.getContent());
 
         List<Item> allItems = itemService.findAll();
-        StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(allItems);
-        model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
+//        StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(allItems);
+        model.addAttribute("itemListForAutocomplete", allItems);
         return "item_list_noodle";
     }
 
@@ -150,6 +150,11 @@ public class ShowListController {
         model.addAttribute("page", itemPage);
         model.addAttribute("itemList", itemPage.getContent());
         model.addAttribute("genres", NoodleGenre.values());
+
+        List<Item> itemList = itemService.findAll();
+//        StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(itemList);
+        model.addAttribute("itemListForAutocomplete", itemList);
+
         return "item_list_noodle";
     }
 }

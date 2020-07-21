@@ -7,7 +7,7 @@
     <title> ラーメン屋のネット注文</title>
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/noodle.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/css/swiper.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/css/swiper.min.css"/>
     <style type="text/css">
         .ui-autocomplete {
             position: absolute;
@@ -27,7 +27,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/js/swiper.min.js"></script>
 
     <!--☆-->
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
@@ -50,13 +51,13 @@
         }
     </script>
     <script>
-    $(document).on('ready', function() {
-    $(".regular").slick({
-    autoplay: true,
-    autoplaySpeed: 4000,
-    dots: true,
-    });
-    });
+        $(document).on('ready', function () {
+            $(".regular").slick({
+                autoplay: true,
+                autoplaySpeed: 4000,
+                dots: true,
+            });
+        });
     </script>
 </head>
 <body>
@@ -72,11 +73,13 @@
 
         <div class="sliderArea" width="50px">
             <div class="regular slider">
+
                 <div class="text-center"><a th:href="@{'/noodle/show-detail?id=6'}"><img th:src="@{img_noodle/slide6.jpg}"></a></div>
                 <div class="text-center"><img th:src="@{img_noodle/2.jpg}"></div>
                 <div class="text-center"><img th:src="@{img_noodle/3.jpg}"></div>
                 <div class="text-center"><img th:src="@{img_noodle/4.jpg}"></div>
                 <div class="text-center"><img th:src="@{img_noodle/5.jpg}"></div>
+
             </div>
         </div>
     </div>
@@ -98,7 +101,10 @@
                             <div class="col-sm-9">
                                 <span th:text="${failure}" style="color: #ff0000"></span>
                                 <input type="text" th:field="*{noodleName}" id="code"
-                                       class="form-control input-sm"/>
+                                       class="form-control input-sm" list="autocomplete" />
+                                <datalist id="autocomplete">
+                                    <option th:each="item:${itemListForAutocomplete}" th:value="${item.name}">
+                                </datalist>
                             </div>
 
                             <label>
@@ -161,7 +167,7 @@
 
         </div>
     </div>
-    <div>
+    <div class="row">
         <ul>
             <li style="display:inline;">
                 <span th:if="${page.first}">&lt;&lt;前</span>
@@ -197,3 +203,5 @@
     </div>
 </div>
 
+</body>
+</html>

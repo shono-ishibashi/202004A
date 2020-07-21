@@ -32,7 +32,7 @@ private OrderHistoryService orderHistoryService;
         if(!orderList.isEmpty()) {
             model.addAttribute("orderList", orderList);
         }else{
-            model.addAttribute("emptyMessage","注文履歴がありません");
+            model.addAttribute("emptyMessage","注文履歴はありません");
         }
 
         return "order_history";

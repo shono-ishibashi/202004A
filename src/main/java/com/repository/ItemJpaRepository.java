@@ -1,13 +1,20 @@
 package com.repository;
 
-import com.domain.Item;
 import com.domain.ItemPaging;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface ItemJpaRepository extends JpaRepository<ItemPaging,Integer> {
     Page<ItemPaging> findAllByOrderByPriceM(Pageable pageable);
+
+    Page<ItemPaging> findByGenre(Integer genre,Pageable pageable);
+
+    Page<ItemPaging> findByNameLike(String name, Pageable pageable);
+
+    Page<ItemPaging> findAllByOrderByPriceMDesc(Pageable pageable);
 }

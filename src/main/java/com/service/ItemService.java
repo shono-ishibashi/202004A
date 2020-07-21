@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,21 +46,13 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
-    /**
-     *
-     *商品の値段の安い順に表示する。
-     * @return
-     */
-    public List<Item> findAllByCheapPric(){
-        return itemRepository.findAllByCheapPrice();
-    }
 
     /**
      * 商品の値段お高い順で表示する。
      * @return
      */
-    public List<Item> findAllByExpensivePrice(){
-        return itemRepository.findAllByExpensivePrice();
+    public Page<ItemPaging> findAllByPriceDesc(Pageable pageable){
+        return itemJpaRepository.findAllByOrderByPriceMDesc(pageable);
     }
 
     /**
@@ -75,8 +68,8 @@ public class ItemService {
      * @param name
      * @return
      */
-    public List<Item> findByItem(String name){
-        return itemRepository.findByNameLike(name);
+    public Page<ItemPaging> findByName(String name, Pageable pageable){
+        return itemJpaRepository.findByNameLike(name,pageable);
     }
 
 
@@ -88,11 +81,11 @@ public class ItemService {
         return toppingRepository.findAll();
     }
 
-    public List<Item> findByGenre(Integer genre){
+    public Page<ItemPaging> findByGenre(Integer genre,Pageable pageable){
         if(genre == 0){
-            return itemRepository.findAll();
+            return itemJpaRepository.findAll(pageable);
         }else {
-            return itemRepository.findByGenre(genre);
+            return itemJpaRepository.findByGenre(genre,pageable);
         }
     }
 

@@ -32,4 +32,7 @@ public class ItemPaging {
 
     @Column(name="deleted")
     private Boolean deleted;
+
+    @Column(name="genre")
+    private Integer genre;
 }

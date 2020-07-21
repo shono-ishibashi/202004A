@@ -95,9 +95,14 @@ public class OrderComfirmController {
             return showConfirm(model);
         }
         //Integer型としてuserIdを取得
-        Integer userId = (Integer)session.getAttribute("userId");
-//        Integer userId = 1;
-        Order order = new Order();
+
+        Integer userId = (Integer)session.getAttribute("userId");//principal
+        Order order = cartService.showCart(userId,0).get(0);
+
+//         Integer userId = (Integer)session.getAttribute("userId");
+// //        Integer userId = 1;
+//         Order order = new Order();
+
         order.setUserId(userId);
         //ステータスを"未入金"としてセット
         order.setStatus(0);
@@ -169,12 +174,12 @@ public class OrderComfirmController {
             }
             //メールを送信する処理
             sendMailService.sendMail(order);
-//            orderService.UpDate(order);
+            orderService.UpDate(order);
             return "order_finished";
         }
         //メールを送信する処理
         sendMailService.sendMail(order);
-//        orderService.UpDate(order);
+        orderService.UpDate(order);
         return "order_finished";
     }
 

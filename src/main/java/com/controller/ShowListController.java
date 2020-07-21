@@ -29,21 +29,20 @@ public class ShowListController {
     private ItemService itemService;
 
     @ModelAttribute
-    private ItemForm setUpForm() {
+    private ItemForm setUpForm(){
         return new ItemForm();
     }
 
     /**
-     * 商品一覧を表示する。
-     * （商品の検索、オートコンプリート機能）
      *
+     *商品一覧を表示する。
+     * （商品の検索、オートコンプリート機能）
      * @param model
      * @return ページ表示のhtml
      */
     @RequestMapping("/show-list")
     public String showList(@PageableDefault(page = 0, size = 9) Pageable pageable, Model model) {
         Page<ItemPaging> itemPage = itemService.findAllPage(pageable);
-        List<Item> itemList = itemService.findAll();
         model.addAttribute("page", itemPage);
         model.addAttribute("itemList", itemPage.getContent());
 
@@ -53,8 +52,10 @@ public class ShowListController {
         sortMap.put(3, "人気順");
         model.addAttribute("sortMap", sortMap);
 
+        List<Item> itemList = itemService.findAll();
         StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(itemList);
         model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
+
 
         model.addAttribute("genres", NoodleGenre.values());
         return "item_list_noodle";
@@ -76,7 +77,6 @@ public class ShowListController {
     ) throws Exception {
 
         model.addAttribute("genres", NoodleGenre.values());
-
 
         Map<Integer, String> sortMap = new HashMap<>();
         sortMap.put(1, "値段が安い順");
@@ -113,6 +113,7 @@ public class ShowListController {
     }
 
     /**
+     *
      * ジャンルでラーメンを検索するメソッド
      *
      * @param genre

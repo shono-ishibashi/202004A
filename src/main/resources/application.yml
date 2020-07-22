@@ -1,7 +1,15 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/student
+    url: jdbc:postgresql://localhost:5432/test
     username: postgres
     password: postgres
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: puchokanza@gmail.com
+    password: krbgissmetqyulyj
+    properties.mail.smtp.auth: true
+    properties.mail.smtp.starttls.enable: true
+
 

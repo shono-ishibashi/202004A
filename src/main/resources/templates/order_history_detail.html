@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ラーメン屋の注文履歴</title>
+
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet">
+    <link th:href="@{/css/piza.css}" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="container">
+    <nav class="navbar navbar-default">
+        <div th:include="fragment::header"></div>
+    </nav>
+
+
+    <!-- table -->
+    <div class="row">
+        <div
+                class="table-responsive"> <!--col-lg-offset-1 col-lg-10 col-md-offset-1 col-md-10 col-sm-10 col-xs-12-->
+            <h3 class="text-center">注文履歴</h3>
+            <table class="table table-striped item-list-table" border="1">
+                <tbody>
+                <tr>
+                    <th class="col-lg-3">
+                        <div class="text-center">
+                            注文日
+                        </div>
+                    </th>
+                    <th class="col-lg-3">
+                        <div class="text-center">
+                            合計金額
+                        </div>
+                    </th>
+                    <th class="col-lg-3">
+                        <div class="text-center">
+                            お支払方法
+                        </div>
+                    </th>
+                    <th class="col-lg-3">
+                        <div class="text-center">
+                            決算状況
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="text-center">
+                            <span th:text="${#dates.format(orderHistory.orderDate, 'yyyy年MM月dd日')}"　class="center"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="text-center">
+                            <span th:text="${#numbers.formatInteger(orderHistory.totalPrice,0,'COMMA')}"></span>円
+                        </div>
+                    </td>
+                    <td>
+                        <div class="text-center">
+                            <div th:if="${orderHistory.paymentMethod == 1}">
+                                <span>クレジットカード払い</span>
+                            </div>
+                            <div th:if="${orderHistory.paymentMethod == 2}">
+                                <span>現金払い</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="text-center">
+                            <div th:if="${orderHistory.status == 1}">
+                                <span>未入金</span><br>
+                                (到着予定:&nbsp;<span th:text="${#dates.format(orderHistory.dateFormatDeliveryTime, 'MM月dd日HH時mm分')}"></span>)
+                            </div>
+                            <div th:if="${orderHistory.status == 2}">
+                                <span>入金済</span>
+                                (到着予定:&nbsp;<span th:text="${#dates.format(orderHistory.dateFormatDeliveryTime, 'MM月dd日HH時mm分')}"></span>)
+                            </div>
+                            <div th:if="${orderHistory.status == 3}">
+                                <span>発送済</span>
+                                (到着予定:&nbsp;<span th:text="${#dates.format(orderHistory.dateFormatDeliveryTime, 'MM月dd日HH時mm分')}"></span>)
+                            </div>
+                            <div th:if="${orderHistory.status == 4}">
+                                <span>配送完了</span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="col-lg-3">
+                        <div class="text-center">
+                            宛先名
+                        </div>
+                    </th>
+                    <th class="col-lg-3">
+                        <div class="text-center">
+                            宛先住所
+                        </div>
+                    </th>
+                    <th class="col-lg-3">
+                        <div class="text-center">
+                            宛先メールアドレス
+                        </div>
+                    </th>
+                    <th class="col-lg-3">
+                        <div class="text-center">
+                            宛先TEL
+                        </div>
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="text-center">
+                            <span th:text="${orderHistory.destinationName}"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="text-center">
+                            <span th:text="${orderHistory.destinationZipcode}"></span><br>
+                            <span th:text="${orderHistory.destinationAddress}"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="text-center">
+                            <span th:text="${orderHistory.destinationEmail}"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="text-center">
+                            <span th:text="${orderHistory.destinationTel}"></span>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table class="table table-striped item-list-table" border="1">
+                <tbody>
+                <tr>
+                    <th class="col-lg-3">
+                        <div class="text-center">
+                            商品名
+                        </div>
+                    </th>
+                    <th class="col-lg-3">
+                        <div class="text-center">
+                            サイズ
+                        </div>
+                    </th>
+                    <th class="col-lg-3">
+                        <div class="text-center">
+                            数量
+                        </div>
+                    </th>
+                    <th class="col-lg-3">
+                        <div class="text-center">
+                            トッピング
+                        </div>
+                    </th>
+                </tr>
+                <!-- セル名の部分終わり-->
+                <!--<div th:text="${emptyMessage}"></div> -->
+                <!-- ここから下が注文内容-->
+                <div th:each="orderItem:${orderHistory.orderItemList}">
+                    <tr>
+                        <td>
+                            <div class="text-center">
+                                <div><img th:src="${'/img_noodle/' + orderItem.item.imagePath}" class="img-rounded" width="30" height="30"></div>
+                                <span th:text="${orderItem.item.name}"></span>
+                                <span th:if="${orderItem.size.toString() == 'M'}" th:text="${'(' + orderItem.item.priceM + '円)'}"　style="float: right;"></span>
+                                <span th:if="${orderItem.size.toString() == 'L'}" th:text="${'(' + orderItem.item.priceL + '円)'}"　style="float: right;"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="text-center">
+                                <span th:text="${orderItem.size}"></span>サイズ
+                            </div>
+                        </td>
+                        <td>
+                            <div class="text-center">
+                                <span th:text="${orderItem.quantity}"></span>杯
+                            </div>
+                        </td>
+                        <td>
+                            <div th:if="${orderItem.orderToppingList.get(0).topping.name}">
+                            <div th:each="orderTopping:${orderItem.orderToppingList}">
+                                <div class="text-center">
+                                <span th:if="${orderTopping.topping.name}">
+                                    &nbsp;&nbsp;&nbsp;<span th:text="${orderTopping.topping.name}"></span>
+                                </span>
+                                    <span style="float: right;"><span th:text="${'(' + orderTopping.price + '円)'}"></span></span>
+                                </div>
+                            </div>
+                            </div>
+                            <div th:unless="${orderItem.orderToppingList.get(0).topping.name}">
+                                <div class="text-center"><span th:text="なし"></span></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <br>
+                </div>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- end container -->
+<script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+</body>
+</html>\

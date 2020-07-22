@@ -1,10 +1,15 @@
 package com.controller;
 
+import com.common.NoodleGenre;
 import com.domain.Item;
 
+import com.domain.ItemPaging;
 import com.form.ItemForm;
 import com.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,7 +17,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,19 +41,25 @@ public class ShowListController {
      * @return ページ表示のhtml
      */
     @RequestMapping("/show-list")
-    public String showList(Model model) {
-        Map<Integer, String> orderOfItemMap = new HashMap<>();
-        orderOfItemMap.put(1, "値段が安い順");
-        orderOfItemMap.put(2, "値段が高い順");
-        orderOfItemMap.put(3,"人気順");
-        model.addAttribute("orderOfItemMap", orderOfItemMap) ;
+    public String showList(@PageableDefault(page = 0, size = 9) Pageable pageable, Model model) {
+        Page<ItemPaging> itemPage = itemService.findAllPage(pageable);
+        model.addAttribute("page", itemPage);
+        model.addAttribute("itemList", itemPage.getContent());
+
+        Map<Integer, String> sortMap = new HashMap<>();
+        sortMap.put(1, "値段が安い順");
+        sortMap.put(2, "値段が高い順");
+        sortMap.put(3, "人気順");
+        model.addAttribute("sortMap", sortMap);
+
         List<Item> itemList = itemService.findAll();
-        model.addAttribute("itemList", itemList);
-        StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(itemList);
-        model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
+//        StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(itemList);
+        model.addAttribute("itemListForAutocomplete", itemList);
+
+
+        model.addAttribute("genres", NoodleGenre.values());
         return "item_list_noodle";
     }
-
 
     /**
      * 検索結果を表示する。
@@ -60,38 +70,91 @@ public class ShowListController {
      * @return
      */
     @RequestMapping("/search_noodle")
-    public String searchNoodle(@Validated ItemForm itemForm, String orderKey, BindingResult result, Model model){
+    public String searchNoodle(
+            Model model
+            , ItemForm itemForm
+            , @PageableDefault(page = 0, size = 9) Pageable pageable
+    ) throws Exception {
 
-        if(result.hasErrors()){
-            return showList(model);
+        model.addAttribute("genres", NoodleGenre.values());
+
+        Map<Integer, String> sortMap = new HashMap<>();
+        sortMap.put(1, "値段が安い順");
+        sortMap.put(2, "値段が高い順");
+        sortMap.put(3, "人気順");
+        model.addAttribute("sortMap", sortMap);
+
+        Page<ItemPaging> page;
+        Integer orderKey = itemForm.getSortNumber();
+
+        if (itemForm.getNoodleName().isEmpty()) {
+            System.out.println(orderKey);
+            if (1 == orderKey) {
+                page = itemService.findAllPage(pageable);
+            } else if (2 == orderKey) {
+                page = itemService.findAllByPriceDesc(pageable);
+            } else if (3 == orderKey) {
+                page = itemService.findAllPage(pageable);
+            } else {
+                page = itemService.findAllPage(pageable);
+                model.addAttribute("sortError", true);
+            }
+        } else {
+            page = itemService.findByName(itemForm.getNoodleName(), itemForm.getSortNumber(), pageable);
         }
 
-        Map<Integer, String> orderOfItemMap = new HashMap<>();
-        orderOfItemMap.put(1, "値段が安い順");
-        orderOfItemMap.put(2, "値段が高い順");
-        orderOfItemMap.put(3,"人気順");
-        model.addAttribute("orderOfItemMap", orderOfItemMap) ;
-
-
+        model.addAttribute("page", page);
+        model.addAttribute("itemList", page.getContent());
 
         List<Item> allItems = itemService.findAll();
-        List<Item> itemList = itemService.findByItem(itemForm.getNoodleName());
-        if(itemList.size()==0){
-            model.addAttribute("failure", "該当する商品がありません");
-            model.addAttribute("itemList", allItems);
-            StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(allItems);
-            model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
-            return "item_list_noodle";
-        } else{
-            model.addAttribute("itemList", itemList);
-            StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(allItems);
-            model.addAttribute("itemListForAutocomplete", itemListForAutocomplete);
-            return "item_list_noodle";
-        }
-
-
+//        StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(allItems);
+        model.addAttribute("itemListForAutocomplete", allItems);
+        return "item_list_noodle";
     }
 
+    /**
+     *
+     * ジャンルでラーメンを検索するメソッド
+     *
+     * @param genre
+     * @param model
+     * @return
+     */
+    @RequestMapping("/search_noodle/genre")
+    public String searchByGenre(Integer genre, Model model, @PageableDefault(page = 0, size = 9) Pageable pageable) {
 
+        //送られた数値が不正な値かどうかを確認する。
+        boolean genreExists = false;
+        for (NoodleGenre enumGenre : NoodleGenre.values()) {
+            if (enumGenre.getLabelNum().equals(genre)) {
+                genreExists = true;
+            }
+        }
 
+        Page<ItemPaging> itemPage;
+
+        //不正な値ならメッセージを投げて、全件表示させる
+        if (genreExists) {
+            itemPage = itemService.findByGenre(genre, pageable);
+        } else {
+            itemPage = itemService.findAllPage(pageable);
+            model.addAttribute("genreError", true);
+        }
+
+        Map<Integer, String> sortMap = new HashMap<>();
+        sortMap.put(1, "値段が安い順");
+        sortMap.put(2, "値段が高い順");
+        sortMap.put(3, "人気順");
+        model.addAttribute("sortMap", sortMap);
+
+        model.addAttribute("page", itemPage);
+        model.addAttribute("itemList", itemPage.getContent());
+        model.addAttribute("genres", NoodleGenre.values());
+
+        List<Item> itemList = itemService.findAll();
+//        StringBuilder itemListForAutocomplete = itemService.getNoodleAutoCompleteList(itemList);
+        model.addAttribute("itemListForAutocomplete", itemList);
+
+        return "item_list_noodle";
+    }
 }

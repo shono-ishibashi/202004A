@@ -1,10 +1,18 @@
 package com.controller;
 
 import com.domain.Order;
+import com.domain.User;
 import com.form.OrderConfirmForm;
 import com.service.CartService;
 import com.service.OrderService;
+import com.service.SendMailService;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.mail.MailSender;
+import org.springframework.mail.SimpleMailMessage;
+
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,7 +42,8 @@ public class OrderComfirmController {
     @Autowired
     private HttpSession session;
 
-
+    @Autowired
+    private SendMailService sendMailService;
 
     @ModelAttribute
     public OrderConfirmForm setUpform(){
@@ -42,10 +51,12 @@ public class OrderComfirmController {
     }
 
     @RequestMapping("")
-    public String showConfirm(Integer id, Integer status, Model model) throws Exception{
+    public String showConfirm(Model model) throws Exception{
 
-        List<Order> orderConfirmList = cartService.showCart(id, status);
-        session.setAttribute("orderConfirmList", orderConfirmList);
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        List<Order> orderConfirmList = cartService.showCart(userId, 0);
+        model.addAttribute("orderConfirmList", orderConfirmList);
 
         List<String> deliveryTimeList = new ArrayList<>();
         deliveryTimeList.add("10時");
@@ -59,6 +70,8 @@ public class OrderComfirmController {
         deliveryTimeList.add("18時");
         deliveryTimeList.add("19時");
         deliveryTimeList.add("20時");
+//        deliveryTimeList.add("21時");
+//        deliveryTimeList.add("22時");
 
         model.addAttribute("deliveryTimeList", deliveryTimeList);
 
@@ -72,18 +85,27 @@ public class OrderComfirmController {
 
     /**
      *  注文ボタンを押下した時の処理
+     *
      */
 
     @RequestMapping("/order-finished")
-    public String orderFinished(@Validated OrderConfirmForm orderConfirmForm, BindingResult result, Integer id, Integer status, Model model) throws Exception {
+    public String orderFinished(@Validated OrderConfirmForm orderConfirmForm, BindingResult result, Model model) throws Exception {
 
         if(result.hasErrors()){
-            return showConfirm(id,status,model);
+            return showConfirm(model);
         }
         //Integer型としてuserIdを取得
-//        Integer userId = (Integer)session.getAttribute("userId");
-        Integer userId = 1;
-        Order order = new Order();
+
+        Integer userId = (Integer)session.getAttribute("userId");//principal
+        Order order = cartService.showCart(userId,0).get(0);
+
+//         Integer userId = (Integer)session.getAttribute("userId");
+// //        Integer userId = 1;
+//         Order order = new Order();
+
+        order.setUserId(userId);
+        //ステータスを"未入金"としてセット
+        order.setStatus(0);
         //String型の日付をDate型へ変換
         Date date = Date.valueOf(orderConfirmForm.getOrderDate());
         order.setOrderDate(date);
@@ -122,15 +144,13 @@ public class OrderComfirmController {
         String orderDateStr = orderConfirmForm.getOrderDate();
         LocalDate orderDate = LocalDate.parse(orderDateStr);
         //注文時刻（時間）を整数として取得
-//        String orderTimeStr = orderConfirmForm.getOrderTime();
-//        String replaceOrderTimeStr = orderTimeStr.replace("時", "");
         Integer replaceOrderTimeInt1 = Integer.parseInt(replaceOrderTimeStr);
 
         //現在時刻（日）と注文時刻（日）を比較
         if(orderDate.compareTo(currentDate) < 0 ){
             System.out.println("iiiii");
             model.addAttribute("errorMsg", "今から3時間後の日時をご入力ください");
-            return showConfirm(id,status,model);
+            return showConfirm(model);
         } else if(orderDate.compareTo(currentDate) == 0 ){ //注文日が当日の場合
             //現在時刻を２つ生成、１つ現在時刻として、もう一つは現在時刻の時間の部分を注文時間を変更
             LocalDateTime currentDateTime1 = LocalDateTime.now();
@@ -139,26 +159,34 @@ public class OrderComfirmController {
             LocalDateTime orderDateTime = currentDateTime2.withHour(replaceOrderTimeInt1);
             //現在時刻に3時間加算
             LocalDateTime currentDateTimePlus3Hour = currentDateTime1.plusHours(3);
-            //現在時刻と注文時刻が３時間離れているか比較
-            if( orderDateTime.compareTo(currentDateTimePlus3Hour) < 0 ){
+
+            //現在時刻が最終注文時刻の３時間前を超えていた時
+            LocalDateTime lastOrderTime = currentDateTime1.withHour(20).withMinute(0).withSecond(0);
+            if( lastOrderTime.compareTo(currentDateTimePlus3Hour) < 0 ){
+                System.out.println("kkkkkkk");
+                model.addAttribute("errorMsg1", "最終注文時刻を過ぎています");
+                return showConfirm(model);
+            }//現在時刻と注文時刻が３時間離れているか比較
+            else if( orderDateTime.compareTo(currentDateTimePlus3Hour) < 0 ){
                 System.out.println("aaaaaa");
-                model.addAttribute("errorMsg", "今から3時間後の日時をご入力ください");
-                return showConfirm(id,status,model);
+                model.addAttribute("errorMsg2", "今から3時間後の日時をご入力ください");
+                return showConfirm(model);
             }
-//            orderService.UpDate(order);
-            System.out.println("あああああ");
+            //メールを送信する処理
+            sendMailService.sendMail(order);
+            orderService.UpDate(order);
             return "order_finished";
         }
-//        orderService.UpDate(order);
-        System.out.println("いいいいい");
-
-
+        //メールを送信する処理
+        sendMailService.sendMail(order);
+        orderService.UpDate(order);
         return "order_finished";
     }
+
     @RequestMapping("/view")
     public String past(Model model){
-        //Integer userId = (Integer)session.getAttribute("userId");
-        Integer userId = 1;
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Integer userId = user.getId();
         List<Order> orderList = orderService.getOrderHistoryList(userId);
         model.addAttribute("orderList", orderList);
         return  "order_history";

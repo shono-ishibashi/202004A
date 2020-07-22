@@ -3,23 +3,35 @@ package com.service;
 import com.domain.Order;
 import com.domain.OrderItem;
 import com.domain.OrderTopping;
-import com.domain.User;
-import com.repository.OrderRepository;
+import com.repository.OrderHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.*;
 
-@Transactional
 @Service
-public class OrderService {
-
+@Transactional
+public class OrderHistoryService {
     @Autowired
-    private OrderRepository orderRepository;
+    private OrderHistoryRepository orderHistoryRepository;
 
-    public List<Order> getOrderHistoryList(Integer userId){
-        List<Order> orderListWithDub = orderRepository.findByUserIdJoinOrderItemsForOrderHistory(userId);
+    public List<Order> getOrderHistoryList(Integer userId) {
+        List<Order> orderListWithDub = orderHistoryRepository
+                .findByUserIdJoinOrderItemsForOrderList(userId);
+        List<Order> orderHistoryList = createOrderHistoryList(orderListWithDub);
+        return orderHistoryList;
+    }
+
+    public Order getOrderHistoryDetail(Integer orderId){
+        List<Order> orderListWithDub = orderHistoryRepository
+                                        .findByUserIdJoinOrderItemsForOrderHistoryDetail(orderId);
+        Order orderHistoryDetail = createOrderHistoryList(orderListWithDub).get(0);
+        return orderHistoryDetail;
+    }
+
+    public List<Order> createOrderHistoryList(List<Order> orderListWithDub){
 
         List<Integer> orderItemIdList = new ArrayList<>();
         List<OrderItem> orderItemListWithoutDub = new ArrayList<>();
@@ -85,10 +97,20 @@ public class OrderService {
                     order.setOrderDate(orderInList.getOrderDate());
                     order.setDestinationName(orderInList.getDestinationName());
                     order.setDestinationEmail(orderInList.getDestinationEmail());
-                    order.setDestinationZipcode(orderInList.getDestinationZipcode());
+                    StringBuilder sbZipcode = new StringBuilder().append(orderInList.getDestinationZipcode());
+                    sbZipcode.insert(0, "〒");
+                    sbZipcode.insert(4, "-");
+                    order.setDestinationZipcode(sbZipcode.toString());
+                    //order.setDestinationZipcode(orderInList.getDestinationZipcode());
                     order.setDestinationAddress(orderInList.getDestinationAddress());
                     order.setDestinationTel(orderInList.getDestinationTel());
                     order.setDeliveryTime(orderInList.getDeliveryTime());
+
+                    //☆
+                    Timestamp deliveryTime = orderInList.getDeliveryTime();
+                    Date dateFormatDeliveryTime = new Date(deliveryTime.getTime());
+                    order.setDateFormatDeliveryTime(dateFormatDeliveryTime);
+
                     order.setPaymentMethod(orderInList.getPaymentMethod());
                     order.setUser(orderInList.getUser());
 
@@ -105,9 +127,9 @@ public class OrderService {
                 }
             }
 
-                    List<OrderItem> list = new ArrayList<>(orderItemMap.values());
-                    order.setOrderItemList(list);
-                    orderListWithoutDub.add(order);
+            List<OrderItem> list = new ArrayList<>(orderItemMap.values());
+            order.setOrderItemList(list);
+            orderListWithoutDub.add(order);
 
         }
 
@@ -123,11 +145,4 @@ public class OrderService {
         }
         return orderListWithoutDub;
     }
-    //お客様情報を更新する処理
-    public void UpDate(Order order){
-        orderRepository.UpDate(order);
     }
-
-
-}
-

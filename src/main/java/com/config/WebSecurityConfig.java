@@ -1,63 +1,78 @@
 package com.config;
 
 
-import com.domain.User;
+import com.common.RefererRedirectionAuthenticationSuccessHandler;
 import com.service.LoginService;
-import com.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@Configuration
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private LoginService loginService;
 
-    @Autowired
-    private UserService userService;
 
+    @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers( "/css/**", "/js/**", "/img_noodle/**", "/fonts/**");
+        web.ignoring().antMatchers("/css/**", "/js/**", "/img_noodle/**");
     }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+
         http
                 .authorizeRequests()
                 //指定したパターンごとに制限をかける
-                .antMatchers("/js/**", "/css/**", "/img_noodle/**","/**").permitAll()//制限なし
+                .antMatchers(
+                        "/login-form"
+                        , "/register-user"
+                        , "/noodle/show-list"
+                        , "/noodle/show-detail"
+                        , "/noodle/cart/add"
+                        , "/cart/show-list"
+                        , "/register-user/insert"
+                        , "/noodle/search_noodle/genre"
+                        , "/noodle/search_noodle"
+                        , "/error"
+                        , "/js/**"
+                        , "/templates/**"
+                        , "/css/**"
+                        , "/js/**"
+                        , "/img_noodle/**"
+                        , "/static/**"
+                ).permitAll()//制限なし
+
+                .anyRequest().authenticated()
                 //アクセスの許可
                 .and()
+
                 .formLogin()
-                .loginPage("/login-form")
+                .defaultSuccessUrl("/noodle/show-list")
                 .loginProcessingUrl("/login")
                 .usernameParameter("email")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/noodle/show-list")
-                .permitAll();
-
-        http.authorizeRequests()
-                .antMatchers("/confirm").authenticated()
-                .antMatchers("/confirm/view").authenticated()
-                .antMatchers("/confirm/").authenticated()
-                .antMatchers("/confirm/order-finished").authenticated();
+                .loginPage("/login-form")
 
 
+                .and()
 
-
-        http.logout()
+                .logout()
                 //  ログアウト時の遷移先URL
-                .logoutSuccessUrl("/cart/show-list");
+                .logoutSuccessUrl("/noodle/show-list");
     }
 
     @Override
@@ -68,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    void configureAuthenticationManager(AuthenticationManagerBuilder auth) throws Exception{
+    void configureAuthenticationManager(AuthenticationManagerBuilder auth) throws Exception {
 
         auth.userDetailsService(loginService).passwordEncoder(passwordEncoder());
     }
@@ -77,6 +92,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 }

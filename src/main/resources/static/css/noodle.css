@@ -35,3 +35,52 @@ span#total-tax {
 th{
 	text-align: center;
 }
+
+.sliderArea {
+    max-width: 25%;
+    margin: 0 auto;
+    /*padding: 0 25px;*/
+}
+.sliderArea.w100 {
+    max-width: 30px;
+}
+.slick-slide {
+    margin: 0 5px;
+}
+.slick-slide img {
+    width: 100%;
+    height: auto;
+}
+.slick-prev {
+    left: 100px;
+    z-index: 100;
+}
+
+.slick-next {
+    right: 100px;
+    z-index: 100;
+}
+
+.slider .slick-prev:before, .slider .slick-next:before {
+    color: black;
+    font-size: 28px;
+}
+.slick-slide {
+    transition: all ease-in-out .3s;
+    opacity: .2;
+}
+.slick-active {
+    opacity: 1;
+}
+.slick-current {
+    opacity: 1;
+}
+.thumb {
+    margin: 20px 0 0;
+}
+.thumb .slick-slide {
+    cursor: pointer;
+}
+.thumb .slick-slide:hover {
+    opacity: .7;
+}

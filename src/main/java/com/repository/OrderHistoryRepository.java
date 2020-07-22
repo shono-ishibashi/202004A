@@ -1,7 +1,6 @@
 package com.repository;
 
 import com.domain.*;
-import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -10,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class OrderRepository {
+public class OrderHistoryRepository {
 
     @Autowired
     private NamedParameterJdbcTemplate template;
@@ -117,40 +117,6 @@ public class OrderRepository {
         insert = withTableName.usingGeneratedKeyColumns("id");
     }
 
-    public List<Order> findByUserIdAndStatus(Integer userId, Integer status) {
-        String sql = "SELECT o.id as id " +
-                ", o.user_id as user_id " +
-                ", o.status as status " +
-                ", o.total_price as total_price" +
-                ", o.order_date as order_date" +
-                ", o.destination_name as destination_name" +
-                ", o.destination_email as destination_email" +
-                ", o.destination_zipcode as destination_zipcode" +
-                ", o.destination_address as destination_address" +
-                ", o.destination_tel as destination_tel" +
-                ", o.delivery_time as delivery_time" +
-                ", o.payment_method as payment_method" +
-                " FROM orders as o " +
-                " WHERE user_id = :userId " +
-                " and status = :status;";
-        SqlParameterSource param = new MapSqlParameterSource()
-                .addValue("userId", userId)
-                .addValue("status", status);
-
-        List<Order> orderList = template.query(sql, param, ORDER_ROW_MAPPER);
-
-        return orderList;
-    }
-
-
-    public Integer createCart(Order order) {
-
-        SqlParameterSource param = new BeanPropertySqlParameterSource(order);
-
-        Number id = insert.executeAndReturnKey(param);
-
-        return id.intValue();
-    }
 
     public List<Order> findByUserIdJoinOrderItems(Integer userId, Integer status) {
         String sql = "SELECT o.id as id" +
@@ -199,11 +165,11 @@ public class OrderRepository {
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId).addValue("status", status);
 
-        List<Order> orderList = template.query(sql, param, ORDER_JOIN_ROW_MAPPER);
+        List<Order> orderList = template.query(sql, param, ORDER_ROW_MAPPER);
 
         return orderList;
     }
-    public List<Order> findByUserIdJoinOrderItemsForOrderHistory(Integer userId){
+    public List<Order> findByUserIdJoinOrderItemsForOrderList(Integer userId){
         String sql = "SELECT o.id as id" +
                 "     , o.user_id as user_id" +
                 "     , o.status as status" +
@@ -244,12 +210,9 @@ public class OrderRepository {
                 " LEFT OUTER JOIN toppings" +
                 " ON toppings.id = ot.topping_id" +
                 " WHERE o.user_id = :userId " +
-                " AND o.status = 1" +
-                " OR o.status = 2" +
-                " OR o.status = 3" +
-                " OR o.status = 4" +
+                " AND NOT o.status = 0" +
                 " AND items.deleted = false" +
-                " ORDER BY o.order_date ;";
+                " ORDER BY o.order_date";
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("userId",userId);
 
@@ -257,67 +220,55 @@ public class OrderRepository {
 
         return orderList;
     }
-  
-   /**
-     *お客様情報を更新する処理
-     *
-     */
-    public void UpDate(Order order){
-        SqlParameterSource param = new BeanPropertySqlParameterSource(order);
+    public List<Order> findByUserIdJoinOrderItemsForOrderHistoryDetail(Integer orderId){
+        String sql = "SELECT o.id as id" +
+                "     , o.user_id as user_id" +
+                "     , o.status as status" +
+                "     , o.total_price as total_price" +
+                "     , o.order_date as order_date" +
+                "     , o.destination_name as destination_name" +
+                "     , o.destination_email as destination_email" +
+                "     , o.destination_zipcode as destination_zipcode" +
+                "     , o.destination_address as destination_address" +
+                "     , o.destination_tel as destination_tel" +
+                "     , o.delivery_time as delivery_time" +
+                "     , o.payment_method as payment_method" +
+                "     ,oi.id as orderItemId" +
+                "     ,oi.order_id as order_id" +
+                "     ,oi.item_id as item_id" +
+                "     ,oi.quantity as quantity" +
+                "     ,oi.size as size" +
+                "     ,items.name as itemName" +
+                "     ,items.description as itemDescription" +
+                "     ,items.price_m as itemPriceM" +
+                "     ,items.price_l as itemPriceL" +
+                "     ,items.image_path as itemImagePath" +
+                "     ,items.deleted as itemDeleted" +
+                "     ,ot.id as orderTopping" +
+                "     ,ot.topping_id as orderToppingId" +
+                "     ,ot.order_item_id as orderItemId" +
+                "     ,toppings.id as toppingId" +
+                "     ,toppings.name as toppingName" +
+                "     ,toppings.price_m as toppingPriceM" +
+                "     ,toppings.price_l as toppingPriceL" +
+                " FROM orders AS o" +
+                " LEFT OUTER JOIN order_items AS oi" +
+                " ON o.id = oi.order_id" +
+                " LEFT OUTER JOIN items" +
+                " ON oi.item_id = items.id" +
+                " LEFT OUTER JOIN order_toppings as ot" +
+                " ON ot.order_item_id = oi.id" +
+                " LEFT OUTER JOIN toppings" +
+                " ON toppings.id = ot.topping_id" +
+                " WHERE o.id = :orderId" +
+                " AND items.deleted = false" +
+                " ORDER BY o.order_date ;";
 
-        if( order.getPaymentMethod() == 1  ){
-            String upDateSqlCash ="UPDATE orders SET  status=1,  " +
-                    "order_date=:orderDate, destination_name=:destinationName, destination_email=:destinationEmail, " +
-                    "destination_zipcode=:destinationZipcode, destination_address=:destinationAddress, " +
-                    "destination_tel=:destinationTel, delivery_time=:deliveryTime, payment_method=:paymentMethod  " +
-                    "WHERE user_id=:userId and status = 0";
-            System.out.println("代金引換でお客様情報を更新");
-            template.update(upDateSqlCash,param);
-        } else{
+        SqlParameterSource param = new MapSqlParameterSource().addValue("orderId",orderId);
 
-            String upDateSqlCredit ="UPDATE orders SET status=2,  " +
-                    "order_date=:orderDate, destination_name=:destinationName, destination_email=:destinationEmail, " +
-                    "destination_zipcode=:destinationZipcode, destination_address=:destinationAddress, " +
-                    "destination_tel=:destinationTel, delivery_time=:deliveryTime, payment_method=:paymentMethod " +
-                    "WHERE user_id=:userId and status = 0";
-            System.out.println("クレカ決済でお客様情報を更新");
-            template.update(upDateSqlCredit,param);
+        List<Order> orderList = template.query(sql,param,ORDER_JOIN_ROW_MAPPER);
 
-        }
-
-    }
-
-
-    public void updateUserId(Integer userId,Integer temporaryId) {
-        String sql = "UPDATE orders SET user_id = :userId WHERE user_id = :temporaryId ";
-
-        SqlParameterSource param = new MapSqlParameterSource()
-                .addValue("userId",userId)
-                .addValue("temporaryId",temporaryId);
-
-        template.update(sql,param );
-
-    }
-
-    public void delete(Integer orderId, Integer orderItemId){
-        String sql = "BEGIN;" +
-                "DELETE FROM order_items WHERE order_id = :orderId AND id = :orderItemId;" +
-                "DELETE FROM order_toppings WHERE order_item_id = :orderItemId;" +
-                "COMMIT;";
-
-        SqlParameterSource param = new MapSqlParameterSource().addValue("orderId",orderId).addValue("orderItemId",orderItemId);
-
-        template.update(sql,param);
-    }
-
-    public void updateTotalPrice(Integer orderId, Integer totalPrice){
-
-        String sql = "UPDATE orders SET total_price = :totalPrice WHERE id = :orderId";
-        SqlParameterSource param = new MapSqlParameterSource()
-                .addValue("totalPrice",totalPrice)
-                .addValue("orderId",orderId);
-
-        template.update(sql,param);
-
+        return orderList;
     }
 }
+

@@ -152,7 +152,7 @@
                             サイズ
                         </div>
                     </th>
-                    <th class="col-lg-3">
+                    <th class="col-lg-1">
                         <div class="text-center">
                             数量
                         </div>
@@ -160,6 +160,11 @@
                     <th class="col-lg-3">
                         <div class="text-center">
                             トッピング
+                        </div>
+                    </th>
+                    <th class="col-lg-2">
+                        <div class="text-center">
+                            評価
                         </div>
                     </th>
                 </tr>
@@ -200,6 +205,17 @@
                             <div th:unless="${orderItem.orderToppingList.get(0).topping.name}">
                                 <div class="text-center"><span th:text="なし"></span></div>
                             </div>
+                        </td>
+                        <td>
+                            <div th:if="${orderItem.reviewPoint} >= 0">
+                                <span th:text="${orderItem.reviewPoint}"></span>
+                            </div>
+                            <form th:action="@{/review}" method="post">
+                                評価：<input  name="point" class="range" type="range" min="1" max="5" step="1" th:value="${orderItem.reviewPoint}">
+                                <input type="hidden" name="orderItemId" th:value="${orderItem.id}">
+                                <input type="hidden" name="orderItemItemId" th:value="${orderItem.itemId}">
+                                <button>送信</button>
+                            </form>
                         </td>
                     </tr>
                     <br>

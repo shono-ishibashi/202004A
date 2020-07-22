@@ -8,6 +8,7 @@
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/noodle.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/css/swiper.min.css"/>
+    <link rel="stylesheet" th:herf="@{/rate/rateit.css}"/>
     <style type="text/css">
         .ui-autocomplete {
             position: absolute;
@@ -32,7 +33,6 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-
     <script>
         $(function () {
             var availableTags = [[(${itemListForAutocomplete})]];
@@ -74,7 +74,8 @@
         <div class="sliderArea" width="50px">
             <div class="regular slider">
 
-                <div class="text-center"><a th:href="@{'/noodle/show-detail?id=6'}"><img th:src="@{img_noodle/slide6.jpg}"></a></div>
+                <div class="text-center"><a th:href="@{'/noodle/show-detail?id=6'}"><img
+                        th:src="@{img_noodle/slide6.jpg}"></a></div>
                 <div class="text-center"><img th:src="@{img_noodle/2.jpg}"></div>
                 <div class="text-center"><img th:src="@{img_noodle/3.jpg}"></div>
                 <div class="text-center"><img th:src="@{img_noodle/4.jpg}"></div>
@@ -101,7 +102,7 @@
                             <div class="col-sm-9">
                                 <span th:text="${failure}" style="color: #ff0000"></span>
                                 <input type="text" th:field="*{noodleName}" id="code"
-                                       class="form-control input-sm" list="autocomplete" />
+                                       class="form-control input-sm" list="autocomplete"/>
                                 <datalist id="autocomplete">
                                     <option th:each="item:${itemListForAutocomplete}" th:value="${item.name}">
                                 </datalist>
@@ -156,6 +157,11 @@
                         <a href="item_detail.html" th:href="@{'/noodle/show-detail?id=' + ${item.id}}">
                             <span th:text="${item.name}"></span>
                         </a><br>
+                        <div class="range-group">
+                            評価：<input class="input-range" th:value="${item.reviewPoint}" type="range" min="1" , max="5"
+                                      step="0.5" id="backing3">
+                            <div class="rateit" data-rateit-backingfld="#backing3"></div>
+                        </div>
                         <span class="price">&nbsp;М&nbsp;</span>&nbsp;&nbsp;<span th:text="${item.priceM}"></span>円<br>
                         <span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;<span th:text="${item.priceL}"></span>円<br>
                     </th>
@@ -204,4 +210,5 @@
 </div>
 
 </body>
+<script type="text/javascript" th:src="@{/rate/jquery.rateit.js}"></script>
 </html>

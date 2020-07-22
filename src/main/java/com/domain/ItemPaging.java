@@ -35,4 +35,8 @@ public class ItemPaging {
 
     @Column(name="genre")
     private Integer genre;
+
+   @Column(name = "point")
+    private Double reviewPoint;
+
 }

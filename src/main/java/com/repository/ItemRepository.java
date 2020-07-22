@@ -30,6 +30,7 @@ public class ItemRepository {
         item.setPriceM(rs.getInt("price_m"));
         item.setPriceL(rs.getInt("price_l"));
         item.setImagePath(rs.getString("image_path"));
+        item.setReviewPoint(rs.getDouble("point"));
         item.setDeleted(rs.getBoolean("deleted"));
 
         return item;
@@ -42,7 +43,7 @@ public class ItemRepository {
      * @return itemList
      */
     public List<Item> findAll(){
-        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items";
+        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted, point FROM items";
 
         List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
 
@@ -56,7 +57,7 @@ public class ItemRepository {
      * @return
      */
     public List<Item> findAllByCheapPrice(){
-        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items ORDER BY price_m ";
+        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted, point FROM items ORDER BY price_m ";
 
         List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
 
@@ -68,7 +69,7 @@ public class ItemRepository {
      * @return
      */
     public List<Item> findAllByExpensivePrice(){
-        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items ORDER BY price_m DESC";
+        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted, point FROM items ORDER BY price_m DESC";
 
         List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
 
@@ -81,7 +82,7 @@ public class ItemRepository {
      * @return
      */
     public List<Item> findAllByPopularItem(){
-        String sql = "SELECT items.id, name, description, price_m, price_l, image_path, deleted FROM items LEFT OUTER JOIN order_items ON items.id=order_items.item_id  GROUP BY items.id ORDER BY count(items.id) DESC, price_m;";
+        String sql = "SELECT items.id, name, description, price_m, price_l, image_path, deleted, point FROM items LEFT OUTER JOIN order_items ON items.id=order_items.item_id  GROUP BY items.id ORDER BY count(items.id) DESC, price_m;";
 
         List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
 
@@ -95,7 +96,7 @@ public class ItemRepository {
      * @return itemList
      */
     public List<Item> findByNameLike(String name){
-        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted FROM items WHERE name LIKE :name ORDER BY price_m";
+        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted, point FROM items WHERE name LIKE :name ORDER BY price_m";
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("name", "%"+name+"%");
 

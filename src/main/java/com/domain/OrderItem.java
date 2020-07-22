@@ -15,5 +15,6 @@ public class OrderItem {
     private Item item;
     private Integer totalPrice;
     private List<OrderTopping> orderToppingList = new ArrayList<>();
+    private Integer reviewPoint;
 
 }

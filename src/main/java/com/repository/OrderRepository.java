@@ -62,6 +62,7 @@ public class OrderRepository {
         item.setPriceL(rs.getInt("itemPriceL"));
         item.setPriceM(rs.getInt("itemPriceM"));
         item.setImagePath(rs.getString("itemImagePath"));
+        item.setDeleted(rs.getBoolean("itemDeleted"));
 
         Topping topping = new Topping();
         topping.setId(rs.getInt("toppingId"));

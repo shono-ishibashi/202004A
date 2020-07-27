@@ -53,13 +53,14 @@
     </script>
     <script>
         $(document).on('ready', function () {
-            $('.regular slider').slick({
+            $('.slider').slick({
                 autoplay: true,
                 autoplaySpeed: 4000,
                 dots: true,
             })
         });
     </script>
+
 </head>
 <body>
 
@@ -76,13 +77,13 @@
     <div class="section">
 
         <div class="sliderArea" width="50px">
-            <div class="regular slider">
+            <div class="slider">
 
-                <div class="text-center"><a th:href="@{'/noodle/show-detail?id=6'}"><img th:src="@{img_noodle/slide6.jpg}"></a></div>
-                <div class="text-center"><img th:src="@{img_noodle/2.jpg}"></div>
-                <div class="text-center"><img th:src="@{img_noodle/3.jpg}"></div>
-                <div class="text-center"><img th:src="@{img_noodle/4.jpg}"></div>
-                <div class="text-center"><img th:src="@{img_noodle/5.jpg}"></div>
+                <div class="text-center"><a th:href="@{'/noodle/show-detail?id=6'}"><img th:src="@{/img_noodle/slide6.jpg}"></a></div>
+                <div class="text-center"><img th:src="@{/img_noodle/2.jpg}"></div>
+                <div class="text-center"><img th:src="@{/img_noodle/3.jpg}"></div>
+                <div class="text-center"><img th:src="@{/img_noodle/4.jpg}"></div>
+                <div class="text-center"><img th:src="@{/img_noodle/5.jpg}"></div>
 
             </div>
         </div>
@@ -218,4 +219,6 @@
 </div>
 </body>
 <script type="text/javascript" th:src="@{/rate/jquery.rateit.js}"></script>
+<script th:src="@{/js/slider.js}"></script>
+
 </html>

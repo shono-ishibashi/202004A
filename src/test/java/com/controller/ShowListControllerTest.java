@@ -34,7 +34,8 @@ class ShowListControllerTest {
 
     @Test
     void showList() throws Exception {
-
+        mockMvc.perform(get("/noodle/show-list")).andExpect(status().isOk())
+        .andExpect(view().name("item_list_noodle"));
     }
 
     @Test

@@ -55,9 +55,9 @@ public class SendMailService {
 
         String paymentMsg;
         if (order.getPaymentMethod() == 1){
-            paymentMsg = "未入金";
+            paymentMsg = "代金引換";
         } else {
-            paymentMsg = "入金済";
+            paymentMsg = "クレジットカード決済";
         }
 
         //感謝のメッセージ

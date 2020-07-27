@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="sidePage">
+    <div class="overlay" id="js__overlay"></div>
+
+    <!--サイドメニューのコンテンツ-->
+    <nav class="side-menu">
+        <ul>
+            <li><a href="https://twitter.com/A74159545?ref_src=twsrc%5Etfw"><i class="fab fa-twitter-square fa-1x twitter"></i>        Twitter</a></li>
+            <li><a href="https://twitter.com/A74159545?ref_src=twsrc%5Etfw"><i class="fab fa-instagram fa-1x instagram-font"></i>     Instagram</a></li>
+            <li><a href="https://goo.gl/maps/CdrpBNtYNnZ8U91Q7"><i class="fas fa-map-marked-alt fa-1x map"></i>     Map</a></li>
+            <li><a href="https://twitter.com/A74159545?ref_src=twsrc%5Etfw"><i class="fas fa-file-contract fa-1x contact-form"></i>      Contact</a></li>
+        </ul>
+    </nav>
+
+    <!--サイドメニュー開閉用ボタン-->
+    <i class="fas fa-bars side-menu-btn fa-3x" id="js__sideMenuBtn">
+    </i>
+</div>
+</body>
+</html>

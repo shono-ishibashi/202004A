@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,7 +7,6 @@
     <title> ラーメン屋のネット注文</title>
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/noodle.css" rel="stylesheet">
-    <link href="./../css/twitter.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/css/swiper.min.css"/>
     <style type="text/css">
         .ui-autocomplete {
@@ -24,42 +23,15 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<!--    <script src="../../js/slider"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/js/swiper.min.js"></script>
-
 
     <!--☆-->
     <link rel="stylesheet" type="text/css"
           href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
-    <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
-<!--    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 
-    <script>
-        $(function () {
-            var $body = $('body');
-            $('#js__sideMenuBtn').on('click', function () {
-                $body.toggleClass('side-open');
-                $('#js__overlay').on('click', function () {
-                    $body.removeClass('side-open');
-                });
-            });
-        });
-    </script>
-
-    <script>
-        $(function () {
-            var availableTags = [[(${itemListForAutocomplete})]];
-
-            $('#code').autocomplete({
-                source: availableTags,
-                minLength: 1
-            });
-        });
-
-    </script>
     <script>
         function textClear() {
             let textForm = document.getElementById("code");
@@ -68,36 +40,16 @@
     </script>
     <script>
         $(document).on('ready', function () {
-            $(".regular").slick({
+            $('.regular slider').slick({
                 autoplay: true,
                 autoplaySpeed: 4000,
                 dots: true,
-            });
+            })
         });
     </script>
 </head>
 <body>
 
-<!--<div class="overlay" id="js__overlay"></div>-->
-
-<!--&lt;!&ndash;サイドメニューのコンテンツ&ndash;&gt;-->
-<!--<nav class="side-menu">-->
-<!--    <ul>-->
-<!--        <li><a href="https://twitter.com/A74159545?ref_src=twsrc%5Etfw"><i class="fab fa-twitter-square fa-1x twitter"></i>        Twitter</a></li>-->
-<!--        <li><a href="https://twitter.com/A74159545?ref_src=twsrc%5Etfw"><i class="fab fa-instagram fa-1x instagram-font"></i>     Instagram</a></li>-->
-<!--        <li><a href="https://goo.gl/maps/CdrpBNtYNnZ8U91Q7"><i class="fas fa-map-marked-alt fa-1x map"></i>     Map</a></li>-->
-<!--        <li><a href="https://twitter.com/A74159545?ref_src=twsrc%5Etfw"><i class="fas fa-file-contract fa-1x contact-form"></i>      Contact</a></li>-->
-<!--    </ul>-->
-<!--</nav>-->
-
-<!--&lt;!&ndash;サイドメニュー開閉用ボタン&ndash;&gt;-->
-<!--<i class="fas fa-bars side-menu-btn fa-3x" id="js__sideMenuBtn">-->
-<!--</i>-->
-
-<div th:include="fragment-sidepage::sidePage">
-</div>
-
-<div class="wrapper">
 <div class="container">
     <nav class="navbar navbar-default">
         <!-- 共通ヘッダをインクルード-->
@@ -105,10 +57,6 @@
     </nav>
 
     <!-- search form -->
-<!--        <div class="twitter">-->
-<!--            <a class="twitter-timeline" data-chrome=”noheader nofooter” href="https://twitter.com/A74159545?ref_src=twsrc%5Etfw" data-lang=”ja” data-width=”260″ data-height=”400″>Tweets by A74159545</a>-->
-<!--            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>-->
-<!--        </div>-->
     <div class="section">
 
         <div class="sliderArea" width="50px">
@@ -123,8 +71,6 @@
             </div>
         </div>
     </div>
-
-
 
 
     <div class="row">
@@ -143,7 +89,7 @@
                             <div class="col-sm-9">
                                 <span th:text="${failure}" style="color: #ff0000"></span>
                                 <input type="text" th:field="*{noodleName}" id="code"
-                                       class="form-control input-sm" list="autocomplete" />
+                                       class="form-control input-sm" list="autocomplete"/>
                                 <datalist id="autocomplete">
                                     <option th:each="item:${itemListForAutocomplete}" th:value="${item.name}">
                                 </datalist>
@@ -180,8 +126,6 @@
         </div>
     </div>
 
-
-
     <!-- table -->
     <div class="row">
         <div
@@ -200,13 +144,14 @@
                         <a href="item_detail.html" th:href="@{'/noodle/show-detail?id=' + ${item.id}}">
                             <span th:text="${item.name}"></span>
                         </a><br>
+                            評価：<span th:text="${#numbers.formatDecimal(item.reviewPoint, 1, 'COMMA', 1, 'POINT')} + '/5.0'"></span>
+                                 <span th:text="${ '('+ item.reviewCounts + ')'}"></span><br>
                         <span class="price">&nbsp;М&nbsp;</span>&nbsp;&nbsp;<span th:text="${item.priceM}"></span>円<br>
                         <span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;<span th:text="${item.priceL}"></span>円<br>
                     </th>
                     <th:block th:if="${status.index%3==2}">
                         </tr>
                     </th:block>
-                </th:block>
                 </tbody>
             </table>
 
@@ -247,6 +192,7 @@
         </ul>
     </div>
 </div>
-</div>
+
 </body>
+<script type="text/javascript" th:src="@{/rate/jquery.rateit.js}"></script>
 </html>

@@ -23,7 +23,6 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="../../js/slider"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/js/swiper.min.js"></script>
 
     <!--☆-->
@@ -34,17 +33,6 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 
     <script>
-        $(function () {
-            var availableTags = [[(${itemListForAutocomplete})]];
-
-            $('#code').autocomplete({
-                source: availableTags,
-                minLength: 1
-            });
-        });
-
-    </script>
-    <script>
         function textClear() {
             let textForm = document.getElementById("code");
             textForm.value = '';
@@ -52,11 +40,11 @@
     </script>
     <script>
         $(document).on('ready', function () {
-            $(".regular").slick({
+            $('.regular slider').slick({
                 autoplay: true,
                 autoplaySpeed: 4000,
                 dots: true,
-            });
+            })
         });
     </script>
 </head>
@@ -101,7 +89,7 @@
                             <div class="col-sm-9">
                                 <span th:text="${failure}" style="color: #ff0000"></span>
                                 <input type="text" th:field="*{noodleName}" id="code"
-                                       class="form-control input-sm" list="autocomplete" />
+                                       class="form-control input-sm" list="autocomplete"/>
                                 <datalist id="autocomplete">
                                     <option th:each="item:${itemListForAutocomplete}" th:value="${item.name}">
                                 </datalist>
@@ -156,6 +144,8 @@
                         <a href="item_detail.html" th:href="@{'/noodle/show-detail?id=' + ${item.id}}">
                             <span th:text="${item.name}"></span>
                         </a><br>
+                            評価：<span th:text="${#numbers.formatDecimal(item.reviewPoint, 1, 'COMMA', 1, 'POINT')} + '/5.0'"></span>
+                                 <span th:text="${ '('+ item.reviewCounts + ')'}"></span><br>
                         <span class="price">&nbsp;М&nbsp;</span>&nbsp;&nbsp;<span th:text="${item.priceM}"></span>円<br>
                         <span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;<span th:text="${item.priceL}"></span>円<br>
                     </th>
@@ -204,4 +194,5 @@
 </div>
 
 </body>
+<script type="text/javascript" th:src="@{/rate/jquery.rateit.js}"></script>
 </html>

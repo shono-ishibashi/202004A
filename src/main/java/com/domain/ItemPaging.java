@@ -1,5 +1,6 @@
 package com.domain;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.Data;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
@@ -35,4 +36,11 @@ public class ItemPaging {
 
     @Column(name="genre")
     private Integer genre;
+
+   @Column(name = "point")
+    private Double reviewPoint;
+
+   @Column(name = "review_counts")
+    private Integer reviewCounts;
+
 }

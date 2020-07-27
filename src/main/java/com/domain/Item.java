@@ -14,4 +14,7 @@ public class Item {
     private String imagePath;
     private Boolean deleted;
     private List<Topping> topping;
+    private Double reviewPoint;
+    private Integer reviewCounts;
+    private Integer genre;
 }

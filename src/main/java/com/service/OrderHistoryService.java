@@ -57,6 +57,7 @@ public class OrderHistoryService {
                     orderItem.setOrderId(orderInList.getOrderItemList().get(0).getOrderId());
                     orderItem.setSize(orderInList.getOrderItemList().get(0).getSize());
                     orderItem.setItemId(orderInList.getOrderItemList().get(0).getItemId());
+                    orderItem.setReviewPoint(orderInList.getOrderItemList().get(0).getReviewPoint());
 
                     OrderTopping orderTopping = new OrderTopping();
                     orderTopping.setId(orderInList.getOrderItemList().get(0).getOrderToppingList().get(0).getId());
@@ -121,6 +122,7 @@ public class OrderHistoryService {
                     orderItem.setQuantity(orderInList.getOrderItemList().get(0).getQuantity());
                     orderItem.setOrderId(orderInList.getOrderItemList().get(0).getOrderId());
                     orderItem.setItem(orderInList.getOrderItemList().get(0).getItem());
+                    orderItem.setReviewPoint(orderInList.getOrderItemList().get(0).getReviewPoint());
 
 
                     orderItemMap.put(orderItem.getId(),orderItem);

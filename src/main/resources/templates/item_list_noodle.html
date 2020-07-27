@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,6 +7,7 @@
     <title> ラーメン屋のネット注文</title>
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/noodle.css" rel="stylesheet">
+    <link href="./../css/twitter.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/css/swiper.min.css"/>
     <style type="text/css">
         .ui-autocomplete {
@@ -23,15 +24,30 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="../../js/slider"></script>
+<!--    <script src="../../js/slider"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/js/swiper.min.js"></script>
+
 
     <!--☆-->
     <link rel="stylesheet" type="text/css"
           href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+<!--    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+    <script>
+        $(function () {
+            var $body = $('body');
+            $('#js__sideMenuBtn').on('click', function () {
+                $body.toggleClass('side-open');
+                $('#js__overlay').on('click', function () {
+                    $body.removeClass('side-open');
+                });
+            });
+        });
+    </script>
 
     <script>
         $(function () {
@@ -62,6 +78,26 @@
 </head>
 <body>
 
+<!--<div class="overlay" id="js__overlay"></div>-->
+
+<!--&lt;!&ndash;サイドメニューのコンテンツ&ndash;&gt;-->
+<!--<nav class="side-menu">-->
+<!--    <ul>-->
+<!--        <li><a href="https://twitter.com/A74159545?ref_src=twsrc%5Etfw"><i class="fab fa-twitter-square fa-1x twitter"></i>        Twitter</a></li>-->
+<!--        <li><a href="https://twitter.com/A74159545?ref_src=twsrc%5Etfw"><i class="fab fa-instagram fa-1x instagram-font"></i>     Instagram</a></li>-->
+<!--        <li><a href="https://goo.gl/maps/CdrpBNtYNnZ8U91Q7"><i class="fas fa-map-marked-alt fa-1x map"></i>     Map</a></li>-->
+<!--        <li><a href="https://twitter.com/A74159545?ref_src=twsrc%5Etfw"><i class="fas fa-file-contract fa-1x contact-form"></i>      Contact</a></li>-->
+<!--    </ul>-->
+<!--</nav>-->
+
+<!--&lt;!&ndash;サイドメニュー開閉用ボタン&ndash;&gt;-->
+<!--<i class="fas fa-bars side-menu-btn fa-3x" id="js__sideMenuBtn">-->
+<!--</i>-->
+
+<div th:include="fragment-sidepage::sidePage">
+</div>
+
+<div class="wrapper">
 <div class="container">
     <nav class="navbar navbar-default">
         <!-- 共通ヘッダをインクルード-->
@@ -69,6 +105,10 @@
     </nav>
 
     <!-- search form -->
+<!--        <div class="twitter">-->
+<!--            <a class="twitter-timeline" data-chrome=”noheader nofooter” href="https://twitter.com/A74159545?ref_src=twsrc%5Etfw" data-lang=”ja” data-width=”260″ data-height=”400″>Tweets by A74159545</a>-->
+<!--            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>-->
+<!--        </div>-->
     <div class="section">
 
         <div class="sliderArea" width="50px">
@@ -83,6 +123,8 @@
             </div>
         </div>
     </div>
+
+
 
 
     <div class="row">
@@ -138,6 +180,8 @@
         </div>
     </div>
 
+
+
     <!-- table -->
     <div class="row">
         <div
@@ -162,6 +206,7 @@
                     <th:block th:if="${status.index%3==2}">
                         </tr>
                     </th:block>
+                </th:block>
                 </tbody>
             </table>
 
@@ -202,6 +247,6 @@
         </ul>
     </div>
 </div>
-
+</div>
 </body>
 </html>

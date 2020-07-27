@@ -53,11 +53,11 @@
     </script>
     <script>
         $(document).on('ready', function () {
-            $('.slider').slick({
+            $('#slider').slick({
                 autoplay: true,
                 autoplaySpeed: 4000,
                 dots: true,
-            })
+            });
         });
     </script>
 
@@ -77,14 +77,12 @@
     <div class="section">
 
         <div class="sliderArea" width="50px">
-            <div class="slider">
-
+            <div id="slider">
                 <div class="text-center"><a th:href="@{'/noodle/show-detail?id=6'}"><img th:src="@{/img_noodle/slide6.jpg}"></a></div>
                 <div class="text-center"><img th:src="@{/img_noodle/2.jpg}"></div>
                 <div class="text-center"><img th:src="@{/img_noodle/3.jpg}"></div>
                 <div class="text-center"><img th:src="@{/img_noodle/4.jpg}"></div>
                 <div class="text-center"><img th:src="@{/img_noodle/5.jpg}"></div>
-
             </div>
         </div>
     </div>

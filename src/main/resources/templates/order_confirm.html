@@ -10,8 +10,11 @@
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+
     <![endif]-->
     <script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
+
+
 </head>
 <body>
 <div class="container">
@@ -56,7 +59,7 @@
                             <img th:src="${'/img_noodle/' + order.item.imagePath}"
                                  class="img-responsive img-rounded item-img-center" width="100" height="300"><br>
                             <span th:text="${order.item.name}"></span>
-                            じゃがバターベーコン
+
                         </div>
                     </td>
                     <td>
@@ -100,6 +103,10 @@
     </div>
 
     <!-- table -->
+    <input type="hidden" name="name" th:value="${userName}" id="hiddenName">
+    <input type="hidden" name="email" th:value="${userEmail}"  id="hiddenEmail">
+    <input type="hidden" name="telephone" th:value="${userTel}" id="hiddenTel">
+
     <form action="order_finished.html" th:action="@{/confirm/order-finished}" method="post"
           th:object="${orderConfirmForm}">
         <div class="row">
@@ -116,7 +123,14 @@
                         </td>
                         <td>
                             <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red"></div>
-                            <input type="text" th:field="*{name}" name="name" placeholder="山田太郎">
+                            <input type="text" th:field="*{name}" name="name" placeholder="山田太郎" id="name"  >
+
+
+                            <input type="button"
+                                   onKeyUp="AjaxZip3.zip2addr('zipcode','','address1','address2');"
+                                   onclick="AjaxZip3.zip2addr('zipcode','','address1','address2');"
+                                   value="ユーザーの情報をセット" id="zipcode">
+
                         </td>
                     </tr>
                     <tr>
@@ -129,7 +143,8 @@
                             <div th:if="${#fields.hasErrors('mailAddress')}" th:errors="*{mailAddress}"
                                  style="color: red"></div>
                             <input type="text" th:field="*{mailAddress}" name="mailAddress"
-                                   placeholder="sample@gmail.com">
+                                   placeholder="sample@gmail.com" id="mailAddress" >
+
                         </td>
                     </tr>
                     <tr>
@@ -142,10 +157,14 @@
                             <div th:if="${#fields.hasErrors('zipCode')}" th:errors="*{zipCode}"
                                  style="color: red"></div>
                             <input type="text" name="zipCode" th:field="*{zipCode}"
-                                   placeholder="123-4567">&nbsp;&nbsp;<input type="button"
-                                                                             onKeyUp="AjaxZip3.zip2addr('zipCode','','address1','address2');"
-                                                                             onclick="AjaxZip3.zip2addr('zipCode','','address1','address2');"
-                                                                             value="住所検索">
+                                   placeholder="123-4567" id="zip">
+                            <input type="hidden" name="zipcode" th:value="${userZip}" id="hiddenZipcode">&nbsp;
+                            <input type="button"
+                                   onKeyUp="AjaxZip3.zip2addr('zipCode','','address1','address2');"
+                                   onclick="AjaxZip3.zip2addr('zipCode','','address1','address2');"
+                                   value="住所検索">
+
+
                         </td>
                     </tr>
                     <tr>
@@ -174,7 +193,8 @@
                         <td>
                             <div th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}"
                                  style="color: red"></div>
-                            <input type="text" name="telephone" th:field="*{telephone}" placeholder="123-4567-8910">
+                            <input type="text" name="telephone" th:field="*{telephone}" placeholder="123-4567-8910" id="tel" >
+
                         </td>
                     </tr>
                     <tr>
@@ -256,7 +276,7 @@
         <div class="row">
             <div class="col-xs-offset-4 col-xs-4">
                 <div class="form-group">
-                    <input class="form-control btn btn-warning btn-block" type="submit" value="この内容で注文する">
+                    <input class="form-control btn btn-warning btn-block" type="submit" value="この内容で注文する" >
                 </div>
             </div>
         </div>
@@ -265,6 +285,8 @@
 <!-- end container -->
 <script
         src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
 <script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/AutoGetUserInfo.js}"></script>
 </body>
 </html>

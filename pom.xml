@@ -145,7 +145,15 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-      
+<!--        csrf対策-->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <version>5.3.3.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+
+
     </dependencies>
     <build>
         <plugins>

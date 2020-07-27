@@ -55,9 +55,9 @@ public class SendMailService {
 
         String paymentMsg;
         if (order.getPaymentMethod() == 1){
-            paymentMsg = "未入金";
+            paymentMsg = "代金引換";
         } else {
-            paymentMsg = "入金済";
+            paymentMsg = "クレジットカード決済";
         }
 
         //感謝のメッセージ
@@ -79,7 +79,14 @@ public class SendMailService {
             builder1.append("商品サイズ : " + orderItem.getSize() + " サイズ");
             builder1.append(System.getProperty("line.separator"));
             for(OrderTopping orderTopping: orderItem.getOrderToppingList()){
-                builder1.append("トッピング : " + orderTopping.getTopping().getName());
+                //トッピングがなしの場合、Nullではなく"なし"を表示
+                if(Objects.isNull( orderTopping.getTopping().getName())){
+                    builder1.append("トッピング : なし");
+                } else if(orderTopping == orderItem.getOrderToppingList().get(0) ){
+                    builder1.append("トッピング : " + orderTopping.getTopping().getName());
+                } else {
+                    builder1.append("               : " + orderTopping.getTopping().getName());
+                }
                 builder1.append(System.getProperty("line.separator"));
             }
             builder1.append("数量 : " + orderItem.getQuantity() + " 杯") ;
@@ -113,15 +120,12 @@ public class SendMailService {
         }
         System.out.println(builder.toString());
 
-
-
         StringBuilder builder2 = new StringBuilder();
 
         builder2.append(builder1.toString());
         builder2.append(System.getProperty("line.separator"));
         builder2.append(System.getProperty("line.separator"));
         builder2.append(builder.toString());
-
 
         //partnersではできない
         SimpleMailMessage msg = new SimpleMailMessage();
@@ -134,8 +138,5 @@ public class SendMailService {
         // メール送信
         mailSender.send(msg);
     }
-
-
-
 
 }

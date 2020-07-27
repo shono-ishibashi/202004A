@@ -72,4 +72,9 @@ public class LoginController {
         return toLogin();
     }
 
+    @RequestMapping("/show-topPage")
+    public String showTopPage(){
+        return toLogin();
+    }
+
 }

@@ -22,6 +22,30 @@ public class User implements UserDetails {
     private String address;
     private String telephone;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getZipcode() {
+        return zipcode;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -33,9 +57,7 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String getUsername() {
-        return getEmail();
-    }
+    public String getUsername() { return getEmail();}
 
     @Override
     public boolean isAccountNonExpired() {

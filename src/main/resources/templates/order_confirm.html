@@ -12,6 +12,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script src="https://ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
+
 </head>
 <body>
 <div class="container">
@@ -117,6 +118,7 @@
                         <td>
                             <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red"></div>
                             <input type="text" th:field="*{name}" name="name" placeholder="山田太郎">
+
                         </td>
                     </tr>
                     <tr>
@@ -142,10 +144,16 @@
                             <div th:if="${#fields.hasErrors('zipCode')}" th:errors="*{zipCode}"
                                  style="color: red"></div>
                             <input type="text" name="zipCode" th:field="*{zipCode}"
-                                   placeholder="123-4567">&nbsp;&nbsp;<input type="button"
-                                                                             onKeyUp="AjaxZip3.zip2addr('zipCode','','address1','address2');"
-                                                                             onclick="AjaxZip3.zip2addr('zipCode','','address1','address2');"
-                                                                             value="住所検索">
+                                   placeholder="123-4567">
+                            <input type="hidden" name="zipcode" th:value="${string}" id="zipcode">&nbsp;
+                            <input type="button"
+                                   onKeyUp="AjaxZip3.zip2addr('zipCode','','address1','address2');"
+                                   onclick="AjaxZip3.zip2addr('zipCode','','address1','address2');"
+                                   value="住所検索">
+                            <input type="button"
+                                   onKeyUp="AjaxZip3.zip2addr('zipcode','','address1','address2');"
+                                   onclick="AjaxZip3.zip2addr('zipcode','','address1','address2');"
+                                   value="ユーザーの住所取得">
                         </td>
                     </tr>
                     <tr>

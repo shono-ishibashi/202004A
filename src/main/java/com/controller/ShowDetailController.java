@@ -28,7 +28,6 @@ public class ShowDetailController {
     @RequestMapping("/show-detail")
     public String showDetail(String id, Model model ) {
 
-
         //商品選択時に受け取ったString型のidをLong型に変換
 
         Item item = itemService.load(Long.parseLong(id));

@@ -34,6 +34,7 @@ public class ReviewPointService {
         Double totalReviewPoint = sumOfOrderItemPoints / orderItemCount;
         Item item = reviewPointRepository.getItem(orderItemId);
         item.setReviewPoint(totalReviewPoint);
+        item.setReviewCounts((int) orderItemCount);
         reviewPointRepository.postReviewPointForItem(item);
 
     }

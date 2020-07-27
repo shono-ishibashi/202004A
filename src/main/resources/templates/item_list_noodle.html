@@ -8,7 +8,6 @@
     <link href="../../css/bootstrap.css" rel="stylesheet">
     <link href="../../css/noodle.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/css/swiper.min.css"/>
-    <link rel="stylesheet" th:herf="@{/rate/rateit.css}"/>
     <style type="text/css">
         .ui-autocomplete {
             position: absolute;
@@ -24,7 +23,6 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="../../js/slider"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.7/js/swiper.min.js"></script>
 
     <!--☆-->
@@ -33,17 +31,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-    <script>
-        $(function () {
-            var availableTags = [[(${itemListForAutocomplete})]];
 
-            $('#code').autocomplete({
-                source: availableTags,
-                minLength: 1
-            });
-        });
-
-    </script>
     <script>
         function textClear() {
             let textForm = document.getElementById("code");
@@ -52,11 +40,11 @@
     </script>
     <script>
         $(document).on('ready', function () {
-            $(".regular").slick({
+            $('.regular slider').slick({
                 autoplay: true,
                 autoplaySpeed: 4000,
                 dots: true,
-            });
+            })
         });
     </script>
 </head>
@@ -74,8 +62,7 @@
         <div class="sliderArea" width="50px">
             <div class="regular slider">
 
-                <div class="text-center"><a th:href="@{'/noodle/show-detail?id=6'}"><img
-                        th:src="@{img_noodle/slide6.jpg}"></a></div>
+                <div class="text-center"><a th:href="@{'/noodle/show-detail?id=6'}"><img th:src="@{img_noodle/slide6.jpg}"></a></div>
                 <div class="text-center"><img th:src="@{img_noodle/2.jpg}"></div>
                 <div class="text-center"><img th:src="@{img_noodle/3.jpg}"></div>
                 <div class="text-center"><img th:src="@{img_noodle/4.jpg}"></div>
@@ -157,11 +144,8 @@
                         <a href="item_detail.html" th:href="@{'/noodle/show-detail?id=' + ${item.id}}">
                             <span th:text="${item.name}"></span>
                         </a><br>
-                        <div class="range-group">
-                            評価：<input class="input-range" th:value="${item.reviewPoint}" type="range" min="1" , max="5"
-                                      step="0.5" id="backing3">
-                            <div class="rateit" data-rateit-backingfld="#backing3"></div>
-                        </div>
+                            評価：<span th:text="${#numbers.formatDecimal(item.reviewPoint, 1, 'COMMA', 1, 'POINT')} + '/5.0'"></span>
+                                 <span th:text="${ '('+ item.reviewCounts + ')'}"></span><br>
                         <span class="price">&nbsp;М&nbsp;</span>&nbsp;&nbsp;<span th:text="${item.priceM}"></span>円<br>
                         <span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;<span th:text="${item.priceL}"></span>円<br>
                     </th>

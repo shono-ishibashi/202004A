@@ -62,8 +62,9 @@ public class ReviewPointRepository {
     }
 
     public void postReviewPointForItem(Item item){
-        String sql = "UPDATE items SET point = :point WHERE id = :id";
+        String sql = "UPDATE items SET point = :point, review_counts = :reviewCounts WHERE id = :id";
         SqlParameterSource param = new MapSqlParameterSource().addValue("point", item.getReviewPoint())
+                                                              .addValue("reviewCounts", item.getReviewCounts())
                                                                .addValue("id", item.getId());
         template.update(sql, param);
     }

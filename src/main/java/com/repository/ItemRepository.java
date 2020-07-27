@@ -31,6 +31,7 @@ public class ItemRepository {
         item.setPriceL(rs.getInt("price_l"));
         item.setImagePath(rs.getString("image_path"));
         item.setReviewPoint(rs.getDouble("point"));
+        item.setReviewCounts(rs.getInt("review_counts"));
         item.setDeleted(rs.getBoolean("deleted"));
 
         return item;
@@ -43,7 +44,7 @@ public class ItemRepository {
      * @return itemList
      */
     public List<Item> findAll(){
-        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted, point FROM items";
+        String sql = "SELECT id, name, description, price_m, price_l, image_path, deleted, point, review_counts FROM items";
 
         List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
 
@@ -82,7 +83,7 @@ public class ItemRepository {
      * @return
      */
     public List<Item> findAllByPopularItem(){
-        String sql = "SELECT items.id, name, description, price_m, price_l, image_path, deleted, point FROM items LEFT OUTER JOIN order_items ON items.id=order_items.item_id  GROUP BY items.id ORDER BY count(items.id) DESC, price_m;";
+        String sql = "SELECT items.id, name, description, price_m, price_l, image_path, deleted, point, review_counts FROM items LEFT OUTER JOIN order_items ON items.id=order_items.item_id  GROUP BY items.id ORDER BY count(items.id) DESC, price_m;";
 
         List<Item> itemList = template.query(sql, ITEM_ROW_MAPPER);
 

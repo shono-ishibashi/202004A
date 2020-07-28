@@ -210,6 +210,7 @@
                                         <!--												<label-->
                                         <!--													class="control-label" style="color: red" for="inputPeriod">配達日時を入力してください</label>-->
                                     </div>
+                                    <div th:if="${errorMsg}" th:text="${errorMsg}" style="color: red"></div>
                                     <div th:if="${errorMsg1}" th:text="${errorMsg1}" style="color: red"></div>
                                     <div th:if="${errorMsg2}" th:text="${errorMsg2}" style="color: red"></div>
                                     <div class="col-sm-12">

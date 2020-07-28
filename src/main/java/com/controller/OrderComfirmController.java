@@ -108,12 +108,9 @@ public class OrderComfirmController {
         if(result.hasErrors()){
             return showConfirm(model,userDetails);
         }
-
-//        //Integer型としてuserIdを取得
-//        Integer userId = (Integer)session.getAttribute("userId");//principal
+        //userIdを取得
         Order order = cartService.showCart(userDetails.getId(),0).get(0);
         order.setUserId(userDetails.getId());
-
         order.setTotalPrice(order.getTotalPrice());
         System.out.println(order.getTotalPrice() * 0.1);
         System.out.println(order.getTotalPrice() * 1.1);
@@ -142,54 +139,61 @@ public class OrderComfirmController {
         String replaceOrderTimeStr = orderTimeStr.replace("時", "");
         Integer replaceOrderTimeInt0 = Integer.parseInt(replaceOrderTimeStr);
         //LocalDateTime型に年月日、時間をいれる
-//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(orderConfirmForm.getOrderDate());
+        //DateTimeFormatter dtf = DateTimeFormatter.ofPattern(orderConfirmForm.getOrderDate());
         LocalDate localDate = LocalDate.parse(orderConfirmForm.getOrderDate());
         LocalDateTime dd = localDate.atTime(replaceOrderTimeInt0,0,0);
         Timestamp ts = Timestamp.valueOf(dd);
         order.setDeliveryTime(ts);
         order.setPaymentMethod(orderConfirmForm.getPaymentMethod());
 
+
+
         //現在時刻（日）を取得
         LocalDate currentDate = LocalDate.now();
         //現在時刻（時間）を整数として取得
         LocalDateTime localDateTime = LocalDateTime.now();
-        Integer currentDateTimeInt = localDateTime.getHour();
         //注文時刻（日）を取得
         String orderDateStr = orderConfirmForm.getOrderDate();
         LocalDate orderDate = LocalDate.parse(orderDateStr);
         //注文時刻（時間）を整数として取得
         Integer replaceOrderTimeInt1 = Integer.parseInt(replaceOrderTimeStr);
 
-        //現在時刻（日）と注文時刻（日）を比較
-        if(orderDate.compareTo(currentDate) < 0 ){
-            model.addAttribute("errorMsg", "今から3時間後の日時をご入力ください");
-            return showConfirm(model,userDetails);
-        } else if(orderDate.compareTo(currentDate) == 0 ){ //注文日が当日の場合
-            //現在時刻を２つ生成、１つ現在時刻として、もう一つは現在時刻の時間の部分を注文時間に変更
-            LocalDateTime currentDateTime1 = LocalDateTime.now();
-            LocalDateTime currentDateTime2 = LocalDateTime.now();
-            //現在時刻を注文時間に変更
-            LocalDateTime orderDateTime = currentDateTime2.withHour(replaceOrderTimeInt1).withMinute(0).withSecond(0);
-            //現在時刻に3時間加算
-            LocalDateTime currentDateTimePlus3Hour = currentDateTime1.plusHours(3);
-            //現在時刻が最終注文時刻の３時間前を超えていた時
-            LocalDateTime lastOrderTime = currentDateTime1.withHour(20).withMinute(0).withSecond(0);
-            if( lastOrderTime.compareTo(currentDateTimePlus3Hour) < 0 ){
+        Integer currentYear = localDateTime.getYear();
+        Integer orderYear = orderDate.getYear();
+
+        if(orderYear.compareTo(currentYear) <0 ) {
+                model.addAttribute("errorMsg", "今から3時間後の日時をご入力ください");
+                return showConfirm(model, userDetails);
+            //現在時刻（日）と注文時刻（日）を比較
+            } else  if (orderDate.compareTo(currentDate) < 0) {
+                model.addAttribute("errorMsg", "今から3時間後の日時をご入力ください");
+                return showConfirm(model, userDetails);
+            } else if (orderDate.compareTo(currentDate) == 0) { //注文日が当日の場合
+                //現在時刻を２つ生成、１つ現在時刻として、もう一つは現在時刻の時間の部分を注文時間に変更
+                LocalDateTime currentDateTime1 = LocalDateTime.now();
+                LocalDateTime currentDateTime2 = LocalDateTime.now();
+                //現在時刻を注文時間に変更
+                LocalDateTime orderDateTime = currentDateTime2.withHour(replaceOrderTimeInt1).withMinute(0).withSecond(0);
+                //現在時刻に3時間加算
+                LocalDateTime currentDateTimePlus3Hour = currentDateTime1.plusHours(3);
+                //現在時刻が最終注文時刻の３時間前を超えていた時
+                LocalDateTime lastOrderTime = currentDateTime1.withHour(20).withMinute(0).withSecond(0);
+                if (lastOrderTime.compareTo(currentDateTimePlus3Hour) < 0) {
                     model.addAttribute("errorMsg1", "最終注文時刻を過ぎています");
-                    return showConfirm(model,userDetails);
-            }//現在時刻と注文時刻が３時間離れているか比較
-            else if( orderDateTime.compareTo(currentDateTimePlus3Hour) < 0 ){
-                model.addAttribute("errorMsg2", "今から3時間後の日時をご入力ください");
-                return showConfirm(model,userDetails);
+                    return showConfirm(model, userDetails);
+                }//現在時刻と注文時刻が３時間離れているか比較
+                else if (orderDateTime.compareTo(currentDateTimePlus3Hour) < 0) {
+                    model.addAttribute("errorMsg2", "今から3時間後の日時をご入力ください");
+                    return showConfirm(model, userDetails);
+                }
+                //メールを送信する処理
+            sendMailService.sendMail(order);
+            orderService.UpDate(order);
+                return "order_finished";
             }
-            //メールを送信する処理
-//            sendMailService.sendMail(order);
-//            orderService.UpDate(order);
-            return "order_finished";
-        }
         //メールを送信する処理
-//        sendMailService.sendMail(order);
-//        orderService.UpDate(order);
+        sendMailService.sendMail(order);
+        orderService.UpDate(order);
         return "order_finished";
     }
 

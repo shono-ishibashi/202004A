@@ -61,7 +61,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
 
                 .formLogin()
-                .defaultSuccessUrl("/noodle/show-list")
+                .defaultSuccessUrl("/noodle/show-list",true)
+                .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
                 .loginProcessingUrl("/login")
                 .usernameParameter("email")
                 .passwordParameter("password")

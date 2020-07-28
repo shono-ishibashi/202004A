@@ -129,11 +129,9 @@ class ItemServiceTest {
     void load() {
         //確認したい処理
         Item item = itemService.load((long) 5);
-
         assertEquals("5", item.getId().toString());
         //確認したい処理
         Item item1 = itemService.load((long) 17);
-
         assertEquals("台湾まぜそば",item1.getName());
 
     }

@@ -31,7 +31,7 @@ public class UserForm {
     private String address;
 
     @NotBlank(message = "電話番号を入力してください")
-    @Pattern(message = "電話番号はXXX-XXX-XXXXの形式で入力してください", regexp = "0\\d{1,4}-\\d{1,4}-\\d{4}")
+    @Pattern(message = "有効な電話番号をXXX-XXX-XXXXの形式で入力してください", regexp = "0\\d{1,4}-\\d{1,4}-\\d{4}")
     private String telephone;
 
     public String getName() {

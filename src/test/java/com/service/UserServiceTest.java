@@ -7,10 +7,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -25,6 +28,14 @@ class UserServiceTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @BeforeEach
     void beforeInsert(){
@@ -79,9 +90,28 @@ class UserServiceTest {
         assertEquals("7777777", list.get(0).getZipcode());
         assertEquals("042-456-7777", list.get(0).getTelephone());
         assertNotEquals("yutayuta", list.get(0).getPassword());
+        String encodedPassword = passwordEncoder.encode("yutayuta");
+        assertTrue(passwordEncoder.matches("yutayuta",list.get(0).getPassword()));
     }
 
     @Test
     void findUserByEmail() {
+        User user = new User();
+        user.setName("テストゆうた");
+        user.setEmail("yuta@gmail.com");
+        user.setPassword("yutayuta");
+        user.setAddress("神奈川県相模原市南区2-81-2");
+        user.setTelephone("042-456-7777");
+        user.setZipcode("7777777");
+        userService.insertUser(user);
+
+        String sql = "SELECT * from users WHERE email = 'yuta@gmail.com'";
+        List<User> list = template.query(sql, USER_ROW_MAPPER);
+        assertEquals("テストゆうた", list.get(0).getName());
+        assertEquals("yuta@gmail.com", list.get(0).getEmail());
+        assertEquals("神奈川県相模原市南区2-81-2", list.get(0).getAddress());
+        assertEquals("7777777", list.get(0).getZipcode());
+        assertEquals("042-456-7777", list.get(0).getTelephone());
+        assertTrue(passwordEncoder.matches("yutayuta",list.get(0).getPassword()));
     }
 }

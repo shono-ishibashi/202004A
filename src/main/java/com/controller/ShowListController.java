@@ -160,6 +160,4 @@ public class ShowListController {
 
         return "item_list_noodle";
     }
-
-
 }

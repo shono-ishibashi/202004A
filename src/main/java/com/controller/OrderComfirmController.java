@@ -169,7 +169,7 @@ public class OrderComfirmController {
             LocalDateTime currentDateTime1 = LocalDateTime.now();
             LocalDateTime currentDateTime2 = LocalDateTime.now();
             //現在時刻を注文時間に変更
-            LocalDateTime orderDateTime = currentDateTime2.withHour(replaceOrderTimeInt1);
+            LocalDateTime orderDateTime = currentDateTime2.withHour(replaceOrderTimeInt1).withMinute(0).withSecond(0);
             //現在時刻に3時間加算
             LocalDateTime currentDateTimePlus3Hour = currentDateTime1.plusHours(3);
             //現在時刻が最終注文時刻の３時間前を超えていた時

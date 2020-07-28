@@ -1,7 +1,6 @@
 $(function () {
 
     $('#zipcode').on('click',function () {
-
         var ddd = $('#hiddenName').val();
         $('#name').val(ddd);
         var fff = $('#hiddenEmail').val();

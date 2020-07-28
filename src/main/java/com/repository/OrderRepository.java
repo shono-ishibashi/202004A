@@ -267,7 +267,7 @@ public class OrderRepository {
         SqlParameterSource param = new BeanPropertySqlParameterSource(order);
 
         if( order.getPaymentMethod() == 1  ){
-            String upDateSqlCash ="UPDATE orders SET  status=1,  " +
+            String upDateSqlCash ="UPDATE orders SET  status=1, total_price=:totalPrice * 1.1,  " +
                     "order_date=:orderDate, destination_name=:destinationName, destination_email=:destinationEmail, " +
                     "destination_zipcode=:destinationZipcode, destination_address=:destinationAddress, " +
                     "destination_tel=:destinationTel, delivery_time=:deliveryTime, payment_method=:paymentMethod  " +
@@ -276,7 +276,7 @@ public class OrderRepository {
             template.update(upDateSqlCash,param);
         } else{
 
-            String upDateSqlCredit ="UPDATE orders SET status=2,  " +
+            String upDateSqlCredit ="UPDATE orders SET status=2, total_price=:totalPrice * 1.1,  " +
                     "order_date=:orderDate, destination_name=:destinationName, destination_email=:destinationEmail, " +
                     "destination_zipcode=:destinationZipcode, destination_address=:destinationAddress, " +
                     "destination_tel=:destinationTel, delivery_time=:deliveryTime, payment_method=:paymentMethod " +

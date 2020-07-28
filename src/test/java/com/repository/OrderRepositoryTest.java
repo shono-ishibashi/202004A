@@ -91,7 +91,7 @@ class OrderRepositoryTest {
     void insertItems1() {
         String sql = "drop table if exists items cascade; create table items (id integer primary key, name text not null, description text not null, price_m integer not null, price_l integer not null, image_path text not null, deleted boolean default false not null) ;";
         jdbcTemplate.execute(sql);
-        String insertSql = "insert into items values(1, 'とんこつラーメン', '創業当時から今に引き継ぐとんこつラーメンの本流であり、原点の味。18時間の調理と、丸1日の熟成を経て、とんこつの旨味を極限まで抽出した豊かで香り高いシルキーなスープに、博多らしい細麺がマッチします。', 700, 800, 'とんこつ.jpg');";
+        String insertSql = "insert into items values(1, 'とんこつラーメン', '創業当時から今に引き継ぐとんこつラーメンの本流であり、原点の味。18時間の調理と、丸1日の熟成を経て、とんこつの旨味を極限まで抽出した豊かで香り高いシルキーなスープに、博多らしい細麺がマッチします。', 700, 800, '1.jpg');";
         template.update(insertSql, new MapSqlParameterSource());
         String insertSql2 = "insert into items values(2, '赤ラーメン', '自家製の香味油と辛みそを加えることで、一杯のラーメンの中でいくつもの味の奥行きと調和を楽しめます。白丸が正統派のとんこつラーメンならば、赤丸新味は豚骨ラーメンの可能性を広げた“革新派”。 コクと深みを追求した、自信作です。', 750, 850, '2.jpg');";
         template.update(insertSql2, new MapSqlParameterSource());
@@ -119,13 +119,13 @@ class OrderRepositoryTest {
         template.update(insertSql2, new MapSqlParameterSource());
         String insertSql3 = "insert into order_toppings(topping_id, order_item_id) VALUES (1,3)";
         template.update(insertSql3, new MapSqlParameterSource());
-//      orderID=2,userID=1
+        // orderID=2,userID=1
         String insertSql4 = "insert into order_toppings(topping_id, order_item_id) VALUES (1,4)";
         template.update(insertSql4, new MapSqlParameterSource());
-//      orderID=3,userID=2
+        //orderID=3,userID=2
         String insertSql5 = "insert into order_toppings(topping_id, order_item_id) VALUES (1,5)";
         template.update(insertSql5, new MapSqlParameterSource());
-//      orderID=4,userID=2
+        //orderID=4,userID=2
         String insertSql6 = "insert into order_toppings(topping_id, order_item_id) VALUES (1,6)";
         template.update(insertSql6, new MapSqlParameterSource());
         //orderID=5,userID=2
@@ -134,7 +134,6 @@ class OrderRepositoryTest {
         //orderID=6,userID=2
         String insertSql8 = "insert into order_toppings(topping_id, order_item_id) VALUES (1,8)";
         template.update(insertSql8, new MapSqlParameterSource());
-
     }
 
     @AfterEach

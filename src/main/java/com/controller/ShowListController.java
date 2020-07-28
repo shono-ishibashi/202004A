@@ -97,7 +97,7 @@ public class ShowListController {
             } else if (2 == orderKey) {
                 page = itemService.findAllByPriceDesc(pageable);
             } else if (3 == orderKey) {
-                page = itemService.findAllPage(pageable);
+                page = itemService.findAllByPopularDesc(pageable);
             } else {
                 page = itemService.findAllPage(pageable);
                 model.addAttribute("sortError", true);

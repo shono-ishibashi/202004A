@@ -22,5 +22,8 @@ public interface ItemJpaRepository extends JpaRepository<ItemPaging,Integer> {
 
     Page<ItemPaging> findAllByOrderByPriceMDesc(Pageable pageable);
 
+    Page<ItemPaging> findAllByOrderByReviewPointDesc(Pageable pageable);
+    Page<ItemPaging> findByNameContainingOrderByReviewPointDesc(String name, Pageable pageable);
+
     //Page<ItemPaging> findAllByOrderByPointDesc(Pageable pageable);
 }

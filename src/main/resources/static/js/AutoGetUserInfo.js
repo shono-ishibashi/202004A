@@ -1,7 +1,6 @@
 $(function () {
 
     $('#zipcode').on('click',function () {
-        alert('あああ');
 
         var ddd = $('#hiddenName').val();
         $('#name').val(ddd);
@@ -15,8 +14,6 @@ $(function () {
         var ggg = $('#hiddenTel').val();
         $('#tel').val(ggg);
 
-
     });
-
 
 });

@@ -294,7 +294,7 @@ class OrderRepositoryTest {
         assertEquals("創業当時から今に引き継ぐとんこつラーメンの本流であり、原点の味。18時間の調理と、丸1日の熟成を経て、とんこつの旨味を極限まで抽出した豊かで香り高いシルキーなスープに、博多らしい細麺がマッチします。",orderList.get(0).getOrderItemList().get(0).getItem().getDescription());
         assertEquals(700, (int)orderList.get(0).getOrderItemList().get(0).getItem().getPriceM());
         assertEquals(800, (int)orderList.get(0).getOrderItemList().get(0).getItem().getPriceL());
-        assertEquals("とんこつ.jpg", orderList.get(0).getOrderItemList().get(0).getItem().getImagePath());
+        assertEquals("1.jpg", orderList.get(0).getOrderItemList().get(0).getItem().getImagePath());
         assertEquals(false,orderList.get(0).getOrderItemList().get(0).getItem().getDeleted());
         assertEquals(1,(int)orderList.get(0).getOrderItemList().get(0).getOrderToppingList().get(0).getToppingId());
         assertEquals(1,(int)orderList.get(0).getOrderItemList().get(0).getOrderToppingList().get(0).getOrderItemId());
@@ -331,7 +331,7 @@ class OrderRepositoryTest {
         assertEquals("創業当時から今に引き継ぐとんこつラーメンの本流であり、原点の味。18時間の調理と、丸1日の熟成を経て、とんこつの旨味を極限まで抽出した豊かで香り高いシルキーなスープに、博多らしい細麺がマッチします。",orderList.get(0).getOrderItemList().get(0).getItem().getDescription());
         assertEquals(700, (int)orderList.get(0).getOrderItemList().get(0).getItem().getPriceM());
         assertEquals(800, (int)orderList.get(0).getOrderItemList().get(0).getItem().getPriceL());
-        assertEquals("とんこつ.jpg", orderList.get(0).getOrderItemList().get(0).getItem().getImagePath());
+        assertEquals("1.jpg", orderList.get(0).getOrderItemList().get(0).getItem().getImagePath());
         assertEquals(false,orderList.get(0).getOrderItemList().get(0).getItem().getDeleted());
         assertEquals(1,(int)orderList.get(0).getOrderItemList().get(0).getOrderToppingList().get(0).getToppingId());
         assertEquals(1,(int)orderList.get(0).getOrderItemList().get(0).getOrderToppingList().get(0).getOrderItemId());

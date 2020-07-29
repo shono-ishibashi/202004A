@@ -216,7 +216,8 @@ public class OrderHistoryRepository {
                 " ON toppings.id = ot.topping_id" +
                 " WHERE o.id = :orderId" +
                 " AND items.deleted = false" +
-                " ORDER BY o.order_date ;";
+                " ORDER BY o.order_date," +
+                " item_id ;";
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("orderId",orderId);
 

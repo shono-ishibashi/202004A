@@ -36,9 +36,11 @@ public class SendMailService {
         Map<String, String> orderMessageMap = new HashMap<>();
         //注文日を取得
         Date orderDate = order.getOrderDate();
+        Date currentDate =new Date();
         //書式の作成
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy年 MM月 dd日");
         String str = sdf.format(orderDate);
+        String str1 = sdf.format(currentDate);
         Timestamp ts = order.getDeliveryTime();
         // Date型へ変換
         Date date = new Date(ts.getTime());
@@ -107,7 +109,8 @@ public class SendMailService {
 
         //お客様情報をマップに詰める
         for( int i = 0 ; i < orderList.size() ; i++){
-            orderMessageMap.put("注文日 / 配達時間", str + " / " + orderHour + "時");
+            orderMessageMap.put("注文日", str1 );
+            orderMessageMap.put("配達時間", str  +  orderHour + "時");
             double totalPriceD = orderList.get(i).getTotalPrice() * 1.1;
             int totalPriceI = (int)totalPriceD;
             orderMessageMap.put("合計金額",+ totalPriceI +" 円 (税込)");

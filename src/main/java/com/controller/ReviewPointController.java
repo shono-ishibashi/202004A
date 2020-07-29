@@ -15,10 +15,10 @@ private ReviewPointService reviewPointService;
 @Autowired
 private  ShowHistoryController showHistoryController;
     @RequestMapping("")
-    public String postReviewPoint(Integer orderItemId, Integer point, Integer orderItemItemId, Model model){
+    public String postReviewPoint(Integer orderItemId, Integer point, Integer orderItemItemId, Integer orderId, Model model){
         reviewPointService.postReviewPointForOrderItem(orderItemId, point);
         reviewPointService.updateReviewPointForItem(orderItemId, orderItemItemId);
-        return showHistoryController.showHistory(model);
+        return showHistoryController.showHistoryDetail(model, orderId);
     }
 
 }

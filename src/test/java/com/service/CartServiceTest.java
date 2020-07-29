@@ -280,55 +280,66 @@ class CartServiceTest {
 
     @Test
     void addCartItem() {
-//        OrderItem orderItem = new OrderItem();
-//        Item item = new Item();
-//        item.setName("とんこつラーメン");
-//        item.setPriceM(700);
-//
-//        orderItem.setItemId(1);
-//        orderItem.setOrderId(1);
-//        orderItem.setSize('M');
-//        orderItem.setQuantity(1);
-//        orderItem.setTotalPrice(700);
-//        orderItem.setItem(item);
-//
-//
-//        List<OrderTopping> orderToppingList = new LinkedList<>();
-//        OrderTopping orderTopping = new OrderTopping();
-//        orderTopping.setToppingId(1);
-//        orderTopping.setOrderItemId(1);
-//        orderTopping.setPrice(200);
-//        Topping topping = new Topping();
-//        topping.setName("チャーシュー");
-//        topping.setPriceM(200);
-//        orderTopping.setTopping(topping);
-//        orderToppingList.add(orderTopping);
-//
-//        orderItem.setOrderToppingList(orderToppingList);
-//        orderItem.setReviewPoint(1);
-//        cartService.addCartItem(orderItem);
-//
-//        String SqlOfOrderItem = "SELECT*FROM order_items WHERE id=(SELECT max(id) FROM order_items)";
-//        List<OrderItem> orderItemList = template.query(SqlOfOrderItem, ORDER_ITEM_ROW_MAPPER);
-//        System.out.println(orderItemList);
-//        assertEquals(1, (int) orderItemList.get(0).getItemId());
-//        assertEquals(1, (int) orderItemList.get(0).getOrderId());
-//        assertEquals('M', (char) orderItemList.get(0).getSize());
-//        assertEquals(1,(int)orderItemList.get(0).getQuantity());
-//        assertEquals("とんこつラーメン", orderItemList.get(0).getItem().getName());
-//        assertEquals(700, (int) orderItemList.get(0).getItem().getPriceM());
-//        assertEquals(700, (int) orderItemList.get(0).getTotalPrice());
-//        assertEquals(1, (int) orderItemList.get(0).getOrderToppingList().get(0).getToppingId());
-//        assertEquals(1, (int) orderItemList.get(0).getOrderToppingList().get(0).getOrderItemId());
-//        assertEquals(200, (int) orderItemList.get(0).getOrderToppingList().get(0).getPrice());
-//        assertEquals("チャーシュー", orderItemList.get(0).getOrderToppingList().get(0).getTopping().getName());
-//        assertEquals(200, (int) orderItemList.get(0).getOrderToppingList().get(0).getTopping().getPriceM());
-//        assertEquals(1, (int) orderItemList.get(0).getReviewPoint());
-//
+        OrderItem orderItem = new OrderItem();
+        Item item = new Item();
+        item.setName("とんこつラーメン");
+        item.setPriceM(700);
+
+        orderItem.setItemId(1);
+        orderItem.setOrderId(1);
+        orderItem.setSize('M');
+        orderItem.setQuantity(1);
+        orderItem.setTotalPrice(700);
+        orderItem.setItem(item);
+
+
+        List<OrderTopping> orderToppingList = new LinkedList<>();
+        OrderTopping orderTopping = new OrderTopping();
+        orderTopping.setToppingId(1);
+        orderTopping.setOrderItemId(1);
+        orderTopping.setPrice(200);
+        Topping topping = new Topping();
+        topping.setPriceM(200);
+        topping.setPriceL(300);
+        topping.setName("チャーシュー");
+        topping.setId(1);
+        orderTopping.setTopping(topping);
+        orderToppingList.add(orderTopping);
+
+        orderItem.setOrderToppingList(orderToppingList);
+        orderItem.setReviewPoint(1);
+        Integer orderItemId = cartService.addCartItem(orderItem);
+
+        assertEquals(4,(int)orderItemId.intValue());
+
     }
 
     @Test
     void addCartTopping() {
+        OrderTopping orderTopping = new OrderTopping();
+        orderTopping.setToppingId(1);
+        orderTopping.setPrice(200);
+        orderTopping.setOrderItemId(1);
+
+        Topping topping = new Topping();
+        topping.setPriceM(200);
+        topping.setPriceL(300);
+        topping.setName("チャーシュー");
+        topping.setId(1);
+
+        orderTopping.setTopping(topping);
+
+        String SqlOfOrderTopping = "SELECT*FROM order_items WHERE id=(SELECT max(id) FROM order_items)";
+        List<OrderItem> orderToppingList = template.query(SqlOfOrderTopping, ORDER_ITEM_ROW_MAPPER);
+        System.out.println(orderToppingList);
+        assertEquals(1,(int)orderTopping.getToppingId());
+        assertEquals(200,(int)orderTopping.getPrice());
+        assertEquals(1,(int)orderTopping.getOrderItemId());
+        assertEquals(200,(int)orderTopping.getTopping().getPriceM());
+        assertEquals(300,(int)orderTopping.getTopping().getPriceL());
+        assertEquals("チャーシュー",orderTopping.getTopping().getName());
+        assertEquals(1,(int)orderTopping.getTopping().getId());
+
 
     }
 }

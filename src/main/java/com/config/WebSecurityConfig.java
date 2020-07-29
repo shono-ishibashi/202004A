@@ -2,7 +2,6 @@ package com.config;
 
 
 import com.common.AdminUrlAutenticationSuccessHandler;
-
 import com.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -63,7 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .formLogin()
 
-                .successHandler(new AdminUrlAutenticationSuccessHandler())
+                .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
                 .defaultSuccessUrl("/noodle/show-list")
                 .loginProcessingUrl("/login")
                 .usernameParameter("email")

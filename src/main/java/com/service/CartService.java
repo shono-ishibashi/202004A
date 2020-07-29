@@ -53,7 +53,6 @@ public class CartService {
             throw new Exception();
         }
     }
-
     /**
      * @param userId ログイン中または、仮発行のUserId
      * @param status 注文状態を示す数値

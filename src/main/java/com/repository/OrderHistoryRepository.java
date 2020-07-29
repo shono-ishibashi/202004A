@@ -164,7 +164,7 @@ public class OrderHistoryRepository {
                 " WHERE o.user_id = :userId " +
                 " AND NOT o.status = 0" +
                 " AND items.deleted = false" +
-                " ORDER BY o.order_date";
+                " ORDER BY o.order_date desc";
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("userId",userId);
 

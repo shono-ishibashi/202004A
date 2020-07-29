@@ -118,7 +118,7 @@ public class OrderComfirmController {
         //ステータスを"未入金"としてセット
         order.setStatus(0);
         //String型の日付をDate型へ変換
-        Date date = Date.valueOf(orderConfirmForm.getOrderDate());
+        Date date = Date.valueOf(LocalDate.now());
         order.setOrderDate(date);
         order.setDestinationName(orderConfirmForm.getName());
         order.setDestinationEmail(orderConfirmForm.getMailAddress());

@@ -207,11 +207,11 @@
                             </div>
                         </td>
                         <td>
-                            <div th:if="${orderItem.reviewPoint} >= 0">
+                            <div th:if="${orderItem.reviewPoint} > 0">
                                 <span th:text="${'もともとの評価:' + orderItem.reviewPoint}"></span>
                             </div>
                             <form th:action="@{/review}" method="post">
-                                評価：<span id="viewPoint" class="viewPoint" th:text="${orderItem.reviewPoint}"></span>
+                                評価：<span id="viewPoint" class="viewPoint"><span th:if="${orderItem.reviewPoint} > 0" th:text="${orderItem.reviewPoint}"></span><span th:unless="${orderItem.reviewPoint} > 0" th:text="未評価"></span></span>
                                 <input id="range" name="point" class="range" type="range" min="1" max="5" step="1" th:value="${orderItem.reviewPoint}">
                                 <input type="hidden" name="orderItemId" th:value="${orderItem.id}">
                                 <input type="hidden" name="orderItemItemId" th:value="${orderItem.itemId}">

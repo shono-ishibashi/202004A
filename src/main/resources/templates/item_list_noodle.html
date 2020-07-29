@@ -68,157 +68,161 @@
 
 <div th:include="fragment-sidepage::sidePage"></div>
 
-<div class="wrapper">
+<div class="wrapper">j
     <div class="container">
-        <nav class="navbar navbar-default">
-            <!-- 共通ヘッダをインクルード-->
-            <div th:include="fragment::header"></div>
-        </nav>
+        <div>
+            <nav class="navbar navbar-default">
+                <!-- 共通ヘッダをインクルード-->
+                <div th:include="fragment::header"></div>
+            </nav>
 
-        <!-- search form -->
-        <div class="section">
+            <!-- search form -->
+            <div class="section">
 
-            <div class="sliderArea" width="50px">
-                <div id="slider">
-                    <div class="text-center"><a th:href="@{'/noodle/show-detail?id=6'}"><img
-                            th:src="@{/img_noodle/slide6.jpg}"></a></div>
-                    <div class="text-center"><a th:href="@{'/noodle/show-detail?id=2'}">
-                        <img th:src="@{/img_noodle/2.jpg}"></a></div>
-                    <div class="text-center"><a th:href="@{'/noodle/show-detail?id=3'}">
-                        <img th:src="@{/img_noodle/3.jpg}"></a></div>
-                    <div class="text-center"><a th:href="@{'/noodle/show-detail?id=4'}">
-                        <img th:src="@{/img_noodle/4.jpg}"></a></div>
-                    <div class="text-center"><a th:href="@{'/noodle/show-detail?id=5'}">
-                        <img th:src="@{/img_noodle/5.jpg}"></a></div>
+                <div class="sliderArea" width="50px">
+                    <div id="slider">
+                        <div class="text-center"><a th:href="@{'/noodle/show-detail?id=6'}"><img
+                                th:src="@{/img_noodle/slide6.jpg}"></a></div>
+                        <div class="text-center"><a th:href="@{'/noodle/show-detail?id=2'}">
+                            <img th:src="@{/img_noodle/2.jpg}"></a></div>
+                        <div class="text-center"><a th:href="@{'/noodle/show-detail?id=3'}">
+                            <img th:src="@{/img_noodle/3.jpg}"></a></div>
+                        <div class="text-center"><a th:href="@{'/noodle/show-detail?id=4'}">
+                            <img th:src="@{/img_noodle/4.jpg}"></a></div>
+                        <div class="text-center"><a th:href="@{'/noodle/show-detail?id=5'}">
+                            <img th:src="@{/img_noodle/5.jpg}"></a></div>
+                    </div>
+
                 </div>
-
             </div>
-        </div>
 
 
-        <div class="row">
-            <div
-                    class="col-lg-offset-3 col-lg-6 col-md-offset-2 col-md-8 col-sm-10 col-xs-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <div class="panel-title">商品を検索する</div>
-                        <div class="alert alert-danger" th:if="${genreError}"
-                             th:text="#{error.noodleSearch.genre}"></div>
+            <div class="row">
+                <div
+                        class="col-lg-offset-3 col-lg-6 col-md-offset-2 col-md-8 col-sm-10 col-xs-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="panel-title">商品を検索する</div>
+                            <div class="alert alert-danger" th:if="${genreError}"
+                                 th:text="#{error.noodleSearch.genre}"></div>
+                        </div>
+                        <div class="panel-body">
+                            <form method="post" action="#" class="form-horizontal" th:action="@{/noodle/search_noodle}"
+                                  th:object="${itemForm}">
+                                <div class="form-group">
+                                    <label for="code" class="control-label col-sm-2">商品名</label>
+                                    <div th:if="${#fields.hasErrors('noodleName')}" th:errors="*{noodleName}"
+                                         style="color:#ff0000"></div>
+                                    <div class="col-sm-9">
+                                        <span th:text="${failure}" style="color: #ff0000"></span>
+                                        <input type="text" th:field="*{noodleName}" id="code"
+                                               class="form-control input-sm" list="autocomplete"/>
+                                        <datalist id="autocomplete">
+                                            <option th:each="item:${itemListForAutocomplete}" th:value="${item.name}">
+                                        </datalist>
+                                    </div>
+                                </div>
+
+                                <div class="text-center">
+                                    <select name="orderKey" th:field="*{sortNumber}">
+                                        <option th:each="sort : ${sortMap}" th:value="${sort.key}"
+                                                th:text="${sort.value}"></option>
+                                    </select>
+                                    <button type="submit" value="検索" class="btn btn-primary">検索</button>
+                                    <button type="button" value="クリア" class="btn btn-default" onclick="textClear()">クリア
+                                    </button>
+
+                                </div>
+                        </div>
+                        </form>
                     </div>
                     <div class="panel-body">
-                        <form method="post" action="#" class="form-horizontal" th:action="@{/noodle/search_noodle}"
-                              th:object="${itemForm}">
+                        <form method="post" action="#" class="form-horizontal"
+                              th:action="@{/noodle/search_noodle/genre}"
+                              id="genre-search-form">
                             <div class="form-group">
-                                <label for="code" class="control-label col-sm-2">商品名</label>
-                                <div th:if="${#fields.hasErrors('noodleName')}" th:errors="*{noodleName}"
-                                     style="color:#ff0000"></div>
-                                <div class="col-sm-9">
-                                    <span th:text="${failure}" style="color: #ff0000"></span>
-                                    <input type="text" th:field="*{noodleName}" id="code"
-                                           class="form-control input-sm" list="autocomplete"/>
-                                    <datalist id="autocomplete">
-                                        <option th:each="item:${itemListForAutocomplete}" th:value="${item.name}">
-                                    </datalist>
+                                <label for="genre" class="control-label col-sm-2">ジャンル</label>
+                                <select class="form-control" id="genre" name="genre">
+                                    <option th:each="genre:${genres}" th:text="${genre.getJapaneseName()}"
+                                            th:value="${genre.getLabelNum()}" name="genre">
+                                </select>
+                                <div class="text-center">
+                                    <button class="btn btn-primary">ジャンルで検索</button>
                                 </div>
                             </div>
-
-                            <div class="text-center">
-                                <select name="orderKey" th:field="*{sortNumber}">
-                                    <option th:each="sort : ${sortMap}" th:value="${sort.key}"
-                                            th:text="${sort.value}"></option>
-                                </select>
-                                <button type="submit" value="検索" class="btn btn-primary">検索</button>
-                                <button type="button" value="クリア" class="btn btn-default" onclick="textClear()">クリア
-                                </button>
-
-                            </div>
+                        </form>
                     </div>
-                    </form>
-                </div>
-                <div class="panel-body">
-                    <form method="post" action="#" class="form-horizontal" th:action="@{/noodle/search_noodle/genre}"
-                          id="genre-search-form">
-                        <div class="form-group">
-                            <label for="genre" class="control-label col-sm-2">ジャンル</label>
-                            <select class="form-control" id="genre" name="genre">
-                                <option th:each="genre:${genres}" th:text="${genre.getJapaneseName()}"
-                                        th:value="${genre.getLabelNum()}" name="genre">
-                            </select>
-                            <div class="text-center">
-                                <button class="btn btn-primary">ジャンルで検索</button>
-                            </div>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- table -->
-    <div class="row">
-        <div
-                class="table-responsive col-lg-offset-1 col-lg-10 col-md-offset-1 col-md-10 col-sm-10 col-xs-12">
-            <table class="table table-striped item-list-table">
-                <tbody>
-                <th:block th:each="item,status : ${itemList}">
-                    <th:block th:if="${status.index%3==0}">
-                        <tr>
-                    </th:block>
-                    <th>
-                        <a href="item_detail.html" th:href="@{'/noodle/show-detail?id=' + ${item.id}}">
-                            <img th:src="${'/img_noodle/' + item.imagePath}"
-                                 class="img-responsive img-rounded item-img-center" width="200" height="600">
-                        </a><br>
-                        <a href="item_detail.html" th:href="@{'/noodle/show-detail?id=' + ${item.id}}">
-                            <span th:text="${item.name}"></span>
-                        </a><br>
-                        評価：<span
-                            th:text="${#numbers.formatDecimal(item.reviewPoint, 1, 'COMMA', 1, 'POINT')} + '/5.0'"></span>
-                        <span th:text="${ '('+ item.reviewCounts + ')'}"></span><br>
-                        <span class="price">&nbsp;М&nbsp;</span>&nbsp;&nbsp;<span th:text="${item.priceM}"></span>円<br>
-                        <span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;<span th:text="${item.priceL}"></span>円<br>
-                    </th>
-                    <th:block th:if="${status.index%3==2}">
-                        </tr>
-                    </th:block>
-                </tbody>
-            </table>
+        <!-- table -->
+        <div class="row">
+            <div
+                    class="table-responsive col-lg-offset-1 col-lg-10 col-md-offset-1 col-md-10 col-sm-10 col-xs-12">
+                <table class="table table-striped item-list-table">
+                    <tbody>
+                    <th:block th:each="item,status : ${itemList}">
+                        <th:block th:if="${status.index%3==0}">
+                            <tr>
+                        </th:block>
+                        <th>
+                            <a href="item_detail.html" th:href="@{'/noodle/show-detail?id=' + ${item.id}}">
+                                <img th:src="${'/img_noodle/' + item.imagePath}"
+                                     class="img-responsive img-rounded item-img-center" width="200" height="600">
+                            </a><br>
+                            <a href="item_detail.html" th:href="@{'/noodle/show-detail?id=' + ${item.id}}">
+                                <span th:text="${item.name}"></span>
+                            </a><br>
+                            評価：<span
+                                th:text="${#numbers.formatDecimal(item.reviewPoint, 1, 'COMMA', 1, 'POINT')} + '/5.0'"></span>
+                            <span th:text="${ '('+ item.reviewCounts + ')'}"></span><br>
+                            <span class="price">&nbsp;М&nbsp;</span>&nbsp;&nbsp;<span
+                                th:text="${item.priceM}"></span>円<br>
+                            <span class="price">&nbsp;Ｌ</span>&nbsp;&nbsp;<span th:text="${item.priceL}"></span>円<br>
+                        </th>
+                        <th:block th:if="${status.index%3==2}">
+                            </tr>
+                        </th:block>
+                    </tbody>
+                </table>
 
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <ul>
-            <li style="display:inline;">
-                <span th:if="${page.first}">&lt;&lt;前</span>
-                <a
-                        th:if="${!page.first}"
-                        th:href="@{/noodle/show-list(page = ${page.number} - 1)}"
+        <div class="row">
+            <ul>
+                <li style="display:inline;">
+                    <span th:if="${page.first}">&lt;&lt;前</span>
+                    <a
+                            th:if="${!page.first}"
+                            th:href="@{/noodle/show-list(page = ${page.number} - 1)}"
+                    >
+                        &lt;&lt;前
+                    </a>
+                </li>
+                <li
+                        th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+                        style="display:inline; margin-left:10px;"
                 >
-                    &lt;&lt;前
-                </a>
-            </li>
-            <li
-                    th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
-                    style="display:inline; margin-left:10px;"
-            >
-                <span th:if="${i} == ${page.number}" th:text="${i + 1}">1</span>
-                <a
-                        th:if="${i} != ${page.number}"
-                        th:href="@{/noodle/show-list(page = ${i})}"
-                >
-                    <span th:text="${i+1}">1</span>
-                </a>
-            </li>
-            <li style="display:inline; margin-left:10px;">
-                <span th:if="${page.last}">次&gt;&gt;</span>
-                <a
-                        th:if="${!page.last}"
-                        th:href="@{/noodle/show-list(page = (${page.number} + 1))}"
-                >
-                    次&gt;&gt;
-                </a>
-            </li>
-        </ul>
+                    <span th:if="${i} == ${page.number}" th:text="${i + 1}">1</span>
+                    <a
+                            th:if="${i} != ${page.number}"
+                            th:href="@{/noodle/show-list(page = ${i})}"
+                    >
+                        <span th:text="${i+1}">1</span>
+                    </a>
+                </li>
+                <li style="display:inline; margin-left:10px;">
+                    <span th:if="${page.last}">次&gt;&gt;</span>
+                    <a
+                            th:if="${!page.last}"
+                            th:href="@{/noodle/show-list(page = (${page.number} + 1))}"
+                    >
+                        次&gt;&gt;
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 </div>

@@ -11,5 +11,7 @@ spring:
     password: krbgissmetqyulyj
     properties.mail.smtp.auth: true
     properties.mail.smtp.starttls.enable: true
+server:
+  port: 8084
 
 

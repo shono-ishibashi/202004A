@@ -1,7 +1,8 @@
 package com.config;
 
 
-import com.common.RefererRedirectionAuthenticationSuccessHandler;
+import com.common.AdminUrlAutenticationSuccessHandler;
+
 import com.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -61,8 +62,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
 
                 .formLogin()
-                .defaultSuccessUrl("/noodle/show-list",true)
-                .successHandler(new SavedRequestAwareAuthenticationSuccessHandler())
+
+                .successHandler(new AdminUrlAutenticationSuccessHandler())
+                .defaultSuccessUrl("/noodle/show-list")
                 .loginProcessingUrl("/login")
                 .usernameParameter("email")
                 .passwordParameter("password")

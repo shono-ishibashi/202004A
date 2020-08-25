@@ -1,0 +1,145 @@
+.overlay {
+    content: '';
+    visibility: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0);
+    -webkit-transition: all .5s ease;
+    transition: all .5s ease;
+    z-index: 3;
+}
+.side-btn.point-top{
+    width: 20px;
+    height: 20px;
+    color: #262626;
+}
+
+.side-btn.point-middle{
+    width: 20px;
+    height: 20px;
+    color: #262626;
+}
+
+.side-btn.point-bottom{
+    width: 20px;
+    height: 20px;
+    color: #262626;
+}
+.overlay::after {
+    visibility: hidden;
+    position: fixed;
+    top: 40%;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 50px;
+    color: rgba(255,255,255,0);
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+    -webkit-transition: all .5s ease;
+    transition: all .5s ease;
+}
+
+.side-open .overlay {
+    visibility: visible;
+    cursor: pointer;
+    background: rgba(0,0,0,.7);
+}
+.side-open .overlay::after {
+    visibility: visible;
+    width: 56px;
+    height: 1px;
+    color: rgba(255,255,255,.8);
+}
+
+ul{
+    list-style: none;
+    color: #262626;
+}
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 100%;
+    padding-top: 150px;
+    text-align: left;
+    font-size: 30px;
+    background-color: #f9f9f9;
+    z-index: 1;
+}
+
+.side-menu-btn {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    width: 60px;
+    height: 50px;
+    padding: 5px;
+    cursor: pointer;
+    background: #f9f9f9;
+    color: #23527c;
+    border: 1px solid #ddd;
+    z-index: 4;
+}
+
+.twitter{
+    color: #31b0d5;
+}
+
+.map{
+    color: #23527c;
+}
+
+.instagram-font{
+    color: #c7254e;
+}
+
+.contact-form{
+    color: #f7ecb5;
+}
+
+/*.side-content {*/
+/*    position: relative;*/
+/*    display: block;*/
+/*    cursor: pointer;*/
+/*    width: 40px;*/
+/*    height: 40px;*/
+/*}*/
+/*.side-content .point {*/
+/*    position: absolute;*/
+/*    left: 0;*/
+/*    right: 0;*/
+/*    display: block;*/
+/*    height: 8px;*/
+/*    margin: auto;*/
+/*    background: #23527c;*/
+/*    box-shadow: 0 0 8px 0 #000000;*/
+/*    transition: all .3s;*/
+/*}*/
+
+.wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 13px;
+    background: #F8F8F8;
+    -webkit-transition: all .5s ease;
+    transition: all .5s ease;
+    z-index: 2;
+}
+
+
+/* サイドメニューオープン */
+.side-open .wrapper,
+.side-open .overlay {
+    -webkit-transform: translate3d(-300px, 0, 0);
+    transform: translate3d(-300px, 0, 0);
+}

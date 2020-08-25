@@ -8,11 +8,11 @@ import com.service.OrderService;
 import com.service.SendMailService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
-
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -51,7 +51,7 @@ public class OrderComfirmController {
     }
 
     @RequestMapping("")
-    public String showConfirm(Model model) throws Exception{
+    public String showConfirm(Model model,@AuthenticationPrincipal User userDetails) throws Exception{
 
         Integer userId = (Integer) session.getAttribute("userId");
 
@@ -80,6 +80,20 @@ public class OrderComfirmController {
         paymentMap.put(2,"クレジットカード");
 
         model.addAttribute("paymentMap", paymentMap);
+
+        String userZipcode = userDetails.getZipcode();
+        StringBuilder buf = new StringBuilder();
+        buf.append(userZipcode);
+        buf.insert(3,"-");
+        //郵便番号に"-"をいれる
+        String newUserZipcode = buf.toString();
+
+        model.addAttribute("userZip", newUserZipcode);
+        model.addAttribute("userName", userDetails.getName());
+        model.addAttribute("userEmail", userDetails.getEmail());
+        model.addAttribute("userTel", userDetails.getTelephone());
+
+
         return "order_confirm";
     }
 
@@ -89,25 +103,22 @@ public class OrderComfirmController {
      */
 
     @RequestMapping("/order-finished")
-    public String orderFinished(@Validated OrderConfirmForm orderConfirmForm, BindingResult result, Model model) throws Exception {
+    public String orderFinished(@Validated OrderConfirmForm orderConfirmForm, BindingResult result, Model model ,@AuthenticationPrincipal User userDetails) throws Exception {
 
         if(result.hasErrors()){
-            return showConfirm(model);
+            return showConfirm(model,userDetails);
         }
-        //Integer型としてuserIdを取得
+        //userIdを取得
+        Order order = cartService.showCart(userDetails.getId(),0).get(0);
+        order.setUserId(userDetails.getId());
+        order.setTotalPrice(order.getTotalPrice());
+        System.out.println(order.getTotalPrice() * 0.1);
+        System.out.println(order.getTotalPrice() * 1.1);
 
-        Integer userId = (Integer)session.getAttribute("userId");//principal
-        Order order = cartService.showCart(userId,0).get(0);
-
-//         Integer userId = (Integer)session.getAttribute("userId");
-// //        Integer userId = 1;
-//         Order order = new Order();
-
-        order.setUserId(userId);
         //ステータスを"未入金"としてセット
         order.setStatus(0);
         //String型の日付をDate型へ変換
-        Date date = Date.valueOf(orderConfirmForm.getOrderDate());
+        Date date = Date.valueOf(LocalDate.now());
         order.setOrderDate(date);
         order.setDestinationName(orderConfirmForm.getName());
         order.setDestinationEmail(orderConfirmForm.getMailAddress());
@@ -128,55 +139,58 @@ public class OrderComfirmController {
         String replaceOrderTimeStr = orderTimeStr.replace("時", "");
         Integer replaceOrderTimeInt0 = Integer.parseInt(replaceOrderTimeStr);
         //LocalDateTime型に年月日、時間をいれる
-//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(orderConfirmForm.getOrderDate());
+        //DateTimeFormatter dtf = DateTimeFormatter.ofPattern(orderConfirmForm.getOrderDate());
         LocalDate localDate = LocalDate.parse(orderConfirmForm.getOrderDate());
         LocalDateTime dd = localDate.atTime(replaceOrderTimeInt0,0,0);
         Timestamp ts = Timestamp.valueOf(dd);
         order.setDeliveryTime(ts);
         order.setPaymentMethod(orderConfirmForm.getPaymentMethod());
 
+
+
         //現在時刻（日）を取得
         LocalDate currentDate = LocalDate.now();
         //現在時刻（時間）を整数として取得
         LocalDateTime localDateTime = LocalDateTime.now();
-        Integer currentDateTimeInt = localDateTime.getHour();
         //注文時刻（日）を取得
         String orderDateStr = orderConfirmForm.getOrderDate();
         LocalDate orderDate = LocalDate.parse(orderDateStr);
         //注文時刻（時間）を整数として取得
         Integer replaceOrderTimeInt1 = Integer.parseInt(replaceOrderTimeStr);
 
-        //現在時刻（日）と注文時刻（日）を比較
-        if(orderDate.compareTo(currentDate) < 0 ){
-            System.out.println("iiiii");
-            model.addAttribute("errorMsg", "今から3時間後の日時をご入力ください");
-            return showConfirm(model);
-        } else if(orderDate.compareTo(currentDate) == 0 ){ //注文日が当日の場合
-            //現在時刻を２つ生成、１つ現在時刻として、もう一つは現在時刻の時間の部分を注文時間を変更
-            LocalDateTime currentDateTime1 = LocalDateTime.now();
-            LocalDateTime currentDateTime2 = LocalDateTime.now();
-            //現在時刻を注文時間に変更
-            LocalDateTime orderDateTime = currentDateTime2.withHour(replaceOrderTimeInt1);
-            //現在時刻に3時間加算
-            LocalDateTime currentDateTimePlus3Hour = currentDateTime1.plusHours(3);
+        Integer currentYear = localDateTime.getYear();
+        Integer orderYear = orderDate.getYear();
 
-            //現在時刻が最終注文時刻の３時間前を超えていた時
-            LocalDateTime lastOrderTime = currentDateTime1.withHour(20).withMinute(0).withSecond(0);
-            if( lastOrderTime.compareTo(currentDateTimePlus3Hour) < 0 ){
-                System.out.println("kkkkkkk");
-                model.addAttribute("errorMsg1", "最終注文時刻を過ぎています");
-                return showConfirm(model);
-            }//現在時刻と注文時刻が３時間離れているか比較
-            else if( orderDateTime.compareTo(currentDateTimePlus3Hour) < 0 ){
-                System.out.println("aaaaaa");
-                model.addAttribute("errorMsg2", "今から3時間後の日時をご入力ください");
-                return showConfirm(model);
-            }
-            //メールを送信する処理
+        if(orderYear.compareTo(currentYear) <0 ) {
+                model.addAttribute("errorMsg", "今から3時間後の日時をご入力ください");
+                return showConfirm(model, userDetails);
+            //現在時刻（日）と注文時刻（日）を比較
+            } else  if (orderDate.compareTo(currentDate) < 0) {
+                model.addAttribute("errorMsg", "今から3時間後の日時をご入力ください");
+                return showConfirm(model, userDetails);
+            } else if (orderDate.compareTo(currentDate) == 0) { //注文日が当日の場合
+                //現在時刻を２つ生成、１つ現在時刻として、もう一つは現在時刻の時間の部分を注文時間に変更
+                LocalDateTime currentDateTime1 = LocalDateTime.now();
+                LocalDateTime currentDateTime2 = LocalDateTime.now();
+                //現在時刻を注文時間に変更
+                LocalDateTime orderDateTime = currentDateTime2.withHour(replaceOrderTimeInt1).withMinute(0).withSecond(0);
+                //現在時刻に3時間加算
+                LocalDateTime currentDateTimePlus3Hour = currentDateTime1.plusHours(3);
+                //現在時刻が最終注文時刻の３時間前を超えていた時
+                LocalDateTime lastOrderTime = currentDateTime1.withHour(20).withMinute(0).withSecond(0);
+                if (lastOrderTime.compareTo(currentDateTimePlus3Hour) < 0) {
+                    model.addAttribute("errorMsg1", "最終注文時刻を過ぎています");
+                    return showConfirm(model, userDetails);
+                }//現在時刻と注文時刻が３時間離れているか比較
+                else if (orderDateTime.compareTo(currentDateTimePlus3Hour) < 0) {
+                    model.addAttribute("errorMsg2", "今から3時間後の日時をご入力ください");
+                    return showConfirm(model, userDetails);
+                }
+                //メールを送信する処理
             sendMailService.sendMail(order);
             orderService.UpDate(order);
-            return "order_finished";
-        }
+                return "order_finished";
+            }
         //メールを送信する処理
         sendMailService.sendMail(order);
         orderService.UpDate(order);

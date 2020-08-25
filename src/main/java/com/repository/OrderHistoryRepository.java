@@ -50,6 +50,7 @@ public class OrderHistoryRepository {
         orderItem.setQuantity(rs.getInt("quantity"));
         orderItem.setOrderId(rs.getInt("order_id"));
         orderItem.setSize(rs.getString("size").charAt(0));
+        orderItem.setReviewPoint(rs.getInt("point"));
 
         List<OrderTopping> orderToppingList = new ArrayList<>();
 
@@ -62,6 +63,7 @@ public class OrderHistoryRepository {
         item.setPriceL(rs.getInt("itemPriceL"));
         item.setPriceM(rs.getInt("itemPriceM"));
         item.setImagePath(rs.getString("itemImagePath"));
+        item.setReviewPoint(rs.getDouble("itemPoint"));
 
         Topping topping = new Topping();
         topping.setId(rs.getInt("toppingId"));
@@ -117,58 +119,6 @@ public class OrderHistoryRepository {
         insert = withTableName.usingGeneratedKeyColumns("id");
     }
 
-
-    public List<Order> findByUserIdJoinOrderItems(Integer userId, Integer status) {
-        String sql = "SELECT o.id as id" +
-                "     , o.user_id as user_id" +
-                "     , o.status as status" +
-                "     , o.total_price as total_price" +
-                "     , o.order_date as order_date" +
-                "     , o.destination_name as destination_name" +
-                "     , o.destination_email as destination_email" +
-                "     , o.destination_zipcode as destination_zipcode" +
-                "     , o.destination_address as destination_address" +
-                "     , o.destination_tel as destination_tel" +
-                "     , o.delivery_time as delivery_time" +
-                "     , o.payment_method as payment_method" +
-                "     ,oi.id as orderItemId" +
-                "     ,oi.order_id as order_id" +
-                "     ,oi.item_id as item_id" +
-                "     ,oi.quantity as quantity" +
-                "     ,oi.size as size" +
-                "     ,items.name as itemName" +
-                "     ,items.description as itemDescription" +
-                "     ,items.price_m as itemPriceM" +
-                "     ,items.price_l as itemPriceL" +
-                "     ,items.image_path as itemImagePath" +
-                "     ,items.deleted as itemDeleted" +
-                "     ,ot.id as orderTopping" +
-                "     ,ot.topping_id as orderToppingId" +
-                "     ,ot.order_item_id as orderItemId" +
-                "     ,toppings.id as toppingId" +
-                "     ,toppings.name as toppingName" +
-                "     ,toppings.price_m as toppingPriceM" +
-                "     ,toppings.price_l as toppingPriceL" +
-                " FROM orders AS o" +
-                " LEFT OUTER JOIN order_items AS oi" +
-                " ON o.id = oi.order_id" +
-                " LEFT OUTER JOIN items" +
-                " ON oi.item_id = items.id" +
-                " LEFT OUTER JOIN order_toppings as ot" +
-                " ON ot.order_item_id = oi.id" +
-                " LEFT OUTER JOIN toppings" +
-                " ON toppings.id = ot.topping_id" +
-                " WHERE o.user_id = :userId " +
-                " AND o.status = :status" +
-                " AND items.deleted = false" +
-                " ORDER BY o.order_date ;";
-
-        SqlParameterSource param = new MapSqlParameterSource().addValue("userId", userId).addValue("status", status);
-
-        List<Order> orderList = template.query(sql, param, ORDER_ROW_MAPPER);
-
-        return orderList;
-    }
     public List<Order> findByUserIdJoinOrderItemsForOrderList(Integer userId){
         String sql = "SELECT o.id as id" +
                 "     , o.user_id as user_id" +
@@ -187,12 +137,14 @@ public class OrderHistoryRepository {
                 "     ,oi.item_id as item_id" +
                 "     ,oi.quantity as quantity" +
                 "     ,oi.size as size" +
+                "     ,oi.point as point" +
                 "     ,items.name as itemName" +
                 "     ,items.description as itemDescription" +
                 "     ,items.price_m as itemPriceM" +
                 "     ,items.price_l as itemPriceL" +
                 "     ,items.image_path as itemImagePath" +
                 "     ,items.deleted as itemDeleted" +
+                "     ,items.point as itempoint" +
                 "     ,ot.id as orderTopping" +
                 "     ,ot.topping_id as orderToppingId" +
                 "     ,ot.order_item_id as orderItemId" +
@@ -212,7 +164,7 @@ public class OrderHistoryRepository {
                 " WHERE o.user_id = :userId " +
                 " AND NOT o.status = 0" +
                 " AND items.deleted = false" +
-                " ORDER BY o.order_date";
+                " ORDER BY o.order_date desc";
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("userId",userId);
 
@@ -238,12 +190,14 @@ public class OrderHistoryRepository {
                 "     ,oi.item_id as item_id" +
                 "     ,oi.quantity as quantity" +
                 "     ,oi.size as size" +
+                "     ,oi.point as point" +
                 "     ,items.name as itemName" +
                 "     ,items.description as itemDescription" +
                 "     ,items.price_m as itemPriceM" +
                 "     ,items.price_l as itemPriceL" +
                 "     ,items.image_path as itemImagePath" +
                 "     ,items.deleted as itemDeleted" +
+                "     ,items.point as itemPoint" +
                 "     ,ot.id as orderTopping" +
                 "     ,ot.topping_id as orderToppingId" +
                 "     ,ot.order_item_id as orderItemId" +
@@ -262,7 +216,8 @@ public class OrderHistoryRepository {
                 " ON toppings.id = ot.topping_id" +
                 " WHERE o.id = :orderId" +
                 " AND items.deleted = false" +
-                " ORDER BY o.order_date ;";
+                " ORDER BY o.order_date," +
+                " item_id ;";
 
         SqlParameterSource param = new MapSqlParameterSource().addValue("orderId",orderId);
 

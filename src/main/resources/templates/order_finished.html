@@ -36,10 +36,10 @@
 		<div class="row">
 			<div class="col-xs-offset-5 col-xs-2">
 				<div class="form-group">
-					<form action="order_finished.html">
-						<input class="form-control btn btn-warning btn-block"
-							type="submit" value="トップ画面を表示する">
-					</form>
+<!--					<form action="order_finished.html"  method="post">-->
+						<a th:href="@{/noodle/show-list}"><input class="form-control btn btn-warning btn-block"
+							type="button" value="トップ画面を表示する"></a>
+<!--					</form>-->
 				</div>
 			</div>
 		</div>

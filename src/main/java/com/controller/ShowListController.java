@@ -16,6 +16,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.thymeleaf.model.IModel;
 
 import java.util.HashMap;
 import java.util.List;
@@ -61,6 +63,7 @@ public class ShowListController {
         return "item_list_noodle";
     }
 
+
     /**
      * 検索結果を表示する。
      *
@@ -94,7 +97,7 @@ public class ShowListController {
             } else if (2 == orderKey) {
                 page = itemService.findAllByPriceDesc(pageable);
             } else if (3 == orderKey) {
-                page = itemService.findAllPage(pageable);
+                page = itemService.findAllByPopularDesc(pageable);
             } else {
                 page = itemService.findAllPage(pageable);
                 model.addAttribute("sortError", true);

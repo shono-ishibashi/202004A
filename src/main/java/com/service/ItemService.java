@@ -11,9 +11,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Collections;
 import java.util.List;
+
 
 @Service
 @Transactional
@@ -28,8 +28,7 @@ public class ItemService {
     @Autowired
     private ToppingRepository toppingRepository;
 
-  
-  
+
     public Page<ItemPaging> findAllPage(Pageable pageable){
         return itemJpaRepository.findAllByOrderByPriceM(pageable);
     }
@@ -52,6 +51,10 @@ public class ItemService {
         return itemJpaRepository.findAllByOrderByPriceMDesc(pageable);
     }
 
+    public Page<ItemPaging> findAllByPopularDesc(Pageable pageable){
+        return itemJpaRepository.findAllByOrderByReviewPointDesc(pageable);
+    }
+
     /**
      * 商品を人気順で表示する。
      * @return
@@ -72,7 +75,7 @@ public class ItemService {
         }else if(sortNum == 2){
             return itemJpaRepository.findByNameContainingOrderByPriceMDesc(name,pageable);
         }else if(sortNum == 3){
-            return itemJpaRepository.findAllByOrderByPriceM(pageable);
+            return itemJpaRepository.findByNameContainingOrderByReviewPointDesc(name,pageable);
         }else {
             throw new Exception();
         }

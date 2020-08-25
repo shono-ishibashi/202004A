@@ -1,7 +1,5 @@
 package com.controller;
 
-import com.domain.Cart;
-import com.domain.Item;
 import com.domain.Order;
 import com.domain.User;
 import com.service.CartService;
@@ -13,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
-
-import static java.util.Objects.isNull;
 
 @Controller
 @RequestMapping("/cart")
